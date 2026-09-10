@@ -1,0 +1,1461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2f6fed" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="IPAP Study">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<title>IPAP Base Study Program</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg:#f6f7f9; --card:#ffffff; --text:#16181d; --muted:#667085; --border:#d9dde5;
+  --accent:#2f6fed; --good:#18794e; --bad:#b42318; --warn:#b54708; --soft:#eef3ff;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#111318; --card:#1b1e25; --text:#f4f5f7; --muted:#a7adba; --border:#343945; --soft:#202b45; }
+}
+* { box-sizing:border-box; }
+html { min-height:100%; background:var(--bg); }
+body { margin:0; min-height:100vh; font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); -webkit-text-size-adjust:100%; -webkit-tap-highlight-color:transparent; overscroll-behavior-y:none; }
+main { max-width:980px; margin:auto; padding:calc(22px + env(safe-area-inset-top)) calc(22px + env(safe-area-inset-right)) calc(22px + env(safe-area-inset-bottom)) calc(22px + env(safe-area-inset-left)); }
+.panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:16px; }
+h1 { margin:0 0 6px; font-size:28px; }
+h2 { margin:0 0 12px; font-size:20px; }
+h3 { margin:14px 0 8px; font-size:17px; }
+.small { color:var(--muted); font-size:14px; line-height:1.4; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:12px; }
+label { display:block; font-weight:700; font-size:14px; }
+select, button, input[type=file], textarea { width:100%; min-height:44px; margin-top:6px; border-radius:9px; border:1px solid var(--border); font-size:16px; }
+select, input[type=file], textarea { background:var(--card); color:var(--text); padding:8px 10px; -webkit-appearance:none; appearance:none; }
+button { cursor:pointer; background:var(--accent); color:white; font-weight:700; padding:9px 12px; touch-action:manipulation; -webkit-appearance:none; appearance:none; }
+button.secondary { background:transparent; color:var(--text); }
+button.danger { background:transparent; color:var(--bad); border-color:var(--bad); }
+button:disabled { opacity:.55; cursor:not-allowed; }
+.topline { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center; }
+.progress { height:10px; background:var(--border); border-radius:99px; overflow:hidden; margin:12px 0 18px; }
+.progress > div { height:100%; background:var(--accent); width:0; }
+.qtext { font-size:21px; line-height:1.35; font-weight:700; margin:12px 0 16px; }
+.answers { display:grid; gap:10px; }
+.answer { text-align:left; background:transparent; color:var(--text); border:1px solid var(--border); font-weight:500; }
+.answer:hover { border-color:var(--accent); }
+.answer.correct { border-color:var(--good); }
+.answer.wrong { border-color:var(--bad); }
+.feedback { margin-top:14px; padding:12px; border-radius:10px; border:1px solid var(--border); line-height:1.45; }
+.feedback.good { border-color:var(--good); }
+.feedback.bad { border-color:var(--bad); }
+.mastery { margin-top:8px; font-weight:700; }
+.mastery.need { color:var(--warn); }
+.mastery.done { color:var(--good); }
+.actions { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.actions button { width:auto; min-width:135px; }
+.statgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px; }
+.stat { border:1px solid var(--border); border-radius:10px; padding:12px; text-align:center; }
+.stat b { display:block; font-size:24px; }
+.missed { margin-top:14px; }
+.missed article, .bank-item { border-top:1px solid var(--border); padding:12px 0; }
+.hide { display:none !important; }
+.pill { display:inline-block; border:1px solid var(--border); border-radius:999px; padding:3px 8px; font-size:12px; color:var(--muted); margin:2px 4px 2px 0; }
+.bank-remove { width:auto; min-height:34px; margin-top:8px; padding:6px 10px; font-size:13px; background:transparent; color:var(--bad); border-color:var(--bad); }
+details { margin-top:14px; }
+summary { cursor:pointer; font-weight:700; }
+.notice { border-left:4px solid var(--accent); padding:10px 12px; background:var(--soft); border-radius:8px; }
+.storage { margin-top:8px; }
+@media (max-width:620px) {
+  main { padding:calc(12px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left)); }
+  .statgrid { grid-template-columns:repeat(2,1fr); }
+  .actions button { width:100%; }
+}
+</style>
+</head>
+<body>
+<main>
+<section class="panel" id="setup">
+  <h1>IPAP Base Study Program</h1>
+  <p class="small">400 questions from your four challenging slide-only quiz packs. Adaptive repetition, an incorrect bank, instant feedback, source-slide notes, and targeted slide-review recommendations, manual Incorrect Bank removal, and previous/next question navigation, bad-question removal before or after answering, an unasked-this-cycle study mode, and portable cross-device progress transfer are built in.</p>
+
+  <div class="notice small">
+    <strong>Adaptive mastery:</strong> a missed question enters the Incorrect Bank. You can manually remove it at any time, or let it stay there until you answer it correctly
+    <strong>3 times in a row</strong>. Adaptive quizzes deliberately pull bank questions more often until they are mastered.<br><br>
+    <strong>Coverage rule:</strong> questions you answer correctly and that are not in the active Incorrect Bank will not recycle until every question in your selected test pool has been shown once. The only exception is an active Incorrect Bank question, which may repeat sooner so you can reach the 3-correct mastery streak.
+  </div>
+
+  <div id="webAppPanel" class="notice small" style="margin-top:12px">
+    <strong>Safari / iPad web app:</strong> <span id="webAppStatus">Checking browser mode…</span><br>
+    <span>App version <strong id="appVersionLabel">2.0.0</strong> • permanent question IDs enabled</span>
+  </div>
+
+  <div id="appUpdatePanel" class="notice small hide" style="margin-top:12px">
+    <strong>Application update available.</strong> Your saved study history will remain on this device.
+    <div class="actions" style="margin-top:8px">
+      <button id="applyAppUpdate" type="button" style="width:auto">Update app now</button>
+    </div>
+  </div>
+
+  <div class="statgrid">
+    <div class="stat"><b id="bankCount">0</b><span class="small">Incorrect bank</span></div>
+    <div class="stat"><b id="masteredCount">0</b><span class="small">Mastered from bank</span></div>
+    <div class="stat"><b id="attemptCount">0</b><span class="small">Total attempts</span></div>
+    <div class="stat"><b id="accuracy">—</b><span class="small">Lifetime accuracy</span></div>
+  </div>
+
+  <div class="grid" style="margin-top:16px">
+    <label>Day
+      <select id="day">
+        <option>Day 1</option><option>Day 2</option><option>Day 3</option><option>Day 4</option>
+        <option value="All">All days</option>
+      </select>
+    </label>
+    <label>Question type
+      <select id="order">
+        <option value="Mixed">Mixed first + second order</option>
+        <option value="First">First order only</option>
+        <option value="Second">Second order only</option>
+      </select>
+    </label>
+    <label>Quiz size
+      <select id="size">
+        <option value="10">10 questions</option>
+        <option value="25" selected>25 questions</option>
+        <option value="50">50 questions</option>
+        <option value="100">100 questions</option>
+      </select>
+    </label>
+    <label>Study mode
+      <select id="mode">
+        <option value="Adaptive" selected>Adaptive — prioritize missed</option>
+        <option value="Random">Random</option>
+        <option value="Unseen">New Questions Only</option>
+        <option value="Incorrect">Incorrect Bank only</option>
+      </select>
+    </label>
+    <label>Question source
+      <select id="source">
+        <option value="Random" selected>All quizzes</option>
+        <option value="Q1">Original Quiz 1</option>
+        <option value="Q2">Original Quiz 2</option>
+        <option value="Q3">Original Quiz 3</option>
+        <option value="Q4">Original Quiz 4</option>
+      </select>
+    </label>
+  </div>
+
+  <p id="coverageStatus" class="small storage"></p>
+  <div class="actions">
+    <button id="start">Start quiz</button>
+    <button id="studyBank" class="secondary">Study Incorrect Bank</button>
+  </div>
+
+  <section class="panel" style="margin-top:16px; padding:14px">
+    <div class="topline">
+      <div>
+        <h2 style="margin-bottom:4px">What to Review</h2>
+        <p class="small" style="margin:0">General topics and slide ranges based only on your active Incorrect Bank.</p>
+      </div>
+      <button id="refreshRecommendations" type="button" class="secondary" style="width:auto; min-width:150px">Refresh recommendations</button>
+    </div>
+    <div id="reviewRecommendations" class="small"></div>
+  </section>
+
+  <details>
+    <summary>View Incorrect Bank</summary>
+    <div id="bankList" class="small"></div>
+  </details>
+
+  <details>
+    <summary>View Removed Questions</summary>
+    <p class="small">Questions removed as bad are excluded from all future quizzes until you restore them.</p>
+    <div id="removedList" class="small"></div>
+  </details>
+
+  <details open>
+    <summary>Cross-device progress transfer</summary>
+    <p id="storageStatus" class="small storage"></p>
+    <div id="resumeSessionPanel" class="notice small hide" style="margin-top:10px">
+      <strong>Saved quiz available.</strong> This transfer includes your in-progress quiz, current question, answers already given, score, Incorrect Bank, mastery, coverage, and removed questions.
+      <div class="actions">
+        <button id="resumeSession" type="button">Resume saved quiz</button>
+        <button id="discardSession" type="button" class="secondary">Discard saved quiz</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="copyTransferCode" type="button" class="secondary">Copy progress code</button>
+      <button id="shareProgress" type="button" class="secondary">Share / save progress file</button>
+      <button id="exportProgress" type="button" class="secondary">Download progress file</button>
+    </div>
+
+    <label style="margin-top:12px">Progress transfer code
+      <textarea id="transferCode" rows="4" placeholder="Paste a progress code here when moving to another device."></textarea>
+    </label>
+    <div class="actions">
+      <button id="importTransferCode" type="button">Import pasted code</button>
+      <button id="clearTransferCode" type="button" class="secondary">Clear code</button>
+    </div>
+
+    <label style="margin-top:12px">Or import a saved progress file
+      <input id="importProgress" type="file" accept=".json,application/json">
+    </label>
+  </details>
+
+  <details>
+    <summary>Reset progress</summary>
+    <button id="resetProgress" class="danger" style="margin-top:10px">Reset all progress</button>
+  </details>
+</section>
+
+<section class="panel hide" id="quiz">
+  <div class="topline">
+    <strong id="counter">Question 1 of 25</strong>
+    <span class="small" id="scoreline">Score: 0 / 0</span>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+  <div class="small" id="meta"></div>
+  <div class="qtext" id="qtext"></div>
+  <div class="answers" id="answers"></div>
+  <div id="feedback" class="feedback hide" aria-live="polite"></div>
+  <div class="actions">
+    <button id="prev" class="secondary" disabled>Previous question</button>
+    <button id="next" disabled>Next question</button>
+    <button id="removeBadQuestion" type="button" class="danger">Remove bad question</button>
+    <button id="quit" class="secondary">End quiz</button>
+  </div>
+  <p class="small" style="margin-top:8px">
+    You can remove a bad question <strong>before or after answering it</strong>. It will be excluded from future quizzes and can be restored later under View Removed Questions.
+  </p>
+</section>
+
+<section class="panel hide" id="results">
+  <h2>Quiz complete</h2>
+  <div class="statgrid">
+    <div class="stat"><b id="pct">0%</b><span class="small">Quiz score</span></div>
+    <div class="stat"><b id="correctCount">0</b><span class="small">Correct</span></div>
+    <div class="stat"><b id="missedCount">0</b><span class="small">Missed</span></div>
+    <div class="stat"><b id="bankAfter">0</b><span class="small">Incorrect bank</span></div>
+  </div>
+  <div class="actions">
+    <button id="again">New adaptive quiz</button>
+    <button id="retry" class="secondary">Retry missed this quiz</button>
+    <button id="resultsBank" class="secondary">Study Incorrect Bank</button>
+    <button id="home" class="secondary">Change settings</button>
+  </div>
+  <div id="missedReview" class="missed"></div>
+</section>
+</main>
+
+<script>
+const BANK = {"Day 1":{"Q1-First":[["What does the plasma/cell membrane separate?",["Intracellular fluid from intravascular fluid","Intracellular fluid from surrounding interstitial fluid","Blood from interstitial fluid","Interstitial fluid from intravascular fluid"],1,5,"HEART-0001"],["What does the blood vessel wall separate?",["Blood from interstitial fluid","Intracellular fluid from intravascular fluid","Interstitial fluid from intravascular fluid","Intracellular fluid from surrounding interstitial fluid"],0,5,"HEART-0002"],["What two types of gradients are maintained by barriers of separation?",["Electrical and osmotic gradients","Electrical and concentration gradients","Concentration and pressure gradients","Electrical and pressure gradients"],1,5,"HEART-0003"],["What is intracellular fluid also called?",["Extracellular fluid","Interstitial fluid","Intracellular fluid","Cytosol"],3,7,"HEART-0004"],["Which extracellular sub-compartment is the fluid component of blood?",["Extracellular fluid","Intravascular fluid (plasma)","Interstitial fluid","Intracellular fluid"],1,7,"HEART-0005"],["Which extracellular sub-compartment includes lymph and cerebrospinal fluid?",["Intravascular fluid","Interstitial fluid","Extracellular fluid","Intracellular fluid"],1,7,"HEART-0006"],["What does the brain receive and process?",["Sensory information","Reflexes","Signals to and from the brain","Motor actions in the body"],0,9,"HEART-0007"],["What does the spinal cord conduct?",["Signals to and from the brain","Reflexes","Motor actions in the body","Sensory information"],0,9,"HEART-0008"],["What does the spinal cord control?",["Sensory information","Motor actions in the body","Reflexes","Signals to and from the brain"],2,9,"HEART-0009"],["Which nervous-system division conducts impulses from the central nervous system to skeletal muscles?",["Sympathetic nervous system","Somatic nervous system","Autonomic nervous system","Parasympathetic nervous system"],1,11,"HEART-0010"],["Which nervous-system division is voluntary?",["Parasympathetic nervous system","Sympathetic nervous system","Autonomic nervous system","Somatic nervous system"],3,11,"HEART-0011"],["Which autonomic division is associated with fight or flight?",["Parasympathetic nervous system","Sympathetic nervous system","Somatic nervous system","Autonomic nervous system"],1,11,"HEART-0012"],["Which neurotransmitters are listed for the sympathetic nervous system?",["Acetylcholine","Epinephrine","Norepinephrine","Norepinephrine and epinephrine"],3,11,"HEART-0013"],["Which autonomic division is associated with rest and digest/feed and breed?",["Autonomic nervous system","Sympathetic nervous system","Somatic nervous system","Parasympathetic nervous system"],3,11,"HEART-0014"],["Which neurotransmitter is listed for the parasympathetic nervous system?",["Acetylcholine","Norepinephrine and epinephrine","Epinephrine","Norepinephrine"],0,11,"HEART-0015"],["Where does the heart rest?",["Inferior to the diaphragm","On the diaphragm near the midline of the thoracic cavity","Posterior to the sternum","In the mediastinum"],1,16,"HEART-0016"],["What forms the apex of the heart?",["Posterior surface formed by the left atrium","Inferolateral part of the left ventricle","Parietal layer of serous pericardium","Inflammation of the endocardium that typically involves the valves"],1,18,"HEART-0017"],["What forms the right border of the heart?",["Right atrium","Right ventricle","Left ventricle","Left atrium"],0,21,"HEART-0018"],["What forms the left border of the heart?",["Right ventricle and part of the left ventricle at the apex","Right atrium","Left ventricle and auricle","Both atria and the great vessels"],2,21,"HEART-0019"],["What forms the superior border of the heart?",["Both atria and the great vessels","Left ventricle and auricle","Right ventricle and part of the left ventricle at the apex","Right atrium"],0,21,"HEART-0020"],["Which surface of the heart is formed by the left atrium?",["Anterior (sternocostal) surface","Right pulmonary surface","Inferior (diaphragmatic) surface","Posterior surface"],3,24,"HEART-0021"],["Which heart surface faces the right lung?",["Posterior surface","Right pulmonary surface","Left pulmonary surface","Anterior (sternocostal) surface"],1,25,"HEART-0022"],["Which heart surface faces the left lung?",["Left pulmonary surface","Posterior surface","Right pulmonary surface","Inferior (diaphragmatic) surface"],0,25,"HEART-0023"],["What is dextrocardia?",["Dextrocardia that affects only the heart","Inflammation of the endocardium that typically involves the valves","A congenital abnormality in which the apex of the heart faces right instead of left","General transposition of thoracic and abdominal viscera including the heart"],2,30,"HEART-0024"],["What is isolated dextrocardia?",["A congenital abnormality in which the apex of the heart faces right instead of left","Dextrocardia that affects only the heart","Inflammation of the endocardium that typically involves the valves","General transposition of thoracic and abdominal viscera including the heart"],1,30,"HEART-0025"]],"Q2-First":[["What is situs inversus totalis?",["A congenital abnormality in which the apex of the heart faces right instead of left","General transposition of thoracic and abdominal viscera including the heart","Space between the visceral and parietal layers of serous pericardium","The heart and the beginning of the great vessels"],1,30,"HEART-0026"],["What is another name for the pericardium?",["Pericardial sac","Parietal layer of serous pericardium","Fibrous pericardium","Pericardium"],0,33,"HEART-0027"],["What does the pericardium surround and protect?",["The heart and the beginning of the great vessels","In the mediastinum","Between the parietal and visceral serous layers","Space between the visceral and parietal layers of serous pericardium"],0,33,"HEART-0028"],["Where does the pericardium confine the heart?",["Pericardium","Fibrous pericardium","Pericardial sac","In the mediastinum"],3,33,"HEART-0029"],["Which pericardial layer is attached to the central tendon of the diaphragm?",["Parietal layer of serous pericardium","Visceral layer of serous pericardium (epicardium)","Epicardium","Fibrous pericardial layer"],3,34,"HEART-0030"],["What are the two parts of the serous pericardium?",["Parietal layer and visceral layer","Pericardial sac","Fibrous pericardium","Pericardium"],0,34,"HEART-0031"],["Where is pericardial fluid located?",["Intracellular fluid","Between the parietal and visceral serous layers","Interstitial fluid","Extracellular fluid"],1,34,"HEART-0032"],["What is another name for the visceral layer of serous pericardium?",["Isolated dextrocardia","Situs inversus totalis","Epicardium","Dextrocardia"],2,42,"HEART-0033"],["What is the pericardial cavity?",["The heart and the beginning of the great vessels","Space between the visceral and parietal layers of serous pericardium","In the mediastinum","Between the parietal and visceral serous layers"],1,43,"HEART-0034"],["What is the function of pericardial fluid?",["Interstitial fluid","Extracellular fluid","Intracellular fluid","Reduce friction between layers as the heart moves"],3,43,"HEART-0035"],["What are the three layers of the heart from external to internal?",["Epicardium and endocardium","Epicardium, myocardium, endocardium","Blood from interstitial fluid","Atria from ventricles"],1,46,"HEART-0036"],["Which layer of the heart is the muscle layer?",["Myocardium","Epicardium","Endocardium","Fibrous pericardium"],0,46,"HEART-0037"],["Which heart layer is the smooth inner lining of the chambers?",["Epicardium","Parietal serous pericardium","Endocardium","Myocardium"],2,53,"HEART-0038"],["What else does the endocardium cover?",["Endocardium","In the mediastinum","Epicardium and endocardium","Heart valves"],3,53,"HEART-0039"],["What is the endothelial lining called when it is in the heart?",["Myocardium","Endocardium","Epicardium","Parietal serous pericardium"],1,53,"HEART-0040"],["What is endocarditis?",["Dextrocardia","Situs inversus totalis","Inflammation of the endocardium that typically involves the valves","Isolated dextrocardia"],2,55,"HEART-0041"],["What treatment is listed for endocarditis?",["Isolated dextrocardia","Situs inversus totalis","intravenous antibiotics","Dextrocardia"],2,55,"HEART-0042"],["What are the atria?",["Raised ventricular muscle bundles","Two superior receiving chambers","Two inferior pumping chambers","Pouch-like atrial appendages"],1,58,"HEART-0043"],["What are the ventricles?",["Raised ventricular muscle bundles","Two inferior pumping chambers","Pouch-like atrial appendages","Two superior receiving chambers"],1,58,"HEART-0044"],["What are auricles?",["Crista terminalis","Pectinate muscle","Pouch-like atrial appendages","Auricle"],2,60,"HEART-0045"],["Where are auricles located?",["Auricle","Crista terminalis","Pectinate muscle","On the anterior surface of each atrium"],3,60,"HEART-0046"],["What does the coronary sulcus externally separate?",["Interventricular sulcus","Coronary sulcus","Atria from ventricles","Atrioventricular sulcus"],2,62,"HEART-0047"],["What is another name for the coronary sulcus?",["Interventricular sulcus","Coronary sulcus","Atrioventricular sulcus","Crista terminalis"],2,62,"HEART-0048"],["What does the interventricular sulcus externally separate?",["Atrioventricular sulcus","Coronary sulcus","Right and left ventricles","Interventricular sulcus"],2,62,"HEART-0049"],["What are chordae tendineae?",["Tendon-like cords connected to papillary muscles","Crista terminalis","Pectinate muscle","Auricle"],0,67,"HEART-0050"]],"Q3-Second":[["A membrane separates fluid inside a cell from fluid around the cell. Which barrier is being described?",["Plasma/cell membrane","Intracellular fluid from surrounding interstitial fluid","Blood from interstitial fluid","Intracellular fluid from intravascular fluid"],0,5,"HEART-0051"],["A barrier separates circulating blood from the fluid around tissue cells. Which barrier is it?",["Intracellular fluid from intravascular fluid","Blood vessel wall","Intracellular fluid from surrounding interstitial fluid","Blood from interstitial fluid"],1,5,"HEART-0052"],["A body fluid sample is taken from inside a cell. Which primary compartment is it from?",["Intracellular fluid","Interstitial fluid","Extracellular fluid","Intravascular fluid"],0,7,"HEART-0053"],["A sample is the liquid portion of blood. Which extracellular sub-compartment is it from?",["Intracellular fluid","Extracellular fluid","Intravascular fluid","Interstitial fluid"],2,7,"HEART-0054"],["A signal travels from the central nervous system to skeletal muscle for conscious movement. Which system carries it?",["Autonomic nervous system","Sympathetic nervous system","Somatic nervous system","Parasympathetic nervous system"],2,11,"HEART-0055"],["A response involves norepinephrine and epinephrine and prepares the body for fight or flight. Which division is active?",["Autonomic nervous system","Parasympathetic nervous system","Somatic nervous system","Sympathetic nervous system"],3,11,"HEART-0056"],["A response uses acetylcholine and supports rest and digest. Which division is active?",["Somatic nervous system","Sympathetic nervous system","Parasympathetic nervous system","Autonomic nervous system"],2,11,"HEART-0057"],["A structure is inferior and lateral and is formed by the left ventricle. What part of the heart is it?",["Base","Apex","Right border","Left border"],1,18,"HEART-0058"],["A cardiac border is formed by the right atrium. Which border is it?",["Inferior border","Right border","Superior border","Left border"],1,21,"HEART-0059"],["A cardiac border is formed by the left ventricle and auricle. Which border is it?",["Superior border","Right border","Left border","Inferior border"],2,21,"HEART-0060"],["A cardiac border includes both atria and the great vessels. Which border is it?",["Superior border","Right border","Inferior border","Left border"],0,21,"HEART-0061"],["A cardiac surface is formed by the left atrium. Which surface is it?",["Posterior surface","Inferior (diaphragmatic) surface","Anterior (sternocostal) surface","Right pulmonary surface"],0,24,"HEART-0062"],["A cardiac surface directly faces the right lung. Which surface is it?",["Left pulmonary surface","Anterior (sternocostal) surface","Right pulmonary surface","Posterior surface"],2,25,"HEART-0063"],["A cardiac surface directly faces the left lung. Which surface is it?",["Right pulmonary surface","Posterior surface","Inferior (diaphragmatic) surface","Left pulmonary surface"],3,25,"HEART-0064"],["The apex points to the right but the other viscera are not transposed. Which condition is described?",["Dextrocardia","Situs inversus totalis","Endocarditis","Isolated dextrocardia"],3,30,"HEART-0065"],["The heart and other thoracic and abdominal viscera are transposed. Which condition is described?",["Dextrocardia","Isolated dextrocardia","Endocarditis","Situs inversus totalis"],3,30,"HEART-0066"],["A dense fibrous membrane surrounds the heart and anchors it in the mediastinum while allowing contraction. What structure is it?",["Heart valves","Fibrous pericardium","Pericardium","In the mediastinum"],2,33,"HEART-0067"],["A pericardial layer is superficial, tough, inelastic, and continuous with the diaphragm. Which layer is it?",["Visceral layer of serous pericardium (epicardium)","Fibrous pericardial layer","Parietal layer of serous pericardium","Fibrous pericardium"],3,39,"HEART-0068"],["A serous layer is fused to the fibrous pericardium. Which layer is it?",["Visceral layer of serous pericardium (epicardium)","Fibrous pericardial layer","Epicardium","Parietal layer of serous pericardium"],3,42,"HEART-0069"],["A serous layer adheres tightly to the heart surface. Which layer is it?",["Posterior surface","Visceral layer of serous pericardium (epicardium)","Inferior (diaphragmatic) surface","Anterior (sternocostal) surface"],1,42,"HEART-0070"],["Fluid between the parietal and visceral serous layers reduces friction. What space contains it?",["Extracellular fluid","Interstitial fluid","Pericardial cavity","Intracellular fluid"],2,43,"HEART-0071"],["A heart-wall layer is also the visceral serous pericardium. Which layer is it?",["Epicardium","Isolated dextrocardia","Situs inversus totalis","Dextrocardia"],0,47,"HEART-0072"],["A heart-wall layer generates the pumping action of the heart. Which layer is it?",["Endocardium","Myocardium","Fibrous pericardium","Epicardium"],1,50,"HEART-0073"],["A smooth lining covers the inside of heart chambers and continues into the great-vessel endothelium. Which layer is it?",["Epicardium","Myocardium","Parietal serous pericardium","Endocardium"],3,53,"HEART-0074"],["Inflammation involves the inner lining of the heart and its valves. Which condition is described?",["Endocarditis","Isolated dextrocardia","Situs inversus totalis","Dextrocardia"],0,55,"HEART-0075"]],"Q4-Second":[["A chamber receives blood returning to the heart through veins. Is it an atrium or ventricle?",["Atrium","Left atrium","Right atrium","Ventricle"],0,58,"HEART-0076"],["A chamber pumps blood away from the heart into arteries. Is it an atrium or ventricle?",["Left atrium","Atrium","Right atrium","Ventricle"],3,58,"HEART-0077"],["A pouch-like structure increases atrial collecting and pumping capacity. What is it?",["Crista terminalis","Papillary muscle","Auricle","Pectinate muscle"],2,60,"HEART-0078"],["A groove separates the atria from the ventricles on the heart surface. Which groove is it?",["Atrioventricular septum","Interventricular sulcus","Posterior interventricular sulcus","Coronary sulcus"],3,62,"HEART-0079"],["A groove separates the right and left ventricles externally. Which groove is it?",["Posterior interventricular sulcus","Interventricular sulcus","Atrioventricular sulcus","Coronary sulcus"],1,62,"HEART-0080"],["A ridged muscle is found in the anterior right atrium and in both auricles. What is it?",["Pectinate muscle","Papillary muscle","Auricle","Crista terminalis"],0,65,"HEART-0081"],["A line in the right atrium marks the transition from smooth wall to pectinate muscles. What is it?",["Pectinate muscles","Fossa ovalis","Interatrial septum","Crista terminalis"],3,65,"HEART-0082"],["A cone-shaped structure is a specialized trabecula carnea and anchors tendon-like cords. What is it?",["Crista terminalis","Pectinate muscle","Papillary muscle","Auricle"],2,67,"HEART-0083"],["A tendon-like cord connects a papillary muscle to an atrioventricular valve cusp. What is it?",["Pectinate muscle","Crista terminalis","Chordae tendineae","Auricle"],2,67,"HEART-0084"],["Raised bundles of cardiac muscle form ridges in the ventricles. What are they?",["Trabeculae carneae","Pouch-like atrial appendages","Two superior receiving chambers","Two inferior pumping chambers"],0,67,"HEART-0085"],["Which two structures work together at an atrioventricular valve: the tendon-like cords and the cone-shaped muscle projections?",["Pectinate muscle","Crista terminalis","Chordae tendineae and papillary muscles","Auricle"],2,67,"HEART-0086"],["If a structure is an atrial appendage and has the same three basic heart-wall layers, what structure is it?",["Myocardium","Endocardium","Auricle","Epicardium"],2,60,"HEART-0087"],["If a groove is also called the atrioventricular sulcus, what does it separate?",["Atria from ventricles","Interventricular sulcus","Atrioventricular sulcus","Coronary sulcus"],0,62,"HEART-0088"],["Which two heart-wall layers are directly continuous with serous/endothelial linings: the outer visceral serous layer and the inner vascular lining?",["Epicardium and endocardium","Isolated dextrocardia","Situs inversus totalis","Dextrocardia"],0,47,"HEART-0089"],["A membrane is fused to connective tissues of great vessels at its open end and to the central tendon below. Which membrane is it?",["Plasma/cell membrane","Fibrous pericardial layer","Fibrous pericardium","In the mediastinum"],2,39,"HEART-0090"],["Which layer lies directly on the heart surface and also forms the outermost heart-wall layer?",["Posterior surface","Epicardium","Inferior (diaphragmatic) surface","Anterior (sternocostal) surface"],1,42,"HEART-0091"],["Which chamber type is superior and receiving, while the other is inferior and pumping?",["Atria are superior receiving chambers; ventricles are inferior pumping chambers","Signals to and from the brain","Inflammation of the endocardium that typically involves the valves","Parietal and visceral layers of serous pericardium"],0,58,"HEART-0092"],["A structure is described as a special ridge of muscle in the atrium rather than a ventricular ridge. What is it?",["Papillary muscle","Crista terminalis","Pectinate muscle","Auricle"],2,65,"HEART-0093"],["A structure is described as a raised ventricular muscle bundle rather than an atrial ridge. What is it?",["Trabecula carnea","Pectinate muscle","Crista terminalis","Auricle"],0,67,"HEART-0094"],["A disease of the endocardium has a bacterial cause listed and is treated with intravenous antibiotics. Which disease is it?",["Endocarditis","Situs inversus totalis","Isolated dextrocardia","Dextrocardia"],0,55,"HEART-0095"],["A pericardial layer is cavity lining, while another is organ lining. Which pair is this?",["Parietal and visceral layers of serous pericardium","Parietal layer of serous pericardium","Visceral layer of serous pericardium (epicardium)","Fibrous pericardial layer"],0,34,"HEART-0096"],["Which structure directly reduces friction as the heart moves: fibrous tissue, myocardium, or pericardial fluid?",["Intracellular fluid","Interstitial fluid","Pericardial fluid","Extracellular fluid"],2,43,"HEART-0097"],["Which surface of the heart corresponds to the chamber that is a receiving chamber on the posterior side?",["Posterior surface","Inferior (diaphragmatic) surface","Posterior surface formed by the left atrium","Anterior (sternocostal) surface"],2,24,"HEART-0098"],["Which external groove would you follow to distinguish the ventricular chambers from one another?",["Posterior interventricular sulcus","Interventricular sulcus","Coronary sulcus","Atrioventricular sulcus"],1,62,"HEART-0099"],["Which external groove would you follow to distinguish atrial from ventricular regions?",["Atrioventricular sulcus","Coronary sulcus","Coronary (atrioventricular) sulcus","Interventricular sulcus"],2,62,"HEART-0100"]]},"Day 2":{"Q1-First":[["Which vessels deliver blood to the right atrium?",["Superior vena cava, inferior vena cava, and coronary sinus","Brachiocephalic trunk","Ascending aorta","Superior vena cava"],0,2,"HEART-0101"],["What forms the border between smooth and rough surfaces of the right atrium?",["Fossa ovalis","Crista terminalis","Pectinate muscles","Interatrial septum"],1,2,"HEART-0102"],["Why is the anterior wall of the right atrium rough?",["Crista terminalis","Fossa ovalis","Interatrial septum","Pectinate muscles"],3,2,"HEART-0103"],["What separates the left and right atria?",["Fibrous skeleton","Interventricular septum","Interatrial septum","Crista terminalis"],2,2,"HEART-0104"],["What remnant is found in the interatrial septum?",["Foramen ovale","Fossa ovalis","Ligamentum arteriosum","Crista terminalis"],1,2,"HEART-0105"],["Which valve carries blood from the right atrium to the right ventricle?",["Aortic valve","Mitral (bicuspid) valve","Tricuspid valve","Pulmonic valve"],2,2,"HEART-0106"],["What unique bridge in the right ventricle carries the right bundle branch?",["Chordae tendineae","Moderator band","Papillary muscles","Trabeculae carneae"],1,4,"HEART-0107"],["What do chordae tendineae connect to in the right ventricle?",["Moderator band","Trabeculae carneae","Papillary muscles","Cusps of the tricuspid valve and papillary muscles"],3,4,"HEART-0108"],["Where does blood pass from the right ventricle?",["Pulmonary trunk","Superior vena cava","Pulmonary veins","Proximal ascending aorta"],0,5,"HEART-0109"],["Through which valve does blood leave the right ventricle?",["Mitral (bicuspid) valve","Pulmonic valve","Tricuspid valve","Aortic valve"],1,5,"HEART-0110"],["What does the pulmonary trunk divide into?",["Pulmonary veins","Left and right coronary arteries","Left and right pulmonary arteries","Superior and inferior venae cavae"],2,5,"HEART-0111"],["What type of blood do pulmonary arteries carry to the lungs?",["Oxygenated blood","Systemic venous blood","Coronary venous blood","Deoxygenated blood"],3,5,"HEART-0112"],["Which chamber receives oxygenated blood from the lungs?",["Right atrium","Right ventricle","Left ventricle","Left atrium"],3,7,"HEART-0113"],["Which vessels return oxygenated blood to the left atrium?",["Coronary veins","Superior and inferior venae cavae","Pulmonary arteries","Pulmonary veins"],3,7,"HEART-0114"],["Which valve carries blood from the left atrium to the left ventricle?",["Tricuspid valve","Pulmonic valve","Mitral (bicuspid) valve","Aortic valve"],2,7,"HEART-0115"],["Which chamber forms the apex of the heart?",["Left atrium","Left ventricle","Right ventricle","Right atrium"],1,9,"HEART-0116"],["Which ventricular feature is absent from the left ventricle?",["Trabeculae carneae","Chordae tendineae","Moderator band","Papillary muscles"],2,9,"HEART-0117"],["Where does blood pass from the left ventricle?",["Superior vena cava","Proximal ascending aorta","Pulmonary trunk","Aortic arch"],1,10,"HEART-0118"],["Through which valve does blood leave the left ventricle?",["Aortic valve","Pulmonic valve","Mitral (bicuspid) valve","Tricuspid valve"],0,10,"HEART-0119"],["Through what structures does blood enter the coronary arteries from the proximal ascending aorta?",["Coronary sulcus","Coronary sinus","Posterior interventricular sulcus","Coronary ostia"],3,10,"HEART-0120"],["What conduction structures are housed in the interventricular septum?",["Papillary muscles and chordae tendineae","Bundle of His and bundle branches","Pectinate muscles and crista terminalis","sinoatrial node and atrioventricular node"],1,13,"HEART-0121"],["What tissue makes up the fibrous skeleton?",["Dense connective tissue","Endothelial tissue","Cardiac muscle tissue","Serous pericardium"],0,16,"HEART-0122"],["What electrical role does the fibrous skeleton perform?",["Returns coronary blood to the right atrium","Carries the right bundle branch","Electrical insulation between atrial and ventricular muscle fibers","Provides one-way blood flow through the heart"],2,16,"HEART-0123"],["What does the foramen ovale become after closure?",["Foramen ovale","Crista terminalis","Fossa ovalis","Ligamentum arteriosum"],2,20,"HEART-0124"],["What does the ductus arteriosus become after closure?",["Fossa ovalis","Ductus arteriosus","Foramen ovale","Ligamentum arteriosum"],3,21,"HEART-0125"]],"Q2-First":[["What does the ductus arteriosus connect before closure?",["Right atrium to left atrium","Aortic arch to left pulmonary artery","Pulmonary artery to the arch of the aorta","Right ventricle to pulmonary trunk"],2,21,"HEART-0126"],["Which valves separate atria from ventricles?",["Semilunar valves","Aortic and pulmonic valves","Mitral and tricuspid valves","Atrioventricular valves"],3,25,"HEART-0127"],["Which valves separate ventricles from vessels?",["Semilunar valves","Aortic and pulmonic valves","Mitral and tricuspid valves","Atrioventricular valves"],0,25,"HEART-0128"],["Which valves are atrioventricular valves?",["Mitral and tricuspid valves","Mitral and aortic valves","Tricuspid and pulmonic valves","Aortic and pulmonic valves"],0,25,"HEART-0129"],["Which valves are semilunar valves?",["Mitral and tricuspid valves","Mitral and aortic valves","Aortic and pulmonic valves","Tricuspid and pulmonic valves"],2,25,"HEART-0130"],["What causes heart valves to open and close?",["Coronary blood flow","Papillary-muscle contraction","Electrical depolarization","Pressure changes"],3,27,"HEART-0131"],["What is regurgitation?",["Slower blood flow through an abnormal valve","Backward blood flow through an abnormal valve","Incomplete closure of a semilunar valve","atrioventricular valve prolapse into the atria"],1,30,"HEART-0132"],["What is stenosis?",["Incomplete closure of a semilunar valve","Slower blood flow through an abnormal valve","Backward blood flow through an abnormal valve","atrioventricular valve prolapse into the atria"],1,30,"HEART-0133"],["What happens to atrioventricular valves during ventricular systole?",["They close","Remain open","Remain closed","They open"],0,32,"HEART-0134"],["What happens to semilunar valves during ventricular systole?",["Remain open","Remain closed","They open","They close"],2,32,"HEART-0135"],["What happens to semilunar valves during ventricular diastole?",["They open","They close","Remain closed","Remain open"],1,32,"HEART-0136"],["What happens to atrioventricular valves during ventricular diastole?",["They open","They close","Remain open","Remain closed"],0,32,"HEART-0137"],["What do papillary muscles and chordae prevent during ventricular contraction?",["Backward blood flow through an abnormal valve","Slower blood flow through an abnormal valve","Semilunar-valve eversion into the ventricles","atrioventricular valve prolapse into the atria"],3,33,"HEART-0138"],["What are the two semilunar valves?",["Mitral and aortic valves","Mitral and tricuspid valves","Tricuspid and pulmonic valves","Aortic and pulmonic valves"],3,36,"HEART-0139"],["What is the heart's own network of blood vessels called?",["Pulmonary circulation","Collateral circulation","Systemic circulation","Coronary circulation"],3,44,"HEART-0140"],["Where do coronary arteries branch from?",["Proximal ascending aorta","Aortic arch","Pulmonary trunk","Superior vena cava"],0,45,"HEART-0141"],["When does coronary blood flow increase after the vessels were squeezed during contraction?",["During isovolumetric contraction","During atrial systole","During ventricular diastole","During ventricular systole"],2,45,"HEART-0142"],["What are the two branches of the left main coronary artery?",["Marginal and posterior descending arteries","Great and middle cardiac veins","Small and anterior cardiac veins","Left anterior descending and circumflex arteries"],3,46,"HEART-0143"],["What branches arise from the right main coronary artery?",["Left anterior descending and circumflex arteries","Small and anterior cardiac veins","Great and middle cardiac veins","Marginal and posterior descending arteries"],3,46,"HEART-0144"],["Where is the left anterior descending artery located?",["Atrioventricular sulcus","Interventricular sulcus","Coronary sulcus","Posterior interventricular sulcus"],1,49,"HEART-0145"],["Where is the circumflex artery located?",["Interventricular sulcus","Posterior interventricular sulcus","Coronary sulcus","Atrioventricular septum"],2,49,"HEART-0146"],["Where is the posterior descending artery located?",["Posterior interventricular sulcus","Interventricular sulcus","Coronary sulcus","Right cardiac margin"],0,51,"HEART-0147"],["Where does the coronary sinus return blood?",["Right ventricle","Right atrium","Left atrium","Left ventricle"],1,56,"HEART-0148"],["Which coronary veins open directly into the right atrium?",["Anterior cardiac veins","Small cardiac vein","Great cardiac vein","Middle cardiac vein"],0,56,"HEART-0149"],["What is myocardial infarction?",["Slower flow through an abnormal valve","Backward flow through an abnormal valve","Complete obstruction of a vessel with cellular death in surrounding tissue","Partial obstruction with reduced oxygen but no cellular death"],2,61,"HEART-0150"]],"Q3-Second":[["Blood enters the right atrium from the venae cavae. Which valve must it cross before reaching the right ventricle?",["Tricuspid valve","Mitral (bicuspid) valve","Pulmonic valve","Aortic valve"],0,2,"HEART-0151"],["Blood has just entered the right ventricle. Which valve will it cross to enter the pulmonary trunk?",["Aortic valve","Tricuspid valve","Pulmonic valve","Mitral (bicuspid) valve"],2,5,"HEART-0152"],["Blood returns from the lungs to the left atrium. Which valve is next in its path?",["Pulmonic valve","Aortic valve","Tricuspid valve","Mitral valve"],3,7,"HEART-0153"],["Blood is in the left ventricle. Which valve must it cross to enter the aorta?",["Mitral (bicuspid) valve","Tricuspid valve","Aortic valve","Pulmonic valve"],2,10,"HEART-0154"],["A ventricular structure carries the right bundle branch. Which structure is it?",["Trabeculae carneae","Papillary muscles","Chordae tendineae","Moderator band"],3,4,"HEART-0155"],["A chamber contains trabeculae carneae and chordae tendineae but no moderator band. Which chamber is it?",["Right ventricle","Left atrium","Right atrium","Left ventricle"],3,9,"HEART-0156"],["A conduction pathway must cross from atria to ventricles through the normal route. Which septum houses much of this pathway?",["Fibrous skeleton","Dense connective tissue","Interatrial septum","Interventricular septum"],3,13,"HEART-0157"],["Electrical activity is prevented from spreading randomly from atrial muscle to ventricular muscle. Which structure provides this insulation?",["During ventricular diastole","Fibrous skeleton","Ventricular diastole","Semilunar valves"],1,16,"HEART-0158"],["A fetal opening directly connects the atria and bypasses the right ventricle and lungs. What is it?",["Fossa ovalis","Ligamentum arteriosum","Ductus arteriosus","Foramen ovale"],3,20,"HEART-0159"],["A fetal shunt moves blood from the pulmonary artery to the aortic arch. What is it?",["Ductus arteriosus","Ligamentum arteriosum","Foramen ovale","Fossa ovalis"],0,21,"HEART-0160"],["A postnatal remnant connects the aortic arch and left pulmonary artery. What is it?",["Foramen ovale","Ductus arteriosus","Fossa ovalis","Ligamentum arteriosum"],3,21,"HEART-0161"],["During ventricular contraction, which valve group closes first as pressure rises?",["Mitral and tricuspid valves","Semilunar valves","Aortic and pulmonic valves","Atrioventricular valves"],3,28,"HEART-0162"],["During ventricular contraction, which valve group opens when ventricular pressure exceeds vessel pressure?",["Semilunar valves","Mitral and tricuspid valves","Atrioventricular valves","Aortic and pulmonic valves"],0,28,"HEART-0163"],["During ventricular relaxation, which valve group is open for filling?",["Mitral and tricuspid valves","Atrioventricular valves","Semilunar valves","Aortic and pulmonic valves"],1,32,"HEART-0164"],["During ventricular relaxation, which valve group prevents arterial backflow?",["Atrioventricular valves","Mitral and tricuspid valves","Aortic and pulmonic valves","Semilunar valves"],3,32,"HEART-0165"],["Papillary muscles contract and chordae become taut. What problem are they preventing?",["Slower blood flow through an abnormal valve","atrioventricular valve prolapse into the atria","Backward blood flow through an abnormal valve","Semilunar-valve eversion into the ventricles"],1,33,"HEART-0166"],["A semilunar valve closes because blood moves backward toward the heart and fills the cusps. What phase is occurring?",["Ventricular diastole","Deoxygenated blood","During ventricular diastole","Semilunar valve"],0,36,"HEART-0167"],["A small amount of blood moves backward into veins when the atria contract even though no valve is present. What limits this backflow?",["Pressure changes","Mechanical compression of the venous entry points","Backward blood flow through an abnormal valve","atrioventricular valve prolapse into the atria"],1,41,"HEART-0168"],["Coronary vessels are squeezed during contraction. When is their blood flow greatest afterward?",["Coronary circulation","During ventricular diastole","Deoxygenated blood","Ventricular diastole"],3,45,"HEART-0169"],["An artery lies in the interventricular sulcus. Which coronary branch is it?",["Left anterior descending artery","Circumflex artery","Right marginal artery","Posterior descending artery"],0,49,"HEART-0170"],["An artery lies in the coronary sulcus and wraps around the left side. Which branch is it?",["Circumflex artery","Left anterior descending artery","Right marginal artery","Posterior descending artery"],0,49,"HEART-0171"],["An artery runs on the right margin and supplies the right ventricle. Which branch is it?",["Right marginal artery","Left anterior descending artery","Circumflex artery","Posterior descending artery"],0,51,"HEART-0172"],["An artery lies in the posterior interventricular sulcus. Which branch is it?",["Left anterior descending artery","Circumflex artery","Posterior descending artery","Right marginal artery"],2,51,"HEART-0173"],["A vein drains the posterior aspect of both ventricles into the coronary sinus. Which vein is it?",["Middle cardiac vein","Great cardiac vein","Small cardiac vein","Posterior cardiac vein"],0,56,"HEART-0174"],["A vein drains part of both ventricles and the left atrium into the coronary sinus. Which vein is it?",["Great cardiac vein","Middle cardiac vein","Posterior cardiac vein","Small cardiac vein"],0,56,"HEART-0175"]],"Q4-Second":[["A vein drains part of the right ventricle and atrium into the coronary sinus. Which vein is it?",["Great cardiac vein","Posterior cardiac vein","Middle cardiac vein","Small cardiac vein"],3,56,"HEART-0176"],["A vein drains the posterior left ventricle into the coronary sinus. Which vein is it?",["Great cardiac vein","Middle cardiac vein","Small cardiac vein","Posterior cardiac vein"],3,56,"HEART-0177"],["A coronary vein bypasses the coronary sinus and opens directly into the right atrium. Which vein is it?",["Anterior cardiac vein","Small cardiac vein","Middle cardiac vein","Great cardiac vein"],0,56,"HEART-0178"],["A coronary vessel is partially obstructed and reduced oxygen weakens cells without killing them. What is this?",["Regurgitation","Stenosis","Myocardial infarction","Myocardial ischemia"],3,61,"HEART-0179"],["A coronary vessel is completely obstructed and surrounding cells undergo necrosis. What is this?",["Myocardial ischemia","Regurgitation","Stenosis","Myocardial infarction"],3,61,"HEART-0180"],["Blood leaves the left ventricle and immediately enters a vessel that gives rise to the coronary arteries. Which vessel is it?",["Inferior vena cava","Superior vena cava","Brachiocephalic trunk","Ascending aorta"],3,68,"HEART-0181"],["A branch of the aortic arch gives rise to the right subclavian and right common carotid arteries. Which branch is it?",["Pulmonary arteries","Aortic and pulmonic valves","Brachiocephalic trunk","Right marginal artery"],2,68,"HEART-0182"],["A vessel returns blood from the head and upper body to the heart. Which vessel is it?",["Superior vena cava","Ascending aorta","Brachiocephalic trunk","Inferior vena cava"],0,71,"HEART-0183"],["A vessel returns blood from the lower body and pierces the diaphragm at the caval hiatus. Which vessel is it?",["Brachiocephalic trunk","Superior vena cava","Ascending aorta","Inferior vena cava"],3,71,"HEART-0184"],["A vessel carries deoxygenated blood away from the right ventricle and divides into two arteries. Which vessel is it?",["Pulmonary trunk","Pulmonary veins","Proximal ascending aorta","Superior vena cava"],0,72,"HEART-0185"],["Which arteries are exceptions because they carry deoxygenated blood?",["Pulmonary arteries","Pulmonary veins","Pulmonary trunk","Deoxygenated blood"],0,72,"HEART-0186"],["Which veins are exceptions because they carry oxygenated blood?",["Superior and inferior venae cavae","Pulmonary veins","Coronary veins","Pulmonary arteries"],1,72,"HEART-0187"],["Blood has just passed through the pulmonic valve. What is the next named vessel?",["Proximal ascending aorta","Superior vena cava","Pulmonary trunk","Pulmonary veins"],2,5,"HEART-0188"],["Blood has just passed through the aortic valve. What is the next named vessel?",["Pulmonary trunk","Superior vena cava","Aortic arch","Proximal ascending aorta"],3,10,"HEART-0189"],["A structure is the remnant of the fetal opening in the atrial septum. What is it?",["Fossa ovalis","Ligamentum arteriosum","Foramen ovale","Crista terminalis"],0,20,"HEART-0190"],["A dense connective-tissue ring surrounds a valve and connects it to the interventricular septum. What system is it part of?",["Interventricular septum","Fibrous skeleton","Interatrial septum","Dense connective tissue"],1,16,"HEART-0191"],["If ventricular pressure falls below atrial pressure, which valve type opens to allow filling?",["Pulmonic valve","Atrioventricular valve","Tricuspid valve","Mitral (bicuspid) valve"],1,33,"HEART-0192"],["If ventricular pressure rises above aortic or pulmonary-trunk pressure, which valve type opens?",["Pulmonic valve","Semilunar valve","Mitral (bicuspid) valve","Tricuspid valve"],1,36,"HEART-0193"],["A cardiac circulation vessel returns venous blood directly to the right atrium through a large vascular sinus. What sinus is it?",["Right atrium","Coronary ostia","Coronary sinus","Coronary circulation"],2,56,"HEART-0194"],["A coronary artery branch is also called the anterior interventricular branch. Which artery is it?",["Right marginal artery","Left anterior descending artery","Posterior descending artery","Circumflex artery"],1,46,"HEART-0195"],["A coronary artery branch is also called the posterior interventricular artery. Which artery is it?",["Posterior descending artery","Right marginal artery","Circumflex artery","Left anterior descending artery"],0,46,"HEART-0196"],["A coronary artery branch is also called the acute marginal branch. Which artery is it?",["Marginal artery","Right marginal artery","Coronary sulcus","Coronary ostia"],0,46,"HEART-0197"],["An alternate arterial route is created where coronary arteries connect. What is this alternate route called?",["Collateral circulation","Pulmonary arteries","Coronary sulcus","Coronary circulation"],0,55,"HEART-0198"],["Connections between two or more arteries supplying the same region are called what?",["Anastomoses","Pulmonary arteries","Fossa ovalis","Left atrium"],0,55,"HEART-0199"],["Which circulation includes coronary arteries, coronary veins, and the coronary sinus?",["Coronary circulation","Pulmonary circulation","Systemic circulation","Collateral circulation"],0,44,"HEART-0200"]]},"Day 3":{"Q1-First":[["What is an action potential?",["Something that impedes current","Measure of potential energy generated by separated charges","Flow of electricity from one point to another","Change in electrical potential associated with passage of an impulse across a muscle-cell or neuron membrane"],3,2,"HEART-0201"],["What is voltage?",["Measure of potential energy generated by separated charges","Change in electrical potential associated with passage of an impulse across a muscle-cell or neuron membrane","Flow of electricity from one point to another","Something that impedes current"],0,3,"HEART-0202"],["What is current?",["Measure of potential energy generated by separated charges","Change in electrical potential associated with passage of an impulse across a muscle-cell or neuron membrane","Something that impedes current","Flow of electricity from one point to another"],3,3,"HEART-0203"],["What is resistance?",["Flow of electricity from one point to another","Something that impedes current","Change in electrical potential associated with passage of an impulse across a muscle-cell or neuron membrane","Measure of potential energy generated by separated charges"],1,3,"HEART-0204"],["What is high resistance called?",["Low resistance","High resistance","Conductor","Insulator"],3,3,"HEART-0205"],["What is low resistance called?",["Low resistance","Insulator","Conductor","High resistance"],2,3,"HEART-0206"],["How do like electrical charges interact?",["They move down a chemical gradient","They repel each other","They remain electrically neutral","They attract each other"],1,6,"HEART-0207"],["How do opposite electrical charges interact?",["They attract each other","They remain electrically neutral","They move down a chemical gradient","They repel each other"],0,6,"HEART-0208"],["What are leakage ion channels?",["Channels opened by physical membrane distortion","Channels that are always open","Channels opened by an electrical threshold","Channels opened by ligand binding"],1,7,"HEART-0209"],["What activates voltage-gated channels?",["Binding of a substance to a receptor","Physical distortion of the cell membrane","No triggering signal; channel remains open","A specified electrical threshold across the membrane"],3,7,"HEART-0210"],["What opens mechanically gated channels?",["Physical distortion of the cell membrane","Binding of a substance to a receptor","A specified electrical threshold across the membrane","No triggering signal; channel remains open"],0,7,"HEART-0211"],["What opens ligand-gated channels?",["Physical distortion of the cell membrane","Binding of a substance to a receptor","A specified electrical threshold across the membrane","No triggering signal; channel remains open"],1,7,"HEART-0212"],["What is depolarization?",["Movement of ions out of a cell","Movement of ions into a cell","A change in membrane potential making the cell less negative or more positive","Return of membrane potential to a more negative or less positive state"],2,10,"HEART-0213"],["What is repolarization?",["Return of membrane potential to a more negative or less positive state","Movement of ions out of a cell","Movement of ions into a cell","A change in membrane potential making the cell less negative or more positive"],0,10,"HEART-0214"],["What is influx?",["A change in membrane potential making the cell less negative or more positive","Return of membrane potential to a more negative or less positive state","Movement of ions into a cell","Movement of ions out of a cell"],2,11,"HEART-0215"],["What is efflux?",["Movement of ions out of a cell","Movement of ions into a cell","A change in membrane potential making the cell less negative or more positive","Return of membrane potential to a more negative or less positive state"],0,11,"HEART-0216"],["What are the two cardiac-cell types listed?",["Autorhythmic/conductive cell","Conductive/autorhythmic cardiac cells","Autorhythmic/conductive cells and contractile muscle fibers","Contractile cardiac muscle cell"],2,15,"HEART-0217"],["What is the main role of conductive cardiac cells?",["Autorhythmic/conductive cells and contractile muscle fibers","Conductive cells of the heart","Detectable electrical currents generated as action potentials propagate through the heart","Initiate and conduct action potentials controlling rhythmic beating"],3,15,"HEART-0218"],["What do contractile cardiac cells require to contract?",["An action potential from conductive cells","Return of membrane potential to a more negative or less positive state","Period during which another action potential cannot occur normally","Change in electrical potential associated with passage of an impulse across a muscle-cell or neuron membrane"],0,15,"HEART-0219"],["What repeating unit is the basic contractile unit of a myocyte?",["Intercalated disc","Sarcomere","Gap junction","Desmosome"],1,17,"HEART-0220"],["What are the thick and thin filaments in a sarcomere?",["Titin and Z-lines","Actin and titin","Myosin and actin","Desmosomes and gap junctions"],2,17,"HEART-0221"],["What protein anchors myosin to the Z-lines?",["Titin","Desmosome","Myosin","Actin"],0,17,"HEART-0222"],["What structures physically hold adjacent cardiac cells together?",["Intercalated discs","Desmosomes","Sarcomeres","Gap junctions"],1,21,"HEART-0223"],["What structures allow action potentials to pass from one cardiac cell to neighboring cells?",["Desmosomes","Gap junctions","Intercalated discs","Sarcomeres"],1,21,"HEART-0224"],["What are the membrane thickenings connecting cardiac cells called?",["Sarcomeres","Desmosomes","Intercalated discs","Gap junctions"],2,21,"HEART-0225"]],"Q2-First":[["Where does the signal that causes cardiac contraction begin?",["Autorhythmic/conductive cells and contractile muscle fibers","Physical distortion of the cell membrane","Conductive cells of the heart","Right atrial wall lateral to the opening of the superior vena cava"],2,25,"HEART-0226"],["Which statement about the cardiac conduction system is NOT supported by the slides?",["It is a nerve tract","It is formed by specialized conductive/autorhythmic cardiac muscle cells","It helps ensure the heart chambers contract in a coordinated manner","Its electrical impulses activate the myocardium"],0,32,"HEART-0227"],["What is the source of electrical activity in the heart?",["Contractile muscle fibers","Contractile cardiac muscle cell","Autorhythmic/conductive cell","Conductive/autorhythmic cardiac cells"],3,32,"HEART-0228"],["What is the primary pacemaker of the heart?",["Sinoatrial node","Purkinje fibers","Atrioventricular node","Atrioventricular bundle"],0,34,"HEART-0229"],["Where does the conduction sequence begin?",["Atrioventricular bundle","Atrioventricular node","Sinoatrial node","Purkinje fibers"],2,36,"HEART-0230"],["Where is the sinoatrial node located?",["Right atrial wall lateral to the opening of the superior vena cava","Apex of the ventricular myocardium","Interventricular septum toward the apex","Left atrial wall near the pulmonary veins"],0,36,"HEART-0231"],["What carries the sinoatrial-node impulse to the left atrium?",["Right and left bundle branches","Bachmann's bundle","Purkinje fibers","Atrioventricular bundle"],1,41,"HEART-0232"],["What structure receives the impulse after the atrial internodal pathways?",["Atrial depolarization","Atrioventricular bundle","Atrioventricular node","Purkinje fibers"],2,42,"HEART-0233"],["Why does conduction slow at the atrioventricular node?",["To produce ventricular repolarization","To provide time for the atria to empty into the ventricles","To initiate atrial depolarization","To rapidly activate Purkinje fibers"],1,42,"HEART-0234"],["What is another name for the atrioventricular bundle?",["Purkinje fibers","Sinoatrial node","Bundle of His","Atrioventricular node"],2,42,"HEART-0235"],["What is the only normal site where action potentials propagate from atria to ventricles?",["Atrioventricular node","Atrioventricular bundle","Sinoatrial node","Purkinje fibers"],1,42,"HEART-0236"],["Where do right and left bundle branches travel?",["Across the right atrium to the left atrium","From the apex upward through ventricular myocardium","Through the interventricular septum toward the apex","Along the coronary sulcus around the heart"],2,44,"HEART-0237"],["Which fibers rapidly conduct the impulse from the apex upward through ventricular myocardium?",["Purkinje fibers","Atrioventricular bundle","Bachmann's bundle","Right and left bundle branches"],0,44,"HEART-0238"],["What ion movement characterizes phase 0 in contractile cells?",["Resting membrane potential","Slow calcium influx balanced with potassium efflux","Rapid potassium efflux","Rapid sodium influx"],3,54,"HEART-0239"],["What occurs during phase 1 in contractile cells?",["Rapid potassium efflux through voltage-gated potassium channels","Rapid sodium influx slows and stops while potassium continues to leak out","Slow calcium influx balanced with potassium efflux","Rapid sodium influx"],1,56,"HEART-0240"],["What ion movements characterize phase 2?",["Slow calcium influx balanced with potassium efflux","Resting membrane potential","Rapid sodium influx","Rapid potassium efflux through voltage-gated potassium channels"],0,58,"HEART-0241"],["What ion movement drives phase 3 repolarization?",["Resting membrane potential","Rapid potassium efflux through voltage-gated potassium channels","Slow calcium influx balanced with potassium efflux","Rapid sodium influx"],1,60,"HEART-0242"],["What is phase 4?",["Phase 2 plateau","Rapid potassium efflux","Rapid sodium influx","Resting membrane potential"],3,62,"HEART-0243"],["What is the absolute refractory period?",["Period of slow calcium influx","Period during which another action potential cannot occur normally","Period of rapid sodium influx","Period of resting membrane potential"],1,64,"HEART-0244"],["What process couples calcium movement to cardiac myocyte contraction?",["Pacemaker function","Excitation-contraction coupling","Cardiac conduction system","Muscle contraction"],1,67,"HEART-0245"],["What does an electrocardiogram record?",["Blood pressure changes","Detectable electrical currents generated as action potentials propagate through the heart","Muscle contraction","Valve closure sounds"],1,70,"HEART-0246"],["What does the P wave represent?",["Atrial depolarization","Ventricular depolarization","Rapid/early septal depolarization","Ventricular repolarization"],0,71,"HEART-0247"],["Which electrical event is represented by the large ventricular complex on the electrocardiogram?",["Atrial depolarization","Rapid/early septal depolarization","Ventricular repolarization","Ventricular depolarization"],3,71,"HEART-0248"],["What does the T wave represent?",["Ventricular depolarization","Rapid/early septal depolarization","Atrial depolarization","Ventricular repolarization"],3,71,"HEART-0249"],["What does the S-T segment represent?",["Time between end of ventricular depolarization and beginning of ventricular repolarization","Time from beginning of ventricular depolarization through end of ventricular repolarization","Time of atrial depolarization only","Time from atrial depolarization to beginning of ventricular depolarization"],0,74,"HEART-0250"]],"Q3-Second":[["A membrane channel is open continuously without a triggering signal. Which type is it?",["Mechanically gated channel","Ligand-gated channel","Voltage-gated channel","Leakage channel"],3,7,"HEART-0251"],["A channel opens when the membrane reaches an electrical threshold. Which type is it?",["Voltage-gated channel","Leakage channel","Ligand-gated channel","Mechanically gated channel"],0,7,"HEART-0252"],["A channel opens after pressure distorts the membrane. Which type is it?",["Mechanically gated channel","Ligand-gated channel","Leakage channel","Voltage-gated channel"],0,7,"HEART-0253"],["A channel opens after a neurotransmitter binds to a receptor. Which type is it?",["Leakage channel","Ligand-gated channel","Voltage-gated channel","Mechanically gated channel"],1,7,"HEART-0254"],["A cell membrane becomes less negative. Which electrical event is occurring?",["Influx","Repolarization","Efflux","Depolarization"],3,10,"HEART-0255"],["A cell membrane returns toward a more negative state after activation. Which event is occurring?",["Efflux","Depolarization","Repolarization","Influx"],2,10,"HEART-0256"],["Sodium moves from outside the cell into the cytosol. Is this influx or efflux?",["Depolarization","Influx","Efflux","Repolarization"],1,11,"HEART-0257"],["Potassium moves from the cytosol to the extracellular space. Is this influx or efflux?",["Depolarization","Repolarization","Influx","Efflux"],3,11,"HEART-0258"],["A cardiac cell generates and conducts its own action potentials rather than producing the pumping force. Which cell type is it?",["Autorhythmic/conductive cell","Contractile cardiac muscle cell","Contractile muscle fibers","Conductive/autorhythmic cardiac cells"],0,15,"HEART-0259"],["A cardiac cell contracts only after receiving an action potential from another cardiac cell. Which type is it?",["Cardiac conduction system function","Contractile cardiac muscle cell","Autorhythmic/conductive cell","Conductive/autorhythmic cardiac cell"],1,15,"HEART-0260"],["Adjacent cardiac cells need strong mechanical attachment during contraction. Which intercalated-disc structure provides it?",["Myosin and actin","Desmosome","Sarcomere","Titin"],1,21,"HEART-0261"],["Adjacent cardiac cells need direct electrical spread from cell to cell. Which intercalated-disc structure provides it?",["Gap junction","Sarcomere","Myosin and actin","Titin"],0,21,"HEART-0262"],["Actin and myosin interact and shorten a repeating contractile unit. What unit is shortening?",["Desmosome","Gap junction","Intercalated disc","Sarcomere"],3,17,"HEART-0263"],["The impulse begins in the primary pacemaker. Which structure fires first?",["Purkinje fibers","atrioventricular node","sinoatrial node","Atrioventricular bundle"],2,34,"HEART-0264"],["An impulse must reach the left atrium from the right atrium for simultaneous atrial contraction. Which pathway carries it?",["Purkinje fibers","Atrioventricular bundle","Bachmann's bundle","Right and left bundle branches"],2,41,"HEART-0265"],["An impulse reaches a structure where conduction is deliberately slowed so atrial emptying can finish. Which structure is it?",["atrioventricular node","Atrioventricular bundle","Purkinje fibers","sinoatrial node"],0,42,"HEART-0266"],["An impulse leaves the atrioventricular node and crosses the fibrous skeleton to enter the ventricles. Which structure carries it?",["Purkinje fibers","atrioventricular node","Right and left bundle branches","Atrioventricular bundle"],3,42,"HEART-0267"],["After the atrioventricular bundle, the impulse travels through the interventricular septum toward the apex. Which structures carry it?",["sinoatrial node","atrioventricular node","Right and left bundle branches","Atrioventricular bundle"],2,44,"HEART-0268"],["The impulse reaches the apex and then spreads rapidly upward through ventricular myocardium. Which fibers carry it?",["Bachmann's bundle","Purkinje fibers","Right and left bundle branches","Atrioventricular bundle"],1,44,"HEART-0269"],["Which conduction sequence is correct after the sinoatrial node?",["Atrioventricular bundle","sinoatrial node","Internodal pathways → atrioventricular node → atrioventricular bundle → bundle branches → Purkinje fibers","atrioventricular node"],2,41,"HEART-0270"],["A contractile cardiac cell rapidly takes in sodium and becomes depolarized. Which phase is this?",["Phase 2","Phase 3","Phase 0","Phase 1"],2,54,"HEART-0271"],["Rapid sodium entry has stopped, potassium is still leaking out, and calcium channels are opening. Which phase is this?",["Phase 2","Phase 3","Phase 0","Phase 1"],3,56,"HEART-0272"],["Calcium enters while potassium leaves and contraction begins. Which phase is this?",["Phase 1","Phase 4","Phase 2","Phase 3"],2,58,"HEART-0273"],["Voltage-gated potassium channels open, potassium exits rapidly, and the cell relaxes. Which phase is this?",["Phase 3","Phase 1","Phase 4","Phase 2"],0,60,"HEART-0274"],["Rapid potassium efflux is complete and the cell can accept another action potential. Which phase is this?",["Phase 3","Phase 0","Phase 2","Phase 4"],3,62,"HEART-0275"]],"Q4-Second":[["A second action potential cannot be initiated during the current cardiac action potential. What period is this?",["Absolute refractory period","Resting membrane potential","Cardiac conduction system","Something that impedes current"],0,64,"HEART-0276"],["Atrial electrical activation appears on the electrocardiogram. Which wave should be present?",["T wave","Q wave","ventricular depolarization complex","P wave"],3,71,"HEART-0277"],["Ventricular electrical activation appears on the electrocardiogram. Which waveform should be present?",["T wave","Q wave","P wave","ventricular depolarization complex"],3,71,"HEART-0278"],["Ventricular recovery begins on the electrocardiogram. Which wave should be present?",["ventricular depolarization complex","P wave","T wave","Q wave"],2,71,"HEART-0279"],["An interval begins with atrial depolarization and ends at the beginning of ventricular depolarization. Which interval is it?",["ventricular depolarization complex","S-T segment","Q-T interval","P-R interval"],3,74,"HEART-0280"],["A segment spans the end of ventricular depolarization to the beginning of ventricular repolarization. Which segment is it?",["Q-T interval","ventricular depolarization complex","S-T segment","P-R interval"],2,74,"HEART-0281"],["An interval spans the beginning of ventricular depolarization through the end of ventricular repolarization. Which interval is it?",["Q-T interval","S-T segment","ventricular depolarization complex","P-R interval"],0,74,"HEART-0282"],["Depolarization moves down the septum, upward from the apex, then outward from endocardium to epicardium. Which electrocardiogram waveform appears?",["ventricular depolarization complex","T wave","P wave","Q wave"],0,76,"HEART-0283"],["Ventricular contraction begins during one waveform and finishes during the following flat segment. Which pair is it?",["Conductive cells of the heart","Right and left bundle branches","ventricular depolarization complex and S-T segment","Physical distortion of the cell membrane"],2,77,"HEART-0284"],["As the T wave begins, what mechanical event starts in the ventricles?",["Q-T interval","Ventricular depolarization","Ventricular repolarization","Ventricular relaxation"],3,77,"HEART-0285"],["The electrocardiogram is flat after completion of ventricular repolarization and before the next P wave. What electrical event has completed?",["Ventricular repolarization","Rapid/early septal depolarization","Ventricular depolarization","Atrial depolarization"],0,77,"HEART-0286"],["A signal is electrical and travels through specialized cardiac muscle, not neurons. Which system is carrying it?",["Desmosomes and gap junctions","Cardiac conduction system","Cardiac conduction system function","Contractile cardiac muscle cell"],1,25,"HEART-0287"],["A structure is self-excitable and repeatedly generates action potentials that trigger contractions. What cell type is it?",["Contractile cardiac muscle cell","Conductive/autorhythmic cardiac cell","Conductive/autorhythmic cardiac cells","Autorhythmic/conductive cell"],1,32,"HEART-0288"],["The heart needs coordinated chamber contraction. Which function of conductive fibers provides this coordination?",["Pacemaker function","Initiate and conduct action potentials controlling rhythmic beating","To provide time for the atria to empty into the ventricles","Cardiac conduction system function"],3,33,"HEART-0289"],["The heart needs a rhythm-setting source of electrical excitation. Which function of conductive fibers provides it?",["Cardiac conduction system function","To provide time for the atria to empty into the ventricles","Pacemaker function","Initiate and conduct action potentials controlling rhythmic beating"],2,33,"HEART-0290"],["Which structure is the only normal electrical bridge between atria and ventricles because the fibrous skeleton insulates elsewhere?",["Atrioventricular bundle","Purkinje fibers","atrioventricular node","Right and left bundle branches"],0,42,"HEART-0291"],["Which two structures explain how cardiac cells remain physically connected yet electrically coupled?",["Desmosomes and gap junctions","Conductive/autorhythmic cardiac cells","Contractile cardiac muscle cell","Gap junctions"],0,21,"HEART-0292"],["Calcium influx activates actin and myosin in a contractile cell. Which action-potential phase is associated with this?",["Myosin and actin","Sarcomere","Titin","Phase 2 plateau"],3,58,"HEART-0293"],["Sodium influx opens voltage-gated calcium channels and calcium then supports contraction. What overall mechanism is described?",["Pacemaker function","Cardiac conduction system","Muscle contraction","Excitation-contraction coupling"],3,67,"HEART-0294"],["An electrocardiogram wave shows electricity rather than the mechanical contraction itself. What does a flat electrocardiogram portion primarily represent according to the slide?",["Ventricular repolarization","Atrial depolarization","Ventricular depolarization","Muscle contraction"],3,70,"HEART-0295"],["A rapid/early septal depolarization wave is present on an electrocardiogram. Which wave is it?",["ventricular depolarization complex","Q wave","P wave","T wave"],1,71,"HEART-0296"],["Which event occurs first in the normal conduction sequence: atrioventricular node activation or bundle-branch activation?",["atrioventricular node","Atrioventricular bundle","sinoatrial node","atrioventricular node activation"],3,42,"HEART-0297"],["Which event occurs first in the normal conduction sequence: bundle-branch activation or Purkinje-fiber activation?",["Bundle-branch activation","sinoatrial node","atrioventricular node","Atrioventricular bundle"],0,44,"HEART-0298"],["Which event occurs first: atrial depolarization or ventricular depolarization?",["Ventricular repolarization","Rapid/early septal depolarization","Ventricular depolarization","Atrial depolarization"],3,71,"HEART-0299"],["Which event occurs after ventricular depolarization on the electrocardiogram: atrial depolarization or ventricular repolarization?",["Ventricular depolarization","Rapid/early septal depolarization","Ventricular repolarization","Atrial depolarization"],2,71,"HEART-0300"]]},"Day 4":{"Q1-First":[["What is auscultation?",["Blood turbulence caused by valve closure","The act of listening","Recording the electrical activity of the heart","Tracking pressure and volume through one heartbeat"],1,3,"HEART-0301"],["What primarily produces heart sounds?",["Blood rebounding off valve leaflets","Ventricular filling through open atrioventricular valves","Electrical depolarization of the myocardium","Blood turbulence caused by valve closure"],3,3,"HEART-0302"],["What causes the turbulence that produces heart sounds?",["Blood rebounding off valve leaflets","Electrical depolarization of the myocardium","Ventricular filling through open atrioventricular valves","Direct contact of the valve leaflets"],0,3,"HEART-0303"],["What does S1 indicate?",["Atrial contraction","Start of ventricular systole","Start of ventricular diastole","Early diastole during early ventricular filling"],1,4,"HEART-0304"],["What valve closure produces S1 turbulence?",["Semilunar valve closure","Atrioventricular valve closure","atrioventricular valve opening","Semilunar valve opening"],1,4,"HEART-0305"],["How is S1 described?",["\"dupp\"","\"lubb\"","S4","S3"],1,4,"HEART-0306"],["What does S2 indicate?",["Start of ventricular diastole","Atrial contraction","Early diastole during early ventricular filling","Start of ventricular systole"],0,4,"HEART-0307"],["What valve closure produces S2 turbulence?",["atrioventricular valve opening","Semilunar valve opening","Semilunar valve closure","Atrioventricular valve closure"],2,4,"HEART-0308"],["How is S2 described?",["\"lubb\"","S4","\"dupp\"","S3"],2,4,"HEART-0309"],["When does S3 occur?",["Early diastole during early ventricular filling","Ventricular ejection","Late ventricular diastole during atrial contraction","Beginning of ventricular systole"],0,7,"HEART-0310"],["With what mechanical event does S4 coincide?",["Atrial contraction","Start of ventricular systole","Start of ventricular diastole","Early diastole during early ventricular filling"],0,8,"HEART-0311"],["What causes S4 turbulence?",["Blood rebounding after semilunar valve closure","Blood rebounding after atrioventricular valve closure","Rapid passive ventricular filling","Atrial systole forcing blood against a non-compliant ventricular wall"],3,8,"HEART-0312"],["What are the two overarching phases of the cardiac cycle?",["Ventricular diastole","Atrial systole","Ventricular systole","Systole and diastole"],3,12,"HEART-0313"],["What is stage 1 of the cardiac cycle?",["Reduced ventricular ejection","Atrial contraction","Isovolumetric contraction","Rapid ventricular ejection"],1,12,"HEART-0314"],["What is stage 2 of the cardiac cycle?",["Isovolumetric contraction","Reduced ventricular ejection","Rapid ventricular ejection","Atrial contraction"],0,12,"HEART-0315"],["What is stage 3 of the cardiac cycle?",["Reduced ventricular ejection","Rapid ventricular ejection","Atrial contraction","Isovolumetric contraction"],1,12,"HEART-0316"],["What is stage 4 of the cardiac cycle?",["Isovolumetric contraction","Atrial contraction","Reduced ventricular ejection","Rapid ventricular ejection"],2,12,"HEART-0317"],["What is stage 5 of the cardiac cycle?",["Rapid ventricular ejection","Isovolumetric contraction","Isovolumetric relaxation","Atrial contraction"],2,12,"HEART-0318"],["What is stage 6 of the cardiac cycle?",["Atrial contraction","Isovolumetric contraction","Rapid ventricular ejection","Rapid ventricular filling"],3,12,"HEART-0319"],["What is stage 7 of the cardiac cycle?",["Reduced ventricular filling","Isovolumetric contraction","Atrial contraction","Rapid ventricular ejection"],0,12,"HEART-0320"],["What does the Wiggers diagram depict?",["One cardiac cycle focused on the right side of the heart","Only the valve sounds of a heartbeat","Only the electrical events of a heartbeat","One heartbeat focused on the left side of the heart"],3,13,"HEART-0321"],["Which pressures are shown on the Wiggers diagram?",["Left atrial, left ventricular, and aortic pressure","Left atrial, right ventricular, and aortic pressure","Left ventricular, pulmonary, and venous pressure","Right atrial, right ventricular, and pulmonary pressure"],0,13,"HEART-0322"],["What electrocardiogram wave is associated with atrial systole?",["P wave","ventricular depolarization complex","Q wave","T wave"],0,17,"HEART-0323"],["What electrocardiogram complex is associated with ventricular systole?",["Q wave","T wave","P wave","ventricular depolarization complex"],3,21,"HEART-0324"],["What happens to the atrioventricular valves as ventricular systole begins?",["Remain closed","They close","They open","Remain open"],1,21,"HEART-0325"]],"Q2-First":[["What is isovolumetric contraction?",["Ventricular ejection while semilunar valves are open","Ventricular filling while atrioventricular valves are open","Ventricular contraction while both atrioventricular and semilunar valves are closed","Ventricular relaxation while all four valves are closed"],2,21,"HEART-0326"],["What causes the semilunar valves to open during ventricular systole?",["Atrial pressure rises above ventricular pressure","Retrograde flow fills the semilunar cusps","Ventricular pressure falls below atrial pressure","Ventricular pressure rises above pressure in the aorta or pulmonary trunk"],3,22,"HEART-0327"],["What is ventricular ejection?",["Phase when all four valves are closed and pressure rises","Phase when all four valves are closed and pressure falls","Phase when atrioventricular valves are open and ventricles fill","Phase when semilunar valves are open and blood leaves the ventricles"],3,23,"HEART-0328"],["What is stroke volume?",["Volume remaining after ventricular ejection","Volume ejected by a ventricle during each contraction","Volume present after ventricular filling","Volume ejected by a ventricle each minute"],1,31,"HEART-0329"],["What is the stroke-volume equation?",["Stroke volume decreases and more blood remains in the ventricles","cardiac output = stroke volume × heart rate","Increases contractility and stroke volume","stroke volume = end-diastolic volume − end-systolic volume"],3,24,"HEART-0330"],["What causes semilunar valves to close during relaxation?",["Retrograde blood flow catches the cusps","Atrial pressure rises above ventricular pressure","atrioventricular valves are pulled open by papillary muscles","Ventricular pressure rises above great-vessel pressure"],0,27,"HEART-0331"],["What is isovolumetric relaxation?",["Phase when semilunar valves are open","Phase when atrioventricular valves are open","Period when all four valves are closed while ventricular pressure rises","Period when all four valves are closed while ventricular pressure falls"],3,27,"HEART-0332"],["When do atrioventricular valves open during filling?",["When ventricular pressure becomes less than atrial pressure","When aortic pressure falls below ventricular pressure","When ventricular pressure exceeds great-vessel pressure","When atrial pressure falls below ventricular pressure"],0,27,"HEART-0333"],["What is cardiac output?",["Volume remaining after ventricular ejection","Volume of blood ejected by a ventricle into its great vessel each minute","Volume returning to the right atrium","Volume ejected during one contraction"],1,31,"HEART-0334"],["What is the cardiac-output equation?",["stroke volume = cardiac output ÷ heart rate","cardiac output = stroke volume × heart rate","stroke volume = end-diastolic volume − end-systolic volume","end-diastolic volume = stroke volume + end-systolic volume"],1,31,"HEART-0335"],["What is heart rate?",["Volume ejected per beat","Degree of ventricular stretch before contraction","Number of heart beats per minute","Pressure that must be overcome before ejection"],2,31,"HEART-0336"],["What is preload?",["Pressure that must be exceeded before ventricular ejection occurs","Forcefulness of contraction","Volume of blood returning to the right atrium","Degree of stretch of the heart before contraction"],3,36,"HEART-0337"],["What is contractility?",["Forcefulness of contraction","Pressure opposing ventricular ejection","Number of heart beats per minute","Degree of stretch before contraction"],0,36,"HEART-0338"],["What is afterload?",["Forcefulness of contraction","Volume returning to the right atrium","Degree of stretch before contraction","Pressure that must be exceeded before ventricular ejection occurs"],3,36,"HEART-0339"],["How does greater preload affect contraction force?",["Isovolumetric contraction","Forcefulness of contraction","It increases contraction force","It decreases stroke volume"],2,37,"HEART-0340"],["What does the Frank-Starling law relate filling to?",["Greater diastolic filling produces greater contraction force within limits","Frank-Starling law of the heart","Stroke-volume equation","Cardiac output equation"],0,39,"HEART-0341"],["What is venous return?",["Volume ejected per minute","Volume ejected per contraction","Volume of blood returning to the right atrium","Volume remaining after systole"],2,40,"HEART-0342"],["What is inotropy?",["Pressure opposing ventricular ejection","Degree of stretch before contraction","Number of beats per minute","Strength of contraction at a given preload"],3,42,"HEART-0343"],["What is an inotrope?",["Something that alters heart rate","Something that alters the force of contraction","Something that alters afterload","Something that alters venous return"],1,42,"HEART-0344"],["What does a positive inotrope do?",["Increases afterload and decreases stroke volume","Increases contractility and stroke volume","Decreases contractility","Decreases preload and venous return"],1,42,"HEART-0345"],["What does a negative inotrope do?",["Increases heart rate","Decreases contractility","Increases preload","Increases contractility and stroke volume"],1,42,"HEART-0346"],["How does increased afterload affect stroke volume?",["It decreases afterload","It decreases stroke volume","It increases stroke volume","It increases preload"],1,44,"HEART-0347"],["Where does nervous-system regulation of the heart originate?",["Cardiovascular center in the medulla oblongata","atrioventricular node","Cardiovascular center of the medulla oblongata","sinoatrial node"],2,46,"HEART-0348"],["What do chemoreceptors monitor?",["Electrical activity of the sinoatrial node","Stretch of major arteries and veins caused by blood pressure","Chemical changes in the blood","Limb and muscle position"],2,47,"HEART-0349"],["What do baroreceptors monitor?",["Limb and muscle position","Electrical activity of the atrioventricular node","Chemical changes in the blood","Stretch of major arteries and veins caused by blood pressure"],3,47,"HEART-0350"]],"Q3-Second":[["atrioventricular valves close and ventricular systole begins. Which heart sound is produced by the resulting turbulence?",["S2","S3","S4","S1"],3,4,"HEART-0351"],["Semilunar valves close and ventricular diastole begins. Which heart sound is produced?",["S3","S1","S2","S4"],2,4,"HEART-0352"],["A sound occurs during early ventricular filling. Which heart sound is it?",["S1","S3","S2","S4"],1,7,"HEART-0353"],["A sound coincides with atrial contraction against a stiff ventricle. Which heart sound is it?",["S1","S4","S3","S2"],1,8,"HEART-0354"],["Atrial depolarization appears on the electrocardiogram. Which mechanical phase follows?",["Ventricular ejection","Ventricular diastole","Ventricular systole","Atrial systole"],3,17,"HEART-0355"],["The ventricular depolarization complex appears and ventricular pressure starts rising. Which mechanical phase begins?",["Ventricular diastole","Atrial systole","Ventricular systole","Ventricular ejection"],2,21,"HEART-0356"],["Ventricles contract while both atrioventricular and semilunar valves are closed. Which phase is this?",["Atrial systole","Ventricular diastole","Isovolumetric contraction","Ventricular systole"],2,21,"HEART-0357"],["Ventricular pressure exceeds pressure in the great vessels and semilunar valves open. Which phase follows?",["Ventricular systole","Atrial systole","Ventricular diastole","Ventricular ejection"],3,22,"HEART-0358"],["Ventricular repolarization causes relaxation and pressure falls. Which overarching phase is beginning?",["Ventricular systole","Ventricular ejection","Atrial systole","Ventricular diastole"],3,27,"HEART-0359"],["Retrograde blood flow catches semilunar cusps. What happens next?",["Semilunar valves close","atrioventricular valves open and ventricular filling begins","atrioventricular valves close","Semilunar valves open"],0,27,"HEART-0360"],["All four valves are closed while ventricular pressure falls. Which phase is this?",["Ventricular diastole","Atrial systole","Isovolumetric relaxation","Ventricular systole"],2,27,"HEART-0361"],["Ventricular pressure falls below atrial pressure. What happens next?",["Semilunar valves close","Semilunar valves open","atrioventricular valves open and ventricular filling begins","atrioventricular valves close"],2,27,"HEART-0362"],["A chamber contracts and pressure rises inside it. In which direction does blood move?",["Toward the atria only","Toward the ventricles only","From lower pressure toward higher pressure","From higher pressure toward lower pressure"],3,16,"HEART-0363"],["A ventricle has completed filling just before systole. What volume term describes the blood present?",["End-diastolic volume (end-diastolic volume)","Stroke volume","Cardiac output","End-systolic volume (end-systolic volume)"],0,18,"HEART-0364"],["A ventricle has completed ejection and retains blood. What volume term describes the remaining blood?",["End-systolic volume (end-systolic volume)","Cardiac output","End-diastolic volume (end-diastolic volume)","Stroke volume"],0,23,"HEART-0365"],["You know end-diastolic volume and end-systolic volume. Which quantity can be calculated directly?",["Cardiac output","End-systolic volume (end-systolic volume)","End-diastolic volume (end-diastolic volume)","Stroke volume"],3,24,"HEART-0366"],["You know stroke volume and heart rate. Which quantity can be calculated directly?",["Stroke volume","Venous return","Heart rate","Cardiac output"],3,31,"HEART-0367"],["Stroke volume increases while heart rate stays unchanged. What happens to cardiac output?",["Stroke volume decreases","Cardiac output is unchanged","Cardiac output decreases","Cardiac output increases"],3,31,"HEART-0368"],["Heart rate increases while stroke volume stays unchanged. What happens to cardiac output?",["Cardiac output is unchanged","Cardiac output increases","Cardiac output decreases","Stroke volume decreases"],1,31,"HEART-0369"],["Cardiac muscle is stretched more before contraction. Which regulator changed?",["Afterload","Preload","Venous return","Contractility"],1,36,"HEART-0370"],["The forcefulness of contraction changes at the same preload. Which regulator changed?",["Heart rate","Afterload","Contractility","Preload"],2,36,"HEART-0371"],["The pressure that must be overcome before a semilunar valve opens rises. Which regulator changed?",["Preload","Afterload","Contractility","Venous return"],1,44,"HEART-0372"],["Afterload increases. What two effects are described in the slides?",["Stroke volume decreases and more blood remains in the ventricles","Increases contractility and stroke volume","Chemical changes in the blood","Stretch of major arteries and veins caused by blood pressure"],0,44,"HEART-0373"],["More blood returns to the right atrium and increases ventricular filling. Which factor determining end-diastolic volume increased?",["Contractility","Preload","Afterload","Venous return"],3,40,"HEART-0374"],["Diastolic filling increases and contraction becomes more forceful within limits. Which law describes this?",["Cardiac output equation","Stroke-volume equation","Frank-Starling law of the heart","Afterload relationship"],2,39,"HEART-0375"]],"Q4-Second":[["A drug or hormone increases contractile force at a given preload. What type of agent is it?",["Positive inotrope","Decreases contractility","Negative inotropic effect","Increases contractility and stroke volume"],0,42,"HEART-0376"],["A calcium-channel blocker reduces calcium influx and contraction strength. What type of inotropic effect is this?",["Positive inotrope","Increases contractility and stroke volume","Negative inotropic effect","Decreases contractility"],2,42,"HEART-0377"],["A sensory receptor detects limb and muscle position and helps trigger a quick rise in heart rate. Which receptor is it?",["Chemoreceptor","Proprioceptor","Baroreceptor","Cardiovascular center in the medulla oblongata"],1,47,"HEART-0378"],["A sensory receptor detects blood chemistry changes. Which receptor is it?",["Cardiovascular center in the medulla oblongata","Chemoreceptor","Baroreceptor","Proprioceptor"],1,47,"HEART-0379"],["A sensory receptor detects vessel-wall stretch caused by blood pressure. Which receptor is it?",["Proprioceptor","Baroreceptor","Chemoreceptor","Cardiovascular center in the medulla oblongata"],1,47,"HEART-0380"],["Sympathetic cardiac accelerator nerves reach the sinoatrial and atrioventricular nodes. What happens to conduction?",["Left and right vagus nerves","Sympathetic nervous system","Conduction of action potentials through sinoatrial and atrioventricular nodes increases","Parasympathetic nervous system"],2,48,"HEART-0381"],["Sympathetic stimulation increases calcium entry into contractile fibers. What mechanical property increases?",["Afterload","Heart rate","Contractility","Preload"],2,48,"HEART-0382"],["Parasympathetic impulses reach the heart through which nerves?",["Sympathetic nervous system","Left and right vagus nerves","sinoatrial node and atrioventricular node","Parasympathetic nervous system"],1,49,"HEART-0383"],["Vagal axons terminate in which two conduction structures?",["Stroke volume decreases and more blood remains in the ventricles","atrioventricular valves open and ventricular filling begins","sinoatrial node and atrioventricular node","Ventricular contraction while both atrioventricular and semilunar valves are closed"],2,49,"HEART-0384"],["Extracellular potassium is high and complete repolarization is impaired. What happens to heart rate and contractility?",["Heart rate decreases while contractility increases","Both increase","Heart rate increases while contractility decreases","Both decrease"],3,50,"HEART-0385"],["Extracellular calcium is high. What happens to heart rate and contractility?",["Heart rate increases while contractility decreases","Heart rate decreases while contractility increases","Both decrease","Both increase"],3,50,"HEART-0386"],["A hormonal signal listed on the slides increases cardiac activity and is also a sympathetic neurotransmitter. Which hormones are listed?",["Left and right vagus nerves","Epinephrine and norepinephrine","Parasympathetic nervous system","Sympathetic nervous system"],1,50,"HEART-0387"],["A cardiac cycle stage follows atrial contraction and precedes rapid ventricular ejection. Which stage is it?",["Reduced ventricular ejection","Rapid ventricular ejection","Isovolumetric contraction","Atrial contraction"],2,12,"HEART-0388"],["A cardiac cycle stage follows reduced ventricular ejection and precedes rapid ventricular filling. Which stage is it?",["Rapid ventricular ejection","Isovolumetric contraction","Atrial contraction","Isovolumetric relaxation"],3,12,"HEART-0389"],["A cardiac cycle stage follows isovolumetric relaxation. Which stage is next?",["Rapid ventricular filling","Rapid ventricular ejection","Atrial contraction","Isovolumetric contraction"],0,12,"HEART-0390"],["A cardiac cycle stage follows rapid ventricular filling. Which stage is next?",["Reduced ventricular filling","Isovolumetric contraction","Rapid ventricular ejection","Atrial contraction"],0,12,"HEART-0391"],["A diagram tracks left atrial pressure, left ventricular pressure, aortic pressure, electrocardiogram, and left ventricular volume for one heartbeat. What diagram is it?",["Wiggers diagram","Left atrial, left ventricular, and aortic pressure","One heartbeat focused on the left side of the heart","Dicrotic wave"],0,13,"HEART-0392"],["The aortic pressure curve shows a rebound after aortic-valve closure. What feature is this?",["Atrioventricular valve closure","Semilunar valve closure","Isovolumetric relaxation","Dicrotic wave"],3,27,"HEART-0393"],["Which valve event marks the beginning of S1 and isovolumetric contraction?",["Semilunar valve closure","Atrioventricular valve opening","Semilunar valve opening","Atrioventricular valve closure"],3,21,"HEART-0394"],["Which valve event marks the beginning of S2 and isovolumetric relaxation?",["Semilunar valve closure","atrioventricular valve opening","Atrioventricular valve closure","Semilunar valve opening"],0,27,"HEART-0395"],["Which three factors regulate stroke volume according to the slide summary?",["Contractility, heart rate, and arterial pressure","Preload, heart rate, and venous return","Preload, contractility, and afterload","Heart rate, venous return, and afterload"],2,36,"HEART-0396"],["Which output variable is directly affected by both stroke volume and heart rate?",["Venous return","Cardiac output","Heart rate","Stroke volume"],1,31,"HEART-0397"],["Which center integrates input from sensory receptors and higher brain regions to regulate heart rate?",["sinoatrial node","Cardiovascular center in the medulla oblongata","atrioventricular node","Thoracic spinal cord"],1,46,"HEART-0398"],["Which autonomic branch uses cardiac accelerator nerves from the thoracic spinal cord?",["Parasympathetic nervous system","Left and right vagus nerves","Sympathetic nervous system","sinoatrial node and atrioventricular node"],2,48,"HEART-0399"],["Which autonomic branch reaches the heart through cranial nerve X?",["Left and right vagus nerves","Parasympathetic nervous system","sinoatrial node and atrioventricular node","Sympathetic nervous system"],1,49,"HEART-0400"]]}};
+const MASTER_STREAK = 3;
+const APP_VERSION = "2.0.0";
+const DATA_SCHEMA_VERSION = 4;
+const QUESTION_ID_SCHEME = "immutable-v1";
+const STORAGE_KEY = "heartQuizTrainerAdaptiveProgressV1";
+const PROGRAM_NAME = "IPAP Base Study Program";
+const BANK_ID = "ipap-adaptive-study-v1";
+const COMPATIBLE_BANK_IDS = new Set([BANK_ID,"heart-400q-ipap-v1"]);
+const SLIDE_OFFSET = {"Day 1":0,"Day 2":68,"Day 3":142,"Day 4":219};
+
+// Topic ranges mirror the organization of the uploaded slide decks.
+// Recommendations are generated only from questions currently in the Incorrect Bank.
+const REVIEW_TOPICS = {
+  "Day 1":[
+    {start:1,end:7,name:"Body Fluid Compartments & Barriers"},
+    {start:8,end:14,name:"Nervous System Refresher"},
+    {start:15,end:31,name:"Gross Heart Anatomy, Position, Borders & Surfaces"},
+    {start:32,end:44,name:"Pericardium & Pericardial Layers"},
+    {start:45,end:55,name:"Layers of the Heart"},
+    {start:56,end:61,name:"Heart Chambers & Basic Chamber Organization"},
+    {start:62,end:68,name:"Sulci, Papillary Muscles, Chordae & Trabeculae Carneae"}
+  ],
+  "Day 2":[
+    {start:69,end:79,name:"Chamber Anatomy & Blood Flow"},
+    {start:80,end:86,name:"Cardiac Septa & Fibrous Skeleton"},
+    {start:87,end:92,name:"Fetal Cardiac Shunts"},
+    {start:93,end:110,name:"Heart Valves, Pressure Changes & Valve Mechanics"},
+    {start:111,end:126,name:"Coronary Circulation, Arteries & Veins"},
+    {start:127,end:135,name:"Ischemia, Infarction & Coronary Artery Disease"},
+    {start:136,end:142,name:"Great Vessels"}
+  ],
+  "Day 3":[
+    {start:143,end:152,name:"Cell Membranes, Gradients, Ion Channels & Electrical Terms"},
+    {start:153,end:173,name:"Cardiac Muscle Cells, Intercalated Discs & Autorhythmic Cells"},
+    {start:174,end:190,name:"Cardiac Conduction System & Conduction Velocity"},
+    {start:191,end:209,name:"Cardiac Action Potentials & Excitation-Contraction Coupling"},
+    {start:210,end:220,name:"ECG Waves, Intervals & Electrical-Mechanical Relationships"}
+  ],
+  "Day 4":[
+    {start:220,end:229,name:"Heart Sounds & Auscultation"},
+    {start:230,end:248,name:"Cardiac Cycle, Wiggers Diagram & Pressure-Volume Changes"},
+    {start:249,end:253,name:"Stroke Volume & Cardiac Output"},
+    {start:254,end:264,name:"Preload, Contractility & Afterload"},
+    {start:265,end:272,name:"Cardiovascular Regulation, Receptors & Autonomic Effects"},
+    {start:273,end:274,name:"Exercise/Training Effects on Cardiac Performance"}
+  ]
+};
+const $ = id => document.getElementById(id);
+
+let active=[], index=0, correct=0, answered=0, missedThisQuiz=[], locked=false, lastSettings=null;
+let savedSession=null, quizInProgress=false, lastSavedAt=null;
+let progress = {};
+let coverage = {};
+let storageAvailable = true;
+
+function legacyId(day,key,idx){ return `${day}|${key}|${idx}`; }
+function migrateId(id){ return LEGACY_TO_PERMANENT[id] || id; }
+function slideNumber(day,pdfPage){ return (SLIDE_OFFSET[day]||0) + Number(pdfPage); }
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function shuffle(a){
+  a=[...a];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function defaultStat(){ return {attempts:0,correct:0,wrong:0,streak:0,everWrong:false,inBank:false,mastered:false,manualRemoved:false,excluded:false,lastResult:null}; }
+function statFor(id){ if(!progress[id]) progress[id]=defaultStat(); return progress[id]; }
+
+function captureSession(){
+  if(!quizInProgress || !active.length) return null;
+  return {
+    active,
+    index,
+    correct,
+    answered,
+    missedIds: missedThisQuiz.map(q=>q.id),
+    locked,
+    lastSettings
+  };
+}
+
+function makeProgressPayload(includeExportTime=false){
+  const payload={
+    version:DATA_SCHEMA_VERSION,
+    appVersion:APP_VERSION,
+    program:PROGRAM_NAME,
+    bankId:BANK_ID,
+    questionIdScheme:QUESTION_ID_SCHEME,
+    questionCount:ALL ? ALL.length : null,
+    lastSavedAt:lastSavedAt || new Date().toISOString(),
+    progress,
+    coverage,
+    session:quizInProgress ? captureSession() : savedSession
+  };
+  if(includeExportTime) payload.exportedAt=new Date().toISOString();
+  return payload;
+}
+
+function migrateProgressKeys(rawProgress){
+  const src=(rawProgress && typeof rawProgress==="object") ? rawProgress : {};
+  const migrated={};
+  let changed=false;
+
+  // Prefer an already-migrated permanent record when both forms exist.
+  for(const [id,stat] of Object.entries(src)){
+    const newId=migrateId(id);
+    if(newId===id) migrated[id]=stat;
+  }
+  for(const [id,stat] of Object.entries(src)){
+    const newId=migrateId(id);
+    if(newId!==id){
+      changed=true;
+      if(!(newId in migrated)) migrated[newId]=stat;
+    }
+  }
+  return {value:migrated,changed};
+}
+
+function migrateCoverageIds(rawCoverage){
+  const src=(rawCoverage && typeof rawCoverage==="object") ? rawCoverage : {};
+  const migrated={};
+  let changed=false;
+  for(const [key,state] of Object.entries(src)){
+    const next={...(state && typeof state==="object" ? state : {})};
+    const seen=(state && state.seen && typeof state.seen==="object") ? state.seen : {};
+    next.seen={};
+    for(const [id,val] of Object.entries(seen)){
+      const newId=migrateId(id);
+      if(newId!==id) changed=true;
+      next.seen[newId]=val;
+    }
+    migrated[key]=next;
+  }
+  return {value:migrated,changed};
+}
+
+function migrateSessionIds(rawSession){
+  if(!rawSession || typeof rawSession!=="object") return {value:null,changed:false};
+  let changed=false;
+  const session={...rawSession};
+  if(Array.isArray(rawSession.active)){
+    session.active=rawSession.active.map(item=>{
+      if(!item || typeof item!=="object") return item;
+      const newId=migrateId(item.id);
+      if(newId!==item.id) changed=true;
+      return {...item,id:newId};
+    });
+  }
+  if(Array.isArray(rawSession.missedIds)){
+    session.missedIds=rawSession.missedIds.map(id=>{
+      const newId=migrateId(id);
+      if(newId!==id) changed=true;
+      return newId;
+    });
+  }
+  return {value:session,changed};
+}
+
+function migrateStateIds(rawProgress,rawCoverage,rawSession){
+  const p=migrateProgressKeys(rawProgress);
+  const c=migrateCoverageIds(rawCoverage);
+  const s=migrateSessionIds(rawSession);
+  return {progress:p.value,coverage:c.value,session:s.value,changed:p.changed||c.changed||s.changed};
+}
+
+function persistMigratedState(){
+  if(!storageAvailable) return;
+  try{
+    lastSavedAt=new Date().toISOString();
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(makeProgressPayload(false)));
+  }catch(e){
+    storageAvailable=false;
+  }
+}
+
+function loadProgress(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed=JSON.parse(raw);
+      if(parsed && typeof parsed==="object"){
+        let rawProgress,rawCoverage,rawSession;
+        if(parsed.progress && typeof parsed.progress==="object"){
+          rawProgress=parsed.progress;
+          rawCoverage=(parsed.coverage && typeof parsed.coverage==="object") ? parsed.coverage : {};
+          rawSession=(parsed.session && typeof parsed.session==="object") ? parsed.session : null;
+          lastSavedAt=parsed.lastSavedAt || parsed.exportedAt || null;
+        }else if(parsed.questions && typeof parsed.questions==="object"){
+          rawProgress=parsed.questions;
+          rawCoverage=(parsed.coverage && typeof parsed.coverage==="object") ? parsed.coverage : {};
+          rawSession=(parsed.session && typeof parsed.session==="object") ? parsed.session : null;
+          lastSavedAt=parsed.lastSavedAt || parsed.exportedAt || null;
+        }else{
+          rawProgress=parsed;
+          rawCoverage={};
+          rawSession=null;
+          lastSavedAt=null;
+        }
+        const migrated=migrateStateIds(rawProgress,rawCoverage,rawSession);
+        progress=migrated.progress;
+        coverage=migrated.coverage;
+        savedSession=migrated.session;
+        if(migrated.changed) persistMigratedState();
+      }
+    }
+  }catch(e){
+    storageAvailable=false;
+  }
+}
+
+function saveProgress(){
+  if(!storageAvailable) return;
+  try{
+    lastSavedAt=new Date().toISOString();
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(makeProgressPayload(false)));
+    updateStorageStatus();
+  }catch(e){
+    storageAvailable=false;
+    updateStorageStatus();
+  }
+}
+
+function formatSavedTime(iso){
+  if(!iso) return "not yet";
+  try{ return new Date(iso).toLocaleString(); }
+  catch(e){ return iso; }
+}
+
+function updateStorageStatus(){
+  $("storageStatus").innerHTML = storageAvailable
+    ? `This device auto-saves after each answer and major change. Last local save: <strong>${escapeHtml(formatSavedTime(lastSavedAt))}</strong>.<br><br><strong>Cross-device:</strong> standalone browser storage does not automatically travel between devices. Before switching devices, use <strong>Copy progress code</strong> or <strong>Share / save progress file</strong>, then import it on the other device. The transfer includes lifetime history, Incorrect Bank, mastery streaks, coverage, removed questions, and an in-progress quiz.`
+    : `Automatic browser storage is unavailable here. Use <strong>Copy progress code</strong> or <strong>Share / save progress file</strong> frequently so your progress can be restored on another device.`;
+}
+
+function showResumeSessionPanel(){
+  const panel=$("resumeSessionPanel");
+  if(!panel) return;
+  panel.classList.toggle("hide", !savedSession);
+}
+
+function restoreSavedSession(){
+  if(!savedSession || !Array.isArray(savedSession.active) || !savedSession.active.length){
+    alert("No saved in-progress quiz is available.");
+    return;
+  }
+  active=savedSession.active;
+  index=Math.max(0,Math.min(Number(savedSession.index)||0,active.length-1));
+  correct=Number(savedSession.correct)||0;
+  answered=Number(savedSession.answered)||0;
+  locked=!!savedSession.locked;
+  lastSettings=savedSession.lastSettings || null;
+  const missedIds=new Set(savedSession.missedIds || []);
+  missedThisQuiz=active.filter(q=>missedIds.has(q.id));
+  quizInProgress=true;
+  savedSession=null;
+
+  $("setup").classList.add("hide");
+  $("results").classList.add("hide");
+  $("quiz").classList.remove("hide");
+  render();
+  saveProgress();
+}
+
+function discardSavedSession(){
+  if(!savedSession) return;
+  if(!confirm("Discard the saved in-progress quiz? Your lifetime progress, Incorrect Bank, mastery, coverage, and removed questions will remain.")) return;
+  savedSession=null;
+  quizInProgress=false;
+  active=[];
+  saveProgress();
+  showResumeSessionPanel();
+}
+
+function bytesToBase64(bytes){
+  let binary="";
+  const chunk=0x8000;
+  for(let i=0;i<bytes.length;i+=chunk){
+    binary+=String.fromCharCode(...bytes.subarray(i,i+chunk));
+  }
+  return btoa(binary);
+}
+
+function base64ToBytes(base64){
+  const binary=atob(base64);
+  const bytes=new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
+  return bytes;
+}
+
+function makeTransferCode(){
+  const json=JSON.stringify(makeProgressPayload(true));
+  return "IPAP4:"+bytesToBase64(new TextEncoder().encode(json));
+}
+
+function parseTransferCode(code){
+  const trimmed=String(code||"").trim();
+  if(!trimmed) throw new Error("Empty transfer code.");
+  if(trimmed.startsWith("IPAP4:") || trimmed.startsWith("IPAP3:")){
+    const json=new TextDecoder().decode(base64ToBytes(trimmed.slice(6)));
+    return JSON.parse(json);
+  }
+  // Also accept raw JSON for compatibility.
+  return JSON.parse(trimmed);
+}
+
+function validateIncomingPayload(parsed){
+  if(!parsed || typeof parsed!=="object") throw new Error("Invalid progress data.");
+  if(parsed.bankId && !COMPATIBLE_BANK_IDS.has(parsed.bankId)){
+    throw new Error("This progress file belongs to a different question-bank family.");
+  }
+  const incoming=parsed.progress || parsed.questions || parsed;
+  if(!incoming || typeof incoming!=="object") throw new Error("Invalid progress data.");
+  const migrated=migrateStateIds(
+    incoming,
+    (parsed.coverage && typeof parsed.coverage==="object") ? parsed.coverage : {},
+    (parsed.session && typeof parsed.session==="object") ? parsed.session : null
+  );
+  return {
+    progress:migrated.progress,
+    coverage:migrated.coverage,
+    session:migrated.session,
+    exportedAt:parsed.exportedAt || parsed.lastSavedAt || null
+  };
+}
+
+function applyImportedPayload(parsed,sourceLabel="transfer"){
+  const data=validateIncomingPayload(parsed);
+  const when=data.exportedAt ? `\nSaved: ${formatSavedTime(data.exportedAt)}` : "";
+  if(!confirm(`Import this ${sourceLabel} and replace the progress currently stored on this device?${when}`)) return false;
+
+  progress=data.progress;
+  coverage=data.coverage;
+  savedSession=data.session;
+  quizInProgress=false;
+  active=[];
+  index=0; correct=0; answered=0; missedThisQuiz=[]; locked=false; lastSettings=null;
+
+  saveProgress();
+  updateLifetimeUI();
+  updateCoverageStatus();
+  showResumeSessionPanel();
+  return true;
+}
+
+async function copyProgressCode(){
+  const code=makeTransferCode();
+  $("transferCode").value=code;
+  try{
+    await navigator.clipboard.writeText(code);
+    alert("Progress code copied. Paste it into the IPAP program on your other device.");
+  }catch(e){
+    $("transferCode").focus();
+    $("transferCode").select();
+    alert("The progress code is ready in the box. Copy it, then paste it into the IPAP program on your other device.");
+  }
+}
+
+const LEGACY_TO_PERMANENT = {};
+function allQuestionObjects(){
+  const out=[];
+  for(const [day,sets] of Object.entries(BANK)){
+    for(const [key,qs] of Object.entries(sets)){
+      const [quiz,order]=key.split("-");
+      qs.forEach((row,idx)=>{
+        const oldId=legacyId(day,key,idx);
+        const permanentId=String(row[4] || "").trim();
+        if(!permanentId) throw new Error(`Missing permanent question ID for ${oldId}`);
+        LEGACY_TO_PERMANENT[oldId]=permanentId;
+        out.push({id:permanentId,day,quiz,order,q:row[0],o:row[1],a:row[2],page:Number(row[3])});
+      });
+    }
+  }
+  const ids=out.map(q=>q.id);
+  const unique=new Set(ids);
+  if(unique.size!==ids.length) throw new Error("Duplicate permanent question ID detected.");
+  return out;
+}
+const ALL = allQuestionObjects();
+
+function bankQuestions(filterDay="All",filterOrder="Mixed",filterSource="Random"){
+  return ALL.filter(q=>{
+    const s=statFor(q.id);
+    return !s.excluded && s.inBank &&
+      (filterDay==="All" || q.day===filterDay) &&
+      (filterOrder==="Mixed" || q.order===filterOrder) &&
+      (filterSource==="Random" || q.quiz===filterSource);
+  });
+}
+function flattenPool(day,order,source){
+  return ALL.filter(q=>{
+    const s=statFor(q.id);
+    return !s.excluded &&
+      (day==="All" || q.day===day) &&
+      (order==="Mixed" || q.order===order) &&
+      (source==="Random" || q.quiz===source);
+  });
+}
+
+function coverageKey(settings){
+  return `${settings.day}|${settings.order}|${settings.source}`;
+}
+function coverageState(settings){
+  const key=coverageKey(settings);
+  if(!coverage[key]) coverage[key]={cycle:1,seen:{}};
+  if(!coverage[key].seen || typeof coverage[key].seen!=="object") coverage[key].seen={};
+  if(!coverage[key].cycle) coverage[key].cycle=1;
+  return coverage[key];
+}
+function normalizeCoverage(settings,base,allowReset=true){
+  const c=coverageState(settings);
+  const eligible=new Set(base.map(q=>q.id));
+  for(const id of Object.keys(c.seen)){
+    if(!eligible.has(id)) delete c.seen[id];
+  }
+  if(allowReset && base.length && base.every(q=>c.seen[q.id])){
+    c.cycle++;
+    c.seen={};
+    saveProgress();
+  }
+  return c;
+}
+function markCoverageSeen(item){
+  if(!lastSettings) return;
+  const base=flattenPool(lastSettings.day,lastSettings.order,lastSettings.source);
+  if(!base.some(q=>q.id===item.id)) return;
+  const c=normalizeCoverage(lastSettings,base,false);
+  c.seen[item.id]=true;
+  saveProgress();
+  updateCoverageStatus();
+}
+function updateCoverageStatus(){
+  if(!$("coverageStatus")) return;
+  const settings={
+    day:$("day").value,
+    order:$("order").value,
+    source:$("source").value
+  };
+  const base=flattenPool(settings.day,settings.order,settings.source);
+  const c=normalizeCoverage(settings,base,false);
+  const seen=base.filter(q=>c.seen[q.id]).length;
+  $("coverageStatus").textContent =
+    `Coverage cycle ${c.cycle}: ${seen} of ${base.length} unique questions have been shown. ` +
+    `Correct non-bank questions stay out of rotation until this reaches ${base.length} of ${base.length}.`;
+}
+
+function weightedSampleWithoutReplacement(items,count,weightFn){
+  const remaining=[...items], picked=[];
+  while(picked.length<count && remaining.length){
+    const weights=remaining.map(x=>Math.max(0.01,Number(weightFn(x))||0.01));
+    const total=weights.reduce((a,b)=>a+b,0);
+    let r=Math.random()*total, idx=0;
+    for(;idx<weights.length;idx++){ r-=weights[idx]; if(r<=0) break; }
+    if(idx>=remaining.length) idx=remaining.length-1;
+    picked.push(remaining.splice(idx,1)[0]);
+  }
+  return picked;
+}
+
+function adaptiveWeight(q){
+  const s=statFor(q.id);
+  if(s.inBank){
+    if(s.streak===0) return 10;
+    if(s.streak===1) return 7;
+    return 4;
+  }
+  if(s.attempts===0) return 2.2;
+  if(s.mastered) return 0.8;
+  return 1.2;
+}
+
+function buildQuiz(settings){
+  const base=flattenPool(settings.day,settings.order,settings.source);
+  const c=normalizeCoverage(settings,base,true);
+  const unseen=base.filter(q=>!c.seen[q.id]);
+
+  if(settings.mode==="Incorrect"){
+    const b=bankQuestions(settings.day,settings.order,settings.source);
+    return shuffle(b).slice(0,Math.min(settings.size,b.length));
+  }
+
+  if(settings.mode==="Unseen"){
+    // Literal current-cycle view: do not auto-reset the cycle here.
+    // Only questions not yet shown in the current coverage cycle are eligible.
+    const current=normalizeCoverage(settings,base,false);
+    const notAsked=base.filter(q=>!current.seen[q.id]);
+    return shuffle(notAsked).slice(0,Math.min(settings.size,notAsked.length));
+  }
+
+  if(settings.mode==="Random"){
+    // Coverage-first randomization: exhaust unseen questions before recycling clean-correct ones.
+    const first=shuffle(unseen).slice(0,Math.min(settings.size,unseen.length));
+    if(first.length>=settings.size) return first;
+    const firstIds=new Set(first.map(q=>q.id));
+    const remainder=shuffle(base.filter(q=>!firstIds.has(q.id))).slice(0,settings.size-first.length);
+    return [...first,...remainder];
+  }
+
+  // Adaptive:
+  // Active Incorrect Bank questions are the deliberate exception to the no-recycle rule.
+  // They can repeat before full coverage so the learner can build a 3-correct streak.
+  const b=bankQuestions(settings.day,settings.order,settings.source);
+  const desiredBank=Math.min(b.length,Math.ceil(settings.size*0.55));
+  const bankPick=weightedSampleWithoutReplacement(b,desiredBank,q=>{
+    const s=statFor(q.id);
+    return s.streak===0 ? 10 : s.streak===1 ? 7 : 4;
+  });
+
+  const pickedIds=new Set(bankPick.map(q=>q.id));
+  const remainingSlots=settings.size-bankPick.length;
+
+  // For every non-bank slot, use unseen questions first.
+  const unseenNonPicked=unseen.filter(q=>!pickedIds.has(q.id));
+  const coveragePick=shuffle(unseenNonPicked).slice(0,Math.min(remainingSlots,unseenNonPicked.length));
+  coveragePick.forEach(q=>pickedIds.add(q.id));
+
+  const stillNeeded=remainingSlots-coveragePick.length;
+  let fill=[];
+  if(stillNeeded>0){
+    const restPool=base.filter(q=>!pickedIds.has(q.id));
+    fill=weightedSampleWithoutReplacement(restPool,stillNeeded,adaptiveWeight);
+  }
+
+  return shuffle([...bankPick,...coveragePick,...fill]);
+}
+
+function prepareQuestion(raw){
+  const pairs=raw.o.map((txt,i)=>({txt,correct:i===raw.a}));
+  const mixed=shuffle(pairs);
+  return {
+    ...raw,
+    choices:mixed,
+    answer:mixed.findIndex(x=>x.correct),
+    answered:false,
+    selected:null,
+    wasCorrect:null
+  };
+}
+
+function topicForQuestion(q){
+  const slide=slideNumber(q.day,q.page);
+  const rows=REVIEW_TOPICS[q.day] || [];
+  return rows.find(t=>slide>=t.start && slide<=t.end) || {
+    start:slide,end:slide,name:"Review the source slide for this question"
+  };
+}
+
+function recommendationData(){
+  const groups=new Map();
+  for(const q of ALL){
+    const s=statFor(q.id);
+    if(s.excluded || !s.inBank) continue;
+    const topic=topicForQuestion(q);
+    const key=`${q.day}|${topic.start}|${topic.end}|${topic.name}`;
+    if(!groups.has(key)){
+      groups.set(key,{
+        day:q.day,start:topic.start,end:topic.end,name:topic.name,
+        questions:0,wrong:0,streakSum:0,zeroStreak:0,ids:[]
+      });
+    }
+    const g=groups.get(key);
+    g.questions++;
+    g.wrong += s.wrong || 0;
+    g.streakSum += s.streak || 0;
+    if((s.streak||0)===0) g.zeroStreak++;
+    g.ids.push(q.id);
+  }
+  return [...groups.values()].sort((a,b)=>{
+    const scoreA=(a.questions*4)+(a.zeroStreak*2)+a.wrong-(a.streakSum*0.5);
+    const scoreB=(b.questions*4)+(b.zeroStreak*2)+b.wrong-(b.streakSum*0.5);
+    return scoreB-scoreA || b.questions-a.questions;
+  });
+}
+
+function renderReviewRecommendations(){
+  const holder=$("reviewRecommendations");
+  if(!holder) return;
+  const recs=recommendationData();
+  if(!recs.length){
+    holder.innerHTML='<p style="margin:10px 0 0"><strong>No targeted review areas right now.</strong> Your Incorrect Bank is empty.</p>';
+    return;
+  }
+
+  const top=recs.slice(0,6);
+  holder.innerHTML=top.map((g,idx)=>{
+    const avg=(g.streakSum/g.questions).toFixed(1);
+    const range=g.start===g.end ? `slide ${g.start}` : `slides ${g.start}–${g.end}`;
+    let priority="Review";
+    if(idx===0 || g.questions>=4 || g.zeroStreak>=3) priority="Highest priority";
+    else if(idx<=2 || g.questions>=2) priority="Priority";
+    return `<article class="bank-item">
+      <strong>${idx+1}. ${escapeHtml(g.day)} — ${escapeHtml(g.name)}</strong><br>
+      <span class="pill">${priority}</span>
+      <span class="pill">${range}</span>
+      <span class="pill">${g.questions} active bank question${g.questions===1?"":"s"}</span>
+      <br><span class="small">Recommendation: go back through ${range}. Your current bank has ${g.questions} question${g.questions===1?"":"s"} tied to this area; ${g.zeroStreak} currently have a 0/${MASTER_STREAK} mastery streak.</span>
+    </article>`;
+  }).join("");
+}
+
+function updateLifetimeUI(){
+  const vals=Object.values(progress);
+  const bank=vals.filter(s=>s.inBank).length;
+  const mastered=vals.filter(s=>s.mastered).length;
+  const attempts=vals.reduce((n,s)=>n+(s.attempts||0),0);
+  const corr=vals.reduce((n,s)=>n+(s.correct||0),0);
+  $("bankCount").textContent=bank;
+  $("masteredCount").textContent=mastered;
+  $("attemptCount").textContent=attempts;
+  $("accuracy").textContent=attempts ? Math.round(corr/attempts*100)+"%" : "—";
+  renderBankList();
+  renderRemovedList();
+  renderReviewRecommendations();
+}
+
+function renderBankList(){
+  const rows=ALL.filter(q=>statFor(q.id).inBank && !statFor(q.id).excluded)
+    .sort((a,b)=>statFor(a.id).streak-statFor(b.id).streak || b.day.localeCompare(a.day));
+  const holder=$("bankList");
+  if(!rows.length){
+    holder.innerHTML="<p>Your Incorrect Bank is empty. Missed questions will appear here automatically.</p>";
+    return;
+  }
+  holder.innerHTML=rows.slice(0,100).map(q=>{
+    const s=statFor(q.id), slide=slideNumber(q.day,q.page);
+    const answer=escapeHtml(q.o[q.a]);
+    return `<div class="bank-item">
+      <button type="button" class="secondary bank-question-toggle" data-toggle-answer="${escapeHtml(q.id)}" style="width:100%;text-align:left;margin:0;padding:0;border:none;background:transparent;color:inherit;min-height:0">
+        <strong>${escapeHtml(q.q)}</strong>
+      </button>
+      <div class="small" style="margin-top:4px">Click the question to show/hide the answer.</div>
+      <div id="bank-answer-${escapeHtml(q.id)}" class="hide" style="margin-top:8px;padding:10px;border:1px solid var(--border);border-radius:8px">
+        <strong>Answer:</strong> ${answer}<br>
+        <span class="small">Source: ${q.day}, slide ${slide} (PDF page ${q.page})</span>
+      </div>
+      <div style="margin-top:7px">
+        <span class="pill">${q.day}</span><span class="pill">${q.order} order</span>
+        <span class="pill">Slide ${slide}</span><span class="pill">Correct streak ${s.streak}/${MASTER_STREAK}</span>
+      </div>
+      <button type="button" class="bank-remove" data-remove-bank="${escapeHtml(q.id)}">Remove from Incorrect Bank</button>
+      <div class="small" style="margin-top:5px">If you miss this question again later, it will automatically return to the Incorrect Bank.</div>
+    </div>`;
+  }).join("") + (rows.length>100 ? `<p>Showing 100 of ${rows.length} bank questions.</p>` : "");
+}
+
+function renderRemovedList(){
+  const rows=ALL.filter(q=>statFor(q.id).excluded);
+  const holder=$("removedList");
+  if(!holder) return;
+  if(!rows.length){
+    holder.innerHTML="<p>No questions have been removed from the test bank.</p>";
+    return;
+  }
+  holder.innerHTML=rows.map(q=>{
+    const slide=slideNumber(q.day,q.page);
+    const answer=escapeHtml(q.o[q.a]);
+    return `<div class="bank-item">
+      <button type="button" class="secondary" data-toggle-removed-answer="${escapeHtml(q.id)}" style="width:100%;text-align:left;margin:0;padding:0;border:none;background:transparent;color:inherit;min-height:0">
+        <strong>${escapeHtml(q.q)}</strong>
+      </button>
+      <div class="small" style="margin-top:4px">Click the question to show/hide the answer.</div>
+      <div id="removed-answer-${escapeHtml(q.id)}" class="hide" style="margin-top:8px;padding:10px;border:1px solid var(--border);border-radius:8px">
+        <strong>Answer:</strong> ${answer}<br>
+        <span class="small">Source: ${q.day}, slide ${slide} (PDF page ${q.page})</span>
+      </div>
+      <div style="margin-top:7px">
+        <span class="pill">${q.day}</span>
+        <span class="pill">${q.order} order</span>
+        <span class="pill">Slide ${slide}</span>
+      </div>
+      <button type="button" class="secondary bank-remove" data-restore-question="${escapeHtml(q.id)}" style="color:var(--text);border-color:var(--border)">Restore to Test Bank</button>
+    </div>`;
+  }).join("");
+}
+
+
+function startQuiz(custom=null, forcedMode=null){
+  let settings;
+  if(custom){
+    settings=lastSettings || {day:"All",order:"Mixed",source:"Random",size:custom.length,mode:"Adaptive"};
+  }else{
+    settings={
+      day:$("day").value,
+      order:$("order").value,
+      source:$("source").value,
+      size:Number($("size").value),
+      mode:forcedMode || $("mode").value
+    };
+  }
+  lastSettings=settings;
+
+  let pool=custom || buildQuiz(settings);
+  if(!pool.length){
+    if(settings.mode==="Incorrect"){
+      alert("Your Incorrect Bank is empty for those filters.");
+    }else if(settings.mode==="Unseen"){
+      alert("There are no unasked questions left in the current coverage cycle for those filters.");
+    }else{
+      alert("That combination has no questions.");
+    }
+    return;
+  }
+  active=pool.map(prepareQuestion);
+  index=0; correct=0; answered=0; missedThisQuiz=[]; locked=false;
+  quizInProgress=true;
+  savedSession=null;
+  $("setup").classList.add("hide"); $("results").classList.add("hide"); $("quiz").classList.remove("hide");
+  render();
+  saveProgress();
+}
+
+function render(){
+  const item=active[index];
+  if(!item){ finish(); return; }
+
+  markCoverageSeen(item);
+  locked=item.answered;
+
+  $("counter").textContent=`Question ${index+1} of ${active.length}`;
+  $("scoreline").textContent=`Score: ${correct} / ${answered}`;
+  $("bar").style.width=`${((index+1)/active.length)*100}%`;
+
+  const s=statFor(item.id);
+  const bankText=s.inBank ? ` • Incorrect Bank streak ${s.streak}/${MASTER_STREAK}` : "";
+  const baseForCoverage=lastSettings ? flattenPool(lastSettings.day,lastSettings.order,lastSettings.source) : [];
+  const cForCoverage=lastSettings ? normalizeCoverage(lastSettings,baseForCoverage,false) : {cycle:1,seen:{}};
+  const seenForCoverage=baseForCoverage.filter(q=>cForCoverage.seen[q.id]).length;
+  const coverageText=baseForCoverage.length ? ` • Coverage ${seenForCoverage}/${baseForCoverage.length}` : "";
+  $("meta").textContent=`${item.day} • ${item.order} order • ${item.quiz}${bankText}${coverageText}`;
+  $("qtext").textContent=item.q;
+
+  $("prev").disabled=index===0;
+  $("next").textContent=index===active.length-1 ? "Finish quiz" : "Next question";
+  $("next").disabled=!item.answered;
+  $("removeBadQuestion").disabled=false;
+
+  const holder=$("answers");
+  holder.innerHTML="";
+  item.choices.forEach((choice,i)=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="answer";
+    b.textContent=`${String.fromCharCode(65+i)}. ${choice.txt}`;
+
+    if(item.answered){
+      b.disabled=true;
+      if(i===item.answer) b.classList.add("correct");
+      if(i===item.selected && !item.wasCorrect) b.classList.add("wrong");
+    }else{
+      b.addEventListener("click",()=>answer(i,b));
+    }
+    holder.appendChild(b);
+  });
+
+  if(item.answered){
+    const correctAnswer=escapeHtml(item.choices[item.answer].txt);
+    const slide=slideNumber(item.day,item.page);
+    let masteryMsg="";
+    const currentStat=statFor(item.id);
+
+    if(currentStat.mastered){
+      masteryMsg=`<div class="mastery done">Mastered: ${MASTER_STREAK}/${MASTER_STREAK} consecutive correct. Removed from Incorrect Bank.</div>`;
+    }else if(currentStat.inBank){
+      masteryMsg=`<div class="mastery need">Incorrect Bank: correct streak ${currentStat.streak}/${MASTER_STREAK}. This question will be prioritized in future adaptive quizzes.</div>`;
+    }
+
+    $("feedback").className=`feedback ${item.wasCorrect ? "good" : "bad"}`;
+    $("feedback").innerHTML=
+      `<strong>${item.wasCorrect ? "Correct." : "Incorrect."}</strong>` +
+      (item.wasCorrect ? "" : `<br>Correct answer: ${correctAnswer}`) +
+      `<br><strong>Source:</strong> ${item.day}, <strong>slide ${slide}</strong> <span class="small">(PDF page ${item.page})</span>` +
+      masteryMsg;
+  }else{
+    $("feedback").className="feedback hide";
+    $("feedback").textContent="";
+  }
+}
+
+function answer(choiceIndex,button){
+  const item=active[index];
+  if(item.answered) return;
+
+  locked=true;
+  item.answered=true;
+  item.selected=choiceIndex;
+  answered++;
+
+  const s=statFor(item.id);
+  const buttons=[...$("answers").querySelectorAll("button")];
+  buttons.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===item.answer) b.classList.add("correct");
+  });
+
+  const ok=choiceIndex===item.answer;
+  item.wasCorrect=ok;
+  s.attempts++;
+
+  if(ok){
+    correct++;
+    s.correct++;
+    s.lastResult="correct";
+    button.classList.add("correct");
+
+    if(s.manualRemoved){
+      s.inBank=false;
+      s.streak=0;
+      s.mastered=false;
+    }else if(s.everWrong && !s.mastered){
+      s.streak++;
+      if(s.streak>=MASTER_STREAK){
+        s.streak=MASTER_STREAK;
+        s.inBank=false;
+        s.mastered=true;
+      }else{
+        s.inBank=true;
+      }
+    }else if(s.mastered){
+      s.streak=MASTER_STREAK;
+    }
+
+    $("feedback").className="feedback good";
+  }else{
+    s.wrong++;
+    s.everWrong=true;
+    s.lastResult="wrong";
+    s.streak=0;
+    s.inBank=true;
+    s.mastered=false;
+    s.manualRemoved=false;
+
+    button.classList.add("wrong");
+    if(!missedThisQuiz.some(q=>q.id===item.id)) missedThisQuiz.push(item);
+    $("feedback").className="feedback bad";
+  }
+
+  saveProgress();
+  updateLifetimeUI();
+
+  const correctAnswer=escapeHtml(item.choices[item.answer].txt);
+  const slide=slideNumber(item.day,item.page);
+  let masteryMsg="";
+  if(s.mastered){
+    masteryMsg=`<div class="mastery done">Mastered: ${MASTER_STREAK}/${MASTER_STREAK} consecutive correct. Removed from Incorrect Bank.</div>`;
+  }else if(s.inBank){
+    masteryMsg=`<div class="mastery need">Incorrect Bank: correct streak ${s.streak}/${MASTER_STREAK}. This question will be prioritized in future adaptive quizzes.</div>`;
+  }
+
+  $("feedback").innerHTML=
+    `<strong>${ok ? "Correct." : "Incorrect."}</strong>` +
+    (ok ? "" : `<br>Correct answer: ${correctAnswer}`) +
+    `<br><strong>Source:</strong> ${item.day}, <strong>slide ${slide}</strong> <span class="small">(PDF page ${item.page})</span>` +
+    masteryMsg;
+
+  $("scoreline").textContent=`Score: ${correct} / ${answered}`;
+  $("next").disabled=false;
+}
+function removeCurrentBadQuestion(){
+  const item=active[index];
+  if(!item) return;
+
+  const wasAnswered=!!item.answered;
+  const wasCorrect=!!item.wasCorrect;
+
+  // If it was already answered, remove its contribution from THIS quiz.
+  if(wasAnswered){
+    answered=Math.max(0,answered-1);
+    if(wasCorrect) correct=Math.max(0,correct-1);
+  }
+
+  // A "bad question" is removed from scoring/history as well as future rotation.
+  // If restored later, it comes back as a clean question.
+  progress[item.id]={
+    ...defaultStat(),
+    excluded:true
+  };
+
+  // Remove it from any current-quiz missed list and from the active quiz.
+  missedThisQuiz=missedThisQuiz.filter(q=>q.id!==item.id);
+  active.splice(index,1);
+
+  // Remove stale coverage entry for this question in the current filtered cycle.
+  // It no longer counts toward the eligible denominator because flattenPool excludes it.
+  if(lastSettings){
+    const key=coverageKey(lastSettings);
+    if(coverage[key] && coverage[key].seen){
+      delete coverage[key].seen[item.id];
+    }
+  }
+
+  saveProgress();
+  updateLifetimeUI();
+  updateCoverageStatus();
+
+  alert(
+    wasAnswered
+      ? "Question removed. Its answer was also removed from this quiz score. You can restore it later under View Removed Questions."
+      : "Question removed before answering. It will not count in this quiz. You can restore it later under View Removed Questions."
+  );
+
+  if(!active.length){
+    finish();
+    return;
+  }
+
+  // Stay at the same numeric position so the next question slides into place.
+  // If the removed item was last, move back to the new last item.
+  if(index>=active.length) index=active.length-1;
+
+  render();
+  saveProgress();
+}
+
+function finish(){
+  quizInProgress=false;
+  savedSession=null;
+  $("quiz").classList.add("hide"); $("results").classList.remove("hide");
+  const pct=active.length ? Math.round((correct/active.length)*100) : 0;
+  $("pct").textContent=pct+"%";
+  $("correctCount").textContent=correct;
+  $("missedCount").textContent=missedThisQuiz.length;
+  $("bankAfter").textContent=Object.values(progress).filter(s=>s.inBank).length;
+  $("retry").disabled=!missedThisQuiz.length;
+
+  const r=$("missedReview"); r.innerHTML="";
+  if(missedThisQuiz.length){
+    const h=document.createElement("h3"); h.textContent="Missed-question review"; r.appendChild(h);
+    missedThisQuiz.forEach((item,i)=>{
+      const a=document.createElement("article");
+      a.innerHTML=`<strong>${i+1}. ${escapeHtml(item.q)}</strong><br>
+        <span class="small">${item.day} • slide ${slideNumber(item.day,item.page)} • PDF page ${item.page}</span><br>
+        Correct: ${escapeHtml(item.choices[item.answer].txt)}<br>
+        <span class="small">Bank streak: ${statFor(item.id).streak}/${MASTER_STREAK}</span>`;
+      r.appendChild(a);
+    });
+  }
+  saveProgress();
+  showResumeSessionPanel();
+}
+
+function startBank(){
+  const settings={
+    day:$("day").value, order:$("order").value, source:$("source").value,
+    size:Number($("size").value), mode:"Incorrect"
+  };
+  lastSettings=settings;
+  const pool=buildQuiz(settings);
+  if(!pool.length){ alert("Your Incorrect Bank is empty for those filters."); return; }
+  startQuiz(pool);
+}
+
+function progressFile(){
+  const payload=makeProgressPayload(true);
+  return new File(
+    [JSON.stringify(payload,null,2)],
+    "IPAP_Base_Study_Program_Progress.json",
+    {type:"application/json"}
+  );
+}
+
+function exportProgress(){
+  const file=progressFile();
+  const url=URL.createObjectURL(file);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=file.name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+async function shareProgress(){
+  const file=progressFile();
+  try{
+    if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+      await navigator.share({
+        title:"IPAP Base Study Program Progress",
+        text:"IPAP Base Study Program progress transfer",
+        files:[file]
+      });
+      return;
+    }
+  }catch(e){
+    if(e && e.name==="AbortError") return;
+  }
+  exportProgress();
+  alert("Direct sharing is not available in this browser, so the progress file was downloaded instead. Save it somewhere you can access from the other device.");
+}
+
+function importProgressFile(file){
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const parsed=JSON.parse(reader.result);
+      if(applyImportedPayload(parsed,"progress file")){
+        alert(savedSession
+          ? "Progress imported. Use Resume saved quiz to continue exactly where you left off."
+          : "Progress imported.");
+      }
+    }catch(e){
+      alert(e && e.message ? e.message : "Could not import that progress file.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function importTransferCode(){
+  try{
+    const parsed=parseTransferCode($("transferCode").value);
+    if(applyImportedPayload(parsed,"progress code")){
+      alert(savedSession
+        ? "Progress imported. Use Resume saved quiz to continue exactly where you left off."
+        : "Progress imported.");
+    }
+  }catch(e){
+    alert(e && e.message ? e.message : "Could not read that progress code.");
+  }
+}
+
+$("start").addEventListener("click",()=>startQuiz());
+$("studyBank").addEventListener("click",startBank);
+$("prev").addEventListener("click",()=>{
+  if(index>0){
+    index--;
+    render();
+    saveProgress();
+  }
+});
+$("next").addEventListener("click",()=>{
+  if(!active[index] || !active[index].answered) return;
+  if(index>=active.length-1) finish();
+  else{
+    index++;
+    render();
+    saveProgress();
+  }
+});
+$("removeBadQuestion").addEventListener("click",removeCurrentBadQuestion);
+$("quit").addEventListener("click",finish);
+$("again").addEventListener("click",()=>{ $("mode").value="Adaptive"; startQuiz(); });
+$("retry").addEventListener("click",()=>{ if(missedThisQuiz.length) startQuiz(missedThisQuiz.map(x=>({id:x.id,day:x.day,quiz:x.quiz,order:x.order,q:x.q,o:x.o,a:x.a,page:x.page}))); });
+$("resultsBank").addEventListener("click",()=>{ $("results").classList.add("hide"); $("setup").classList.remove("hide"); startBank(); });
+$("home").addEventListener("click",()=>{ $("results").classList.add("hide"); $("setup").classList.remove("hide"); updateLifetimeUI(); });
+
+$("refreshRecommendations").addEventListener("click",renderReviewRecommendations);
+
+$("removedList").addEventListener("click",e=>{
+  const toggle=e.target.closest("[data-toggle-removed-answer]");
+  if(toggle){
+    const id=toggle.getAttribute("data-toggle-removed-answer");
+    const panel=document.getElementById(`removed-answer-${id}`);
+    if(panel) panel.classList.toggle("hide");
+    return;
+  }
+
+  const btn=e.target.closest("[data-restore-question]");
+  if(!btn) return;
+  const id=btn.getAttribute("data-restore-question");
+  progress[id]=defaultStat();
+  saveProgress();
+  updateLifetimeUI();
+  updateCoverageStatus();
+});
+
+$("bankList").addEventListener("click",e=>{
+  const toggle=e.target.closest("[data-toggle-answer]");
+  if(toggle){
+    const id=toggle.getAttribute("data-toggle-answer");
+    const panel=document.getElementById(`bank-answer-${id}`);
+    if(panel) panel.classList.toggle("hide");
+    return;
+  }
+
+  const btn=e.target.closest("[data-remove-bank]");
+  if(!btn) return;
+  const id=btn.getAttribute("data-remove-bank");
+  const q=ALL.find(x=>x.id===id);
+  if(!q) return;
+  const s=statFor(id);
+  s.inBank=false;
+  s.streak=0;
+  s.mastered=false;
+  s.manualRemoved=true;
+  saveProgress();
+  updateLifetimeUI();
+});
+
+$("copyTransferCode").addEventListener("click",copyProgressCode);
+$("shareProgress").addEventListener("click",shareProgress);
+$("exportProgress").addEventListener("click",exportProgress);
+$("importTransferCode").addEventListener("click",importTransferCode);
+$("clearTransferCode").addEventListener("click",()=>{ $("transferCode").value=""; });
+$("resumeSession").addEventListener("click",restoreSavedSession);
+$("discardSession").addEventListener("click",discardSavedSession);
+$("importProgress").addEventListener("change",e=>{ const f=e.target.files && e.target.files[0]; if(f) importProgressFile(f); e.target.value=""; });
+$("resetProgress").addEventListener("click",()=>{
+  if(confirm("Reset ALL quiz history, Incorrect Bank entries, mastery streaks, removed questions, coverage, and any saved in-progress quiz?")){
+    progress={}; coverage={}; savedSession=null; quizInProgress=false; active=[];
+    saveProgress(); updateLifetimeUI(); updateCoverageStatus(); showResumeSessionPanel();
+  }
+});
+
+["day","order","source"].forEach(id=>$(id).addEventListener("change",updateCoverageStatus));
+
+function isStandaloneWebApp(){
+  return window.matchMedia?.("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+
+function updateWebAppStatus(){
+  const el=$("webAppStatus");
+  if($("appVersionLabel")) $("appVersionLabel").textContent=APP_VERSION;
+  if(!el) return;
+  if(location.protocol === "file:"){
+    el.innerHTML = "This copy is open as a local file. On iPad, deploy this package to an <strong>HTTPS web address</strong> and open that address in Safari; Files/Quick Look may display the page without reliably running its JavaScript.";
+    return;
+  }
+  if(isStandaloneWebApp()){
+    el.innerHTML = "Running as a Home Screen web app. Quiz JavaScript is active, progress is stored on this web app’s origin, and the app can reopen offline after its first successful load.";
+    return;
+  }
+  el.innerHTML = "Running in the browser with JavaScript active. On iPad, use <strong>Share → Add to Home Screen</strong> for an app-style launcher. Keep using the same web address so this device keeps the same saved history.";
+}
+
+let waitingServiceWorker=null;
+let appUpdateActivationRequested=false;
+let reloadingForAppUpdate=false;
+
+function showAppUpdateAvailable(worker){
+  waitingServiceWorker=worker || waitingServiceWorker;
+  const panel=$("appUpdatePanel");
+  if(panel) panel.classList.remove("hide");
+}
+
+function hideAppUpdateAvailable(){
+  const panel=$("appUpdatePanel");
+  if(panel) panel.classList.add("hide");
+}
+
+async function registerWebAppServiceWorker(){
+  if(!("serviceWorker" in navigator)) return;
+  if(location.protocol !== "https:" && location.hostname !== "localhost") return;
+  try{
+    const registration=await navigator.serviceWorker.register("./sw.js", {scope:"./",updateViaCache:"none"});
+
+    if(registration.waiting && navigator.serviceWorker.controller){
+      showAppUpdateAvailable(registration.waiting);
+    }
+
+    registration.addEventListener("updatefound",()=>{
+      const worker=registration.installing;
+      if(!worker) return;
+      worker.addEventListener("statechange",()=>{
+        if(worker.state==="installed" && navigator.serviceWorker.controller){
+          showAppUpdateAvailable(registration.waiting || worker);
+        }
+      });
+    });
+
+    // Explicitly check the host for a newer service worker on each launch.
+    registration.update().catch(()=>{});
+
+    // Re-check when returning to the app after it has been backgrounded.
+    document.addEventListener("visibilitychange",()=>{
+      if(document.visibilityState === "visible") registration.update().catch(()=>{});
+    });
+  }catch(e){
+    console.warn("IPAP service worker registration failed:", e);
+  }
+}
+
+$("applyAppUpdate")?.addEventListener("click",()=>{
+  if(!waitingServiceWorker) return;
+  saveProgress();
+  appUpdateActivationRequested=true;
+  waitingServiceWorker.postMessage({type:"SKIP_WAITING"});
+});
+
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{
+    // A first-time service-worker install can claim this page too. Only reload
+    // automatically when the learner explicitly chose the in-app update.
+    if(!appUpdateActivationRequested || reloadingForAppUpdate) return;
+    reloadingForAppUpdate=true;
+    hideAppUpdateAvailable();
+    location.reload();
+  });
+}
+
+// iPadOS may suspend a tab/web app without firing beforeunload. Save on pagehide and
+// whenever the page becomes hidden so in-progress state is committed before suspension.
+window.addEventListener("pagehide",()=>saveProgress());
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState === "hidden") saveProgress();
+});
+
+loadProgress();
+updateStorageStatus();
+updateLifetimeUI();
+updateCoverageStatus();
+showResumeSessionPanel();
+updateWebAppStatus();
+registerWebAppServiceWorker();
+</script>
+</body>
+</html>
