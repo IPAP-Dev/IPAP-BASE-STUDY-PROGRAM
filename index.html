@@ -833,8 +833,6 @@ function render(){
   const seenForCoverage=baseForCoverage.filter(q=>cForCoverage.seen[q.id]).length;
   const coverageText=baseForCoverage.length ? ` • Coverage ${seenForCoverage}/${baseForCoverage.length}` : "";
   $("meta").textContent=`${item.day} • ${item.order==="Instructor"?"Instructor self-assessment":item.order+" order"} • ${item.quiz}${bankText}${coverageText}`;
-  $("viewCurrentSource").disabled=!sourceSlidesFor(item).length;
-  $("currentSourceLabel").textContent=sourceLabel(item);
   $("qtext").textContent=item.q;
   $("questionMedia").innerHTML=questionMedia(item);
 
