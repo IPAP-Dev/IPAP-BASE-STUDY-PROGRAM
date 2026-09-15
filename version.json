@@ -1,7 +1,0 @@
-{
-  "appVersion": "2.0.0",
-  "dataSchemaVersion": 4,
-  "questionIdScheme": "immutable-v1",
-  "questionCount": 400,
-  "contentModules": ["Heart"]
-}
