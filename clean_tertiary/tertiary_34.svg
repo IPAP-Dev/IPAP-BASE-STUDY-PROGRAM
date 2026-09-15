@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><rect width="1000" height="300" fill="white"/><g font-family="Arial,Helvetica,sans-serif" fill="#111" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+<text x="30" y="118" font-size="28" stroke="none">Protein</text><text x="30" y="150" font-size="28" stroke="none">backbone</text>
+<path d="M165 70 l-18 22 l18 22 l-18 22 l18 22 l-18 22 l18 22" fill="none"/>
+<line x1="165" y1="136" x2="330" y2="136"/><text x="200" y="127" font-size="40" stroke="none">CH₂</text><text x="330" y="147" font-size="40" stroke="none">OH</text>
+<ellipse cx="585" cy="141" rx="255" ry="118" fill="none" stroke="#d80a82" stroke-width="5"/>
+<text x="480" y="78" font-size="40" stroke="none">H—O—H</text>
+<text x="650" y="150" font-size="40" stroke="none">H—O—H</text>
+<text x="500" y="230" font-size="40" stroke="none">H—O—H</text>
+<text x="300" y="265" font-size="34" fill="#d80a82" stroke="none">Ser</text>
+</g></svg>
