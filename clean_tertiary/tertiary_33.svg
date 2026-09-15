@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><rect width="1000" height="300" fill="white"/><g font-family="Arial,Helvetica,sans-serif" fill="#111" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+<text x="30" y="118" font-size="28" stroke="none">Protein</text><text x="30" y="150" font-size="28" stroke="none">backbone</text>
+<path d="M155 70 l-18 22 l18 22 l-18 22 l18 22 l-18 22 l18 22" fill="none"/>
+<line x1="155" y1="136" x2="245" y2="136"/><text x="185" y="127" font-size="40" stroke="none">CH₂</text>
+<polygon points="310,88 356,114 356,168 310,194 264,168 264,114" fill="none"/><circle cx="310" cy="141" r="34" fill="none"/>
+<line x1="245" y1="136" x2="264" y2="136"/>
+<line x1="356" y1="136" x2="510" y2="136"/>
+<text x="515" y="147" font-size="40" stroke="none">CH</text>
+<line x1="570" y1="132" x2="620" y2="82"/><text x="610" y="72" font-size="38" stroke="none">CH₃</text>
+<line x1="570" y1="145" x2="620" y2="200"/><text x="610" y="235" font-size="38" stroke="none">CH₃</text>
+<line x1="570" y1="136" x2="740" y2="136"/><text x="655" y="127" font-size="40" stroke="none">CH₂</text>
+<path d="M790 70 l18 22 l-18 22 l18 22 l-18 22 l18 22 l-18 22" fill="none"/><line x1="740" y1="136" x2="790" y2="136"/>
+<ellipse cx="465" cy="141" rx="235" ry="112" fill="none" stroke="#d80a82" stroke-width="5"/>
+<text x="270" y="265" font-size="34" fill="#d80a82" stroke="none">Phe</text><text x="600" y="265" font-size="34" fill="#d80a82" stroke="none">Leu</text>
+</g></svg>
