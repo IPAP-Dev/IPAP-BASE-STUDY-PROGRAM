@@ -1,0 +1,1356 @@
+<!doctype html>
+<!-- IPAP Base Adaptive Program: slide-only Microbiology and Immunology; 2026-09-25. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IPAP Base Adaptive Program</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg:#f6f7f9; --card:#ffffff; --text:#16181d; --muted:#667085; --border:#d9dde5;
+  --accent:#2f6fed; --good:#18794e; --bad:#b42318; --warn:#b54708; --soft:#eef3ff;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#111318; --card:#1b1e25; --text:#f4f5f7; --muted:#a7adba; --border:#343945; --soft:#202b45; }
+}
+* { box-sizing:border-box; }
+body { margin:0; font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); }
+main { max-width:980px; margin:auto; padding:22px; }
+.panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:16px; }
+h1 { margin:0 0 6px; font-size:28px; }
+h2 { margin:0 0 12px; font-size:20px; }
+h3 { margin:14px 0 8px; font-size:17px; }
+.small { color:var(--muted); font-size:14px; line-height:1.4; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:12px; }
+label { display:block; font-weight:700; font-size:14px; }
+select, button, input[type=file], textarea { width:100%; min-height:44px; margin-top:6px; border-radius:9px; border:1px solid var(--border); font-size:16px; }
+select, input[type=file], textarea { background:var(--card); color:var(--text); padding:8px 10px; }
+button { cursor:pointer; background:var(--accent); color:white; font-weight:700; padding:9px 12px; }
+button.secondary { background:transparent; color:var(--text); }
+button.danger { background:transparent; color:var(--bad); border-color:var(--bad); }
+button:disabled { opacity:.55; cursor:not-allowed; }
+.topline { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center; }
+.progress { height:10px; background:var(--border); border-radius:99px; overflow:hidden; margin:12px 0 18px; }
+.progress > div { height:100%; background:var(--accent); width:0; }
+.qtext { font-size:21px; line-height:1.35; font-weight:700; margin:12px 0 16px; }
+.answers { display:grid; gap:10px; }
+.answer { text-align:left; background:transparent; color:var(--text); border:1px solid var(--border); font-weight:500; }
+.answer:hover { border-color:var(--accent); }
+.answer.correct { border-color:var(--good); }
+.answer.wrong { border-color:var(--bad); }
+.feedback { margin-top:14px; padding:12px; border-radius:10px; border:1px solid var(--border); line-height:1.45; }
+.feedback.good { border-color:var(--good); }
+.feedback.bad { border-color:var(--bad); }
+.mastery { margin-top:8px; font-weight:700; }
+.mastery.need { color:var(--warn); }
+.mastery.done { color:var(--good); }
+.actions { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.actions button { width:auto; min-width:135px; }
+.statgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px; }
+.stat { border:1px solid var(--border); border-radius:10px; padding:12px; text-align:center; }
+.stat b { display:block; font-size:24px; }
+.missed { margin-top:14px; }
+.missed article, .bank-item { border-top:1px solid var(--border); padding:12px 0; }
+.hide { display:none !important; }
+.pill { display:inline-block; border:1px solid var(--border); border-radius:999px; padding:3px 8px; font-size:12px; color:var(--muted); margin:2px 4px 2px 0; }
+.bank-remove { width:auto; min-height:34px; margin-top:8px; padding:6px 10px; font-size:13px; background:transparent; color:var(--bad); border-color:var(--bad); }
+details { margin-top:14px; }
+summary { cursor:pointer; font-weight:700; }
+.notice { border-left:4px solid var(--accent); padding:10px 12px; background:var(--soft); border-radius:8px; }
+.storage { margin-top:8px; }
+@media (max-width:620px) {
+  main { padding:12px; }
+  .statgrid { grid-template-columns:repeat(2,1fr); }
+  .actions button { width:100%; }
+}
+#customQuestionForm label{display:block;margin:10px 0} #customQuestionForm input,#customQuestionForm textarea,#customQuestionForm select{width:100%;box-sizing:border-box} #customError{color:#c64040}
+dialog{border:1px solid var(--border);border-radius:12px;padding:20px} dialog::backdrop{background:rgba(0,0,0,.55)}
+.picture-diagram{position:relative;width:100%;max-width:760px;margin:16px auto;background:#fff;line-height:0}
+.picture-diagram img{width:100%;height:auto;display:block}
+.picture-mask{position:absolute;display:flex;align-items:center;justify-content:center;background:#12385f;color:#fff;border-radius:2px;font-weight:bold;line-height:1;font-size:clamp(8px,2vw,16px);overflow:hidden}
+</style>
+</head>
+<body>
+<main>
+<section class="panel" id="setup">
+  <h1>IPAP Base Adaptive Program</h1>
+  <p class="notice" id="answerKeyRevision"><strong>Microbiology &amp; Immunology</strong> · Slide-only question bank</p>
+  <p class="small"><strong>422 questions installed.</strong> 329 text questions (including 68 block review questions) and 93 cover/reveal questions. Text questions use only typed slide content, excluding FYI slides and presenter notes. Microbiology references its own deck; Immunology references the master deck. Picture questions reveal the entire diagram after answering and outline the requested word or phrase in orange.</p>
+
+  <div class="notice small">
+    <strong>Adaptive mastery:</strong> a missed question enters the Incorrect Bank. You can manually remove it at any time, or let it stay there until you answer it correctly
+    <strong>3 times in a row</strong>. Adaptive quizzes deliberately pull bank questions more often until they are mastered.<br><br>
+    <strong>Coverage rule:</strong> questions you answer correctly and that are not in the active Incorrect Bank will not recycle until every question in your selected test pool has been shown once. The only exception is an active Incorrect Bank question, which may repeat sooner so you can reach the 3-correct mastery streak.
+  </div>
+
+  <p id="statsScope" class="small"></p>
+  <div class="statgrid">
+    <div class="stat"><b id="bankCount">0</b><span class="small">Incorrect bank</span></div>
+    <div class="stat"><b id="masteredCount">0</b><span class="small">Mastered from bank</span></div>
+    <div class="stat"><b id="attemptCount">0</b><span class="small">Total attempts</span></div>
+    <div class="stat"><b id="accuracy">—</b><span class="small">Lifetime accuracy</span></div>
+  </div>
+
+  <div class="grid" style="margin-top:16px">
+    <label>Section
+      <select id="day"><option>Into to Microbiology</option><option>Innate Response</option><option>Adaptive Response</option><option>Vaccines</option><option>Immune System Disorders</option><option>Exam pictures</option><option>Block Review Slides</option></select>
+    </label>
+    <label>Question type
+      <select id="order"><option value="Mixed">Mixed first + second order</option><option value="First">First order only</option><option value="Second">Second order only</option></select>
+    </label>
+    <label>Quiz size
+      <select id="size">
+        <option value="10">10 questions</option>
+        <option value="25" selected>25 questions</option>
+        <option value="50">50 questions</option>
+        <option value="100">100 questions</option><option value="9999">Entire selected section / pool</option>
+      </select>
+    </label>
+    <label>Study mode
+      <select id="mode">
+        <option value="Adaptive" selected>Adaptive — prioritize missed</option>
+        <option value="Random">Random</option>
+        <option value="Unseen">New Questions Only</option>
+        <option value="Incorrect">Incorrect Bank only</option>
+      </select>
+    </label>
+    <label>Question source
+      <select id="source"><option value="Random" selected>All questions</option><option value="Slides">Slide questions</option><option value="Images">Image questions</option><option value="Custom">My added questions</option></select>
+    </label>
+  </div>
+
+  <p id="coverageStatus" class="small storage"></p>
+  <div class="actions">
+    <button id="start">Start quiz</button>
+    <button id="studyBank" class="secondary">Study Incorrect Bank</button><button id="addOwnQuestion" type="button" class="secondary">Add Your Own Question</button>
+  </div>
+
+  <section class="panel" style="margin-top:16px; padding:14px">
+    <div class="topline">
+      <div>
+        <h2 style="margin-bottom:4px">What to Review</h2>
+        <p class="small" style="margin:0">General topics and slide ranges based only on your active Incorrect Bank.</p>
+      </div>
+      <button id="refreshRecommendations" type="button" class="secondary" style="width:auto; min-width:150px">Refresh recommendations</button>
+    </div>
+    <div id="reviewRecommendations" class="small"></div>
+  </section>
+
+  <details>
+    <summary>View Incorrect Bank</summary>
+    <div id="bankList" class="small"></div>
+  </details>
+
+  <details>
+    <summary>View Removed Questions</summary>
+    <p class="small">Questions removed as bad are excluded from all future quizzes until you restore them.</p>
+    <div id="removedList" class="small"></div>
+  </details>
+
+
+  <details id="wholeBank">
+    <summary>View whole question bank</summary>
+    <label>Search questions and answers<input id="bankSearch" type="search" placeholder="Search questions and answers"></label>
+    <label>Bank section<select id="bankDay"><option value="All">All sections</option><option>Into to Microbiology</option><option>Innate Response</option><option>Adaptive Response</option><option>Vaccines</option><option>Immune System Disorders</option><option>Exam pictures</option><option>Block Review Slides</option></select></label>
+    <p id="wholeBankCount" class="small"></p><div id="wholeBankList"></div>
+  </details>
+  <button id="resetProgress" type="button" class="danger" style="margin-top:16px">Reset all progress</button>
+
+</section>
+
+<section class="panel">
+  <div class="actions"><button id="exportProgress" type="button">Save Progress</button><button id="loadButton" type="button" class="secondary">Load Progress</button></div>
+  <input id="importProgress" type="file" accept=".json,application/json" hidden>
+  <p id="storageStatus" class="small storage"></p>
+  <p id="backupStatus" class="small" role="status"></p>
+  <div id="resumeSessionPanel" class="notice small hide"><strong>Saved quiz available.</strong>
+    <div class="actions"><button id="resumeSession" type="button">Resume saved quiz</button><button id="discardSession" type="button" class="secondary">Discard saved quiz</button></div>
+  </div>
+</section>
+<dialog id="confirmDialog"><p id="confirmMessage"></p><div class="actions"><button id="confirmYes" type="button" class="danger">Confirm</button><button id="confirmNo" type="button" class="secondary">Cancel</button></div></dialog>
+<dialog id="editDialog" style="width:min(650px,90vw);max-height:85vh;overflow:auto">
+  <form id="editForm"><h2>Edit question</h2><p class="small">Edits apply to unanswered and future questions. Previously scored answers remain in your history. Save Progress includes your edits.</p>
+    <label>Question<textarea id="editText" rows="4" required></textarea></label>
+    <div id="editChoices"></div><label>Correct answer<select id="editCorrect"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label>
+    <div class="actions"><button type="submit">Save question</button><button id="cancelEdit" type="button" class="secondary">Cancel</button></div>
+  </form>
+</dialog>
+<section class="panel hide" id="quiz">
+  <div class="topline">
+    <strong id="counter">Question 1 of 25</strong>
+    <span class="small" id="scoreline">Score: 0 / 0</span>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+  <div class="small" id="meta"></div>
+  <div class="qtext" id="qtext"></div>
+  <div id="questionMedia"></div><div class="answers" id="answers"></div>
+  <div id="feedback" class="feedback hide" aria-live="polite"></div>
+  <div class="actions">
+    <button id="prev" class="secondary" disabled>Previous question</button>
+    <button id="next" disabled>Next question</button>
+    
+    <button id="editCurrent" type="button" class="secondary">Edit question</button>
+    <button id="removeBadQuestion" type="button" class="danger">Remove bad question</button>
+    <button id="quit" class="secondary">End quiz</button>
+  </div>
+  <p class="small" style="margin-top:8px">
+    You can remove a bad question <strong>before or after answering it</strong>. It will be excluded from future quizzes and can be restored later under View Removed Questions.
+  </p>
+</section>
+
+<section class="panel hide" id="results">
+  <h2>Quiz complete</h2>
+  <div class="statgrid">
+    <div class="stat"><b id="pct">0%</b><span class="small">Quiz score</span></div>
+    <div class="stat"><b id="correctCount">0</b><span class="small">Correct</span></div>
+    <div class="stat"><b id="missedCount">0</b><span class="small">Missed</span></div>
+    <div class="stat"><b id="bankAfter">0</b><span class="small">Incorrect bank</span></div>
+  </div>
+  <div class="actions">
+    <button id="again">New adaptive quiz</button>
+    <button id="retry" class="secondary">Retry missed this quiz</button>
+    <button id="resultsBank" class="secondary">Study Incorrect Bank</button>
+    <button id="home" class="secondary">Change settings</button>
+  </div>
+  <div id="missedReview" class="missed"></div>
+</section>
+<dialog id="customQuestionDialog" aria-labelledby="customQuestionTitle" style="width:min(700px,92vw);max-height:90vh;overflow:auto">
+  <form id="customQuestionForm">
+    <h2 id="customQuestionTitle">Add Your Own Question</h2>
+    <div class="grid"><label>Section<select id="customSection"></select></label><label>Question type<select id="customOrder"><option value="First">First order</option><option value="Second">Second order</option></select></label></div>
+    <label>Question<textarea id="customQuestionText" rows="3" required></textarea></label>
+    <label>Answer A<input id="customAnswer0" required></label>
+    <label>Answer B<input id="customAnswer1" required></label>
+    <label>Answer C<input id="customAnswer2" required></label>
+    <label>Answer D<input id="customAnswer3" required></label>
+    <label>Answer E<input id="customAnswer4" required></label>
+    <label>Correct answer<select id="customCorrect"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option><option value="4">E</option></select></label>
+    <label>Source slide numbers (optional)<input id="customSlideNumbers" placeholder="For example: 12, 13" inputmode="text"></label>
+    <p id="customError" role="alert"></p>
+    <div class="actions"><button type="submit">Add to test bank</button><button type="button" id="cancelCustomQuestion" class="secondary">Cancel</button></div>
+  </form>
+</dialog>
+
+</main>
+
+
+<dialog id="examImageDialog" style="width:min(1440px,98vw);max-height:94vh;overflow:auto;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:12px">
+<div style="position:sticky;top:0;z-index:2;background:var(--panel);display:flex;gap:16px;align-items:center;justify-content:space-between;padding:10px"><h2 id="examImageTitle" style="margin:0"></h2><button type="button" id="examImageClose" class="secondary" style="width:auto">Close</button></div><div id="examImageContent"></div></dialog>
+<script>
+const BANK = {"Into to Microbiology":{"Slides-First":[["According to the microbial-world slide, where are most bacteria in or on the human body located?",["GI tract","Lungs","Brain","Thymus","Bone marrow"],0,11,[11],null,"Intro to Microbiology"],["Which activity is listed as a beneficial role of microbes in humans?",["Tissue damage by extracellular pathogens","Synthesis of vitamins","Production of antibiotic resistance factors","Conversion of normal PrP to misfolded PrP","Release of lipid A causing inflammation"],1,12,[12],null,"Intro to Microbiology"],["Why are viruses excluded from the three domains of cellular life?",["They are nonliving and acellular","They are unicellular eukaryotes","They are classified within Bacteria","They are classified within Archaea","They are living prokaryotes lacking nuclei"],0,13,[13],null,"Intro to Microbiology"],["Which taxonomic activity assigns names to groups?",["Replication","Identification","Serotyping","Classification","Nomenclature"],4,14,[14],null,"Intro to Microbiology"],["Serovars are distinguished by variations in which feature?",["Nuclear membranes","Antigens","Histones","ATP production sites","Mitochondria"],1,15,[15],null,"Intro to Microbiology"],["Which pairing correctly describes eukaryotic chromosomes and replication?",["One circular chromosome; mitosis","Multiple circular chromosomes; binary fission","Multiple linear chromosomes; mitosis","One circular chromosome; budding","Multiple linear chromosomes; binary fission"],2,17,[17],null,"Intro to Microbiology"],["Where is circular prokaryotic DNA located?",["Outer membrane","Nucleus","Nucleoid region","Capsule","Mitochondrion"],2,18,[18],null,"Intro to Microbiology"],["What approximate prokaryotic generation time is stated?",["8–72 hours","1–20 hours","2–5 days","5–21 days","20–30 minutes"],4,18,[18],null,"Intro to Microbiology"],["Binary fission produces which result?",["New cells through budding","Multiple virions from a capsid","Two genetically identical cells from one cell","One spore from two cells","A multinucleated hypha"],2,19,[19],null,"Intro to Microbiology"],["Which Gram-stain result is paired correctly?",["Gram-positive: bluish-purple","Gram-positive: bright green","Gram-positive: pinkish-red","Gram-negative: bluish-purple","Gram-negative: colorless only"],0,20,[20],null,"Intro to Microbiology"],["Which term describes a curved, comma-shaped rod?",["Coccobacillus","Coccus","Vibrio","Spirillum","Spirochete"],2,21,[21],null,"Intro to Microbiology"],["A bacterium varies in shape and size with its environment. Which term applies?",["Diplococcal","Spirillum","Tetrad","Bacillus","Pleomorphic"],4,21,[21],null,"Intro to Microbiology"],["What is the stated general length range for bacilli?",["Approximately 1–6 µm","Approximately 4–15 µm","Approximately 500 µm–60 mm","Approximately 2 mm–10 m","Approximately 20–300 nm"],0,22,[22],null,"Intro to Microbiology"],["Approximately what proportion of bacterial cytoplasm is water?",["30%","100%","10%","80%","50%"],3,24,[24],null,"Intro to Microbiology"],["Which bacterial DNA element is small and extrachromosomal?",["Capsomere","Nucleoid chromosome","Histone","Plasmid","Peptidoglycan"],3,25,[25],null,"Intro to Microbiology"],["Which bacterial structure houses the electron transport chain for ATP generation?",["Fimbriae","Capsule","Nucleoid","Cytoplasmic membrane","Peptidoglycan mesh"],3,26,[26],null,"Intro to Microbiology"],["Which feature is characteristic of the Gram-positive wall described?",["Thick peptidoglycan with teichoic acids","Lipid A in an outer membrane","Outer membrane containing porins","Periplasm between peptidoglycan and outer membrane","Thin peptidoglycan with LPS"],0,27,[27],null,"Intro to Microbiology"],["Which sugars alternate in peptidoglycan glycan chains?",["Chitin and glucan","Histone and DNA","NAG and NAM","Flagellin and porin","Lipid A and O antigen"],2,28,[28],null,"Intro to Microbiology"],["Which LPS component is used for serotyping because its sugars vary?",["Porin","Lipid A","Core polysaccharide","Peptide cross-link","O antigen polysaccharide"],4,29,[29],null,"Intro to Microbiology"],["Which component is identified as endotoxin?",["NAG","Core polysaccharide","NAM","O antigen","Lipid A"],4,30,[30],null,"Intro to Microbiology"],["Which structure can mask surface antigens and resist phagocytosis?",["Flagellum","Ribosome","Plasmid","Capsule","Cytoplasmic membrane"],3,31,[31],null,"Intro to Microbiology"],["Which pairing correctly matches fimbriae and pili?",["Fimbriae: dormancy; pili: osmotic protection","Fimbriae: ATP generation; pili: ribosomal synthesis","Fimbriae: longer and fewer; pili: short and numerous","Fimbriae: short and numerous; pili: longer and fewer","Fimbriae: nucleic acid; pili: polysaccharide"],3,32,[32],null,"Intro to Microbiology"],["Flagella are composed of which helically coiled protein?",["Carrier protein","Flagellin","PrP","Histone","Capsomere"],1,34,[34],null,"Intro to Microbiology"],["What is the principal function of a bacterial endospore?",["Nutrient absorption by hyphae","Long-term survival in harsh conditions","Horizontal gene transfer","ATP generation by mitochondria","Rapid production of multiple daughter cells"],1,35,[35],null,"Intro to Microbiology"],["Why are bacteria cultured, isolated, and identified from patient samples?",["To replace identification with incubation alone","To guide appropriate antimicrobial therapy","To observe growth without characterizing the organism","To establish morphology without identifying the organism","To classify every sample by colony size alone"],1,40,[40],null,"Intro to Microbiology"],["Which observation is associated with bacterial growth in broth?",["Turbidity","Spore release from a mold","Visible colonies on agar","Budding hyphae","Capsid assembly"],0,41,[41],null,"Intro to Microbiology"],["Which organisms require reduced oxygen levels?",["Microaerophiles","Capnophiles","Anaerobes","Facultative anaerobes","Aerobes"],0,42,[42],null,"Intro to Microbiology"],["Which organisms require increased carbon dioxide?",["Capnophiles","Microaerophiles","Anaerobes","Facultative anaerobes","Aerobes"],0,42,[42],null,"Intro to Microbiology"],["Which atypical bacterium lacks a cell wall entirely?",["Staphylococcus","Mycobacteria","Mycoplasma","Bacillus","Chlamydia"],2,45,[45],null,"Intro to Microbiology"],["Which atypical bacterial feature contributes to difficulty in staining and killing Mycobacteria?",["Sterol-free membrane","Waxy acid-fast cell wall","Complete absence of a cell wall","Requirement for host ATP","Thick capsule alone"],1,45,[45],null,"Intro to Microbiology"],["Which components chiefly form fungal cell walls?",["NAG, NAM, and lipid A","Chitin, glucans, and glycoproteins","Flagellin, porins, and histones","DNA, RNA, and capsomeres","LPS, teichoic acid, and lipid A"],1,47,[47],null,"Intro to Microbiology"],["How do yeasts reproduce on the slide?",["Spore germination into bacteria","Conjugation","Binary fission","Capsid assembly","Budding"],4,48,[48],null,"Intro to Microbiology"],["What is a mycelium?",["A protozoan feeding stage","A single budding yeast","A dormant bacterial cell","A visible mass of hyphae","A protein viral coat"],3,49,[49],null,"Intro to Microbiology"],["Which statement matches the viral genome described?",["Both DNA and RNA in every genome","One circular bacterial chromosome","Multiple human chromosomes","DNA or RNA, but not both","Only proteins and no nucleic acid"],3,51,[51],null,"Intro to Microbiology"],["What typical viral size range is given?",["20–300 nm","1–6 µm","500 µm–60 mm","2 mm–10 m","4–15 µm"],0,52,[52],null,"Intro to Microbiology"],["What is the protein coat surrounding a viral genome called?",["Capsid","Envelope","Cell wall","Capsule","Tegument"],0,53,[53],null,"Intro to Microbiology"],["Which replication step releases the viral genome from its covering?",["Uncoating","Attachment","Release","Assembly","Adsorption"],0,54,[54],null,"Intro to Microbiology"],["What range is given for the viral eclipse period?",["5–21 days","1–20 hours","2–5 days","Years to decades","20–30 minutes"],1,56,[56],null,"Intro to Microbiology"],["What propagates prion conversion?",["Yeast cells budding","Misfolded PrP converting normal PrP","Helminth eggs germinating","Bacterial DNA undergoing binary fission","Viral RNA encoding capsomeres"],1,59,[59],null,"Intro to Microbiology"],["Which category of prion disease acquisition involves inherited PRNP mutations?",["Extracellular","Vector-borne","Genetic","Sporadic","Acquired"],2,60,[60],null,"Intro to Microbiology"],["Which animal prion disease is linked to variant CJD in humans on the slide?",["Bovine spongiform encephalopathy","Chronic wasting disease","Iatrogenic CJD","Scrapie","Kuru"],0,61,[61],null,"Intro to Microbiology"],["What is the most common human prion disease listed?",["Bovine spongiform encephalopathy","Kuru","Creutzfeldt–Jakob disease","Scrapie","Chronic wasting disease"],2,61,[61],null,"Intro to Microbiology"],["Which protozoan stage is active, feeding, and motile?",["Trophozoite","Endospore","Cyst","Capsomere","Proglottid"],0,63,[63],null,"Intro to Microbiology"],["Which protozoan stage is dormant and resistant?",["Cyst","Hypha","Trophozoite","Scolex","Mycelium"],0,63,[63],null,"Intro to Microbiology"],["Which pairing matches a helminth group with its common name?",["Trematodes: yeasts","Trematodes: roundworms","Cestodes: protozoa","Nematodes: flukes","Cestodes: tapeworms"],4,64,[64],null,"Intro to Microbiology"],["Which cestode structure bears suckers for intestinal attachment?",["Cuticle","Scolex","Proglottid","Hypha","Cyst"],1,65,[65],null,"Intro to Microbiology"],["What distinguishes the trematode digestive system described?",["Complete mouth-to-anus tract","Nutrient absorption only through tegument","Mouth but no anus","A bacterial cytoplasmic membrane","No digestive tract"],2,66,[66],null,"Intro to Microbiology"]],"Slides-Second":[["A cell lacks a membrane-bound nucleus. Which pair of domains fits that feature?",["Viruses and Bacteria","Viruses and Eukaryotes","Bacteria and Archaea","Archaea and Eukaryotes","Bacteria and Eukaryotes"],2,13,[13],null,"Intro to Microbiology"],["An organism is placed into a taxonomic group using its observable traits and genetic makeup. Which activity is being performed?",["Identification","Budding","Binary fission","Nomenclature","Conjugation"],0,14,[14],null,"Intro to Microbiology"],["Two E. coli populations descend from distinct ancestors and differ in traits, with K12 harmless and K1 associated with neonatal meningitis. Which designation distinguishes them on the slide?",["Kingdoms","Cell types","Domains","Strains","Genera"],3,15,[15],null,"Intro to Microbiology"],["A cell generates ATP at its cytoplasmic membrane and has one circular chromosome. Which additional feature matches the slide comparison?",["Mitochondrial ATP production","No nuclear membrane","Mitotic replication","Several membrane-bound organelles","Multiple linear chromosomes"],1,17,[17],null,"Intro to Microbiology"],["A spiral-shaped bacterium is flexible and has internal flagella. Which morphology best fits?",["Coccus","Spirochete","Vibrio","Spirillum","Coccobacillus"],1,21,[21],null,"Intro to Microbiology"],["A bacterial compartment contains nutrients, storage granules, ribosomes, and metabolic machinery. Which compartment is described?",["Cytoplasm","Capsule","Cell wall","Fimbriae","Outer membrane"],0,24,[24],null,"Intro to Microbiology"],["Antibiotic resistance genes are found on small DNA molecules separate from the bacterial chromosome. What are these molecules?",["Flagellin","Plasmids","Teichoic acids","Capsomeres","Porins"],1,25,[25],null,"Intro to Microbiology"],["A bacterial structure controls entry and exit of molecules while supporting nutrient import and waste export. What is its basic composition?",["Helically coiled flagellin","Alternating NAG and NAM alone","Gelatinous polysaccharide layer","Fluid phospholipid bilayer with proteins","Densely packed DNA and ribosomes"],3,26,[26],null,"Intro to Microbiology"],["A bacterium has an outer membrane with porins and a thin peptidoglycan layer. Which additional component fits?",["Lipopolysaccharide","Lipoteichoic acid anchoring thick peptidoglycan","Nuclear membrane","Teichoic acid embedded in thick peptidoglycan","Chitin wall"],0,27,[27],null,"Intro to Microbiology"],["Loss of the peptidoglycan mesh would most directly compromise which listed function?",["Prevention of osmotic lysis","Antigen masking by capsule","Directed motility","Genome storage","Conjugation"],0,28,[28],null,"Intro to Microbiology"],["Which component connects lipid A to the O antigen and stabilizes the outer membrane?",["Flagellin","Lipoteichoic acid","Capsomere","Plasmid","Core polysaccharide"],4,29,[29],null,"Intro to Microbiology"],["After Gram-negative bacteria are lysed, high levels of a released outer-membrane component provoke fever, hypotension, and shock. Which component explains this?",["Lipid A","Flagellin","Capsomere","Histone","Chitin"],0,30,[30],null,"Intro to Microbiology"],["A bacterium forms mucoid colonies and has a gelatinous polysaccharide layer outside its wall. Which structure accounts for these observations?",["Capsule","Pilus","Porin","Nucleoid","Endospore"],0,31,[31],null,"Intro to Microbiology"],["A surface appendage participates in horizontal gene transfer by conjugation. Which structure is involved?",["Porin","Fimbria","Capsule","Peptidoglycan","Pilus"],4,32,[32],null,"Intro to Microbiology"],["A bacterium rotates a membrane-anchored appendage to move toward nutrients. Which function does this demonstrate?",["Budding","Conjugation","Binary fission","Taxis","Sporulation"],3,34,[34],null,"Intro to Microbiology"],["One bacterial spore germinates under favorable conditions. What does it form?",["A capsid","Multiple trophozoites","A mycelium","One vegetative cell","Two spores"],3,36,[36],null,"Intro to Microbiology"],["Visible bacterial clusters develop on a solid nutrient surface. Which medium and growth form are described?",["Broth; mycelium","Broth; turbidity","Agar; colonies","Host membrane; capsomeres","Agar; virions"],2,41,[41],null,"Intro to Microbiology"],["An organism grows with or without oxygen but usually grows better with it. How is it classified?",["Microaerophile","Obligate intracellular pathogen","Obligate anaerobe","Facultative anaerobe","Capnophile"],3,42,[42],null,"Intro to Microbiology"],["Starting with one cell, how many cells result after five binary divisions according to the growth table?",["16","128","64","32","256"],3,43,[43],null,"Intro to Microbiology"],["An organism must invade host cells to live and is difficult to culture because of host dependence. Which description best fits?",["Obligate intracellular pathogen","Capnophile","Free-living mold","Facultative anaerobe","Extracellular pathogen"],0,44,[44],null,"Intro to Microbiology"],["An atypical bacterium requires host ATP. Which group matches that requirement?",["Chlamydia","Mycoplasma","Staphylococcus","Mycobacteria","Bacillus"],0,45,[45],null,"Intro to Microbiology"],["A fungus can exist in both yeast and mold forms. Which term describes it?",["Dimorphic","Acellular","Pleomorphic bacterium","Obligate intracellular virus","Prokaryotic"],0,47,[47],null,"Intro to Microbiology"],["A unicellular fungus forms smooth, shiny colonies after 2–5 days. Which form is described?",["Yeast","Mold","Bacterial endospore","Protozoan cyst","Helminth egg"],0,48,[48],null,"Intro to Microbiology"],["A multicellular fungus releases small reproductive cells that enable dispersal. What are these cells?",["Trophozoites","Plasmids","Proglottids","Spores","Capsomeres"],3,49,[49],null,"Intro to Microbiology"],["An infectious particle relies on host machinery for replication and is not a cell. Which group is described?",["Bacterium","Helminth","Virus","Protozoan","Yeast"],2,51,[51],null,"Intro to Microbiology"],["A virus acquires a lipid bilayer from the host cell membrane. Which structure has it acquired?",["Flagellum","Envelope","Nucleoid","Capsomere","Peptidoglycan"],1,53,[53],null,"Intro to Microbiology"],["New virions leave a cell continuously by budding from its membrane. Which viral feature is consistent with that release mechanism?",["Bacterial capsule","Naked capsid only","Endospore","Peptidoglycan wall","Envelope"],4,54,[54],null,"Intro to Microbiology"],["After infection, no intact virions are detectable while genome replication and protein synthesis occur. Which period is described?",["Release phase","Plateau phase","Attachment alone","Prion incubation","Eclipse period"],4,56,[56],null,"Intro to Microbiology"],["Viral yield stops increasing when infected cells lose structural integrity and replication capacity. What stage does this explain?",["Uncoating","Early eclipse","Receptor binding","Plateau","Initial attachment"],3,57,[57],null,"Intro to Microbiology"],["Contaminated tissues transmit a prionopathy. Which acquisition category applies?",["Genetic","Dimorphic","Acquired","Commensal","Sporadic"],2,60,[60],null,"Intro to Microbiology"],["A protozoan moves by pseudopodia. Which motility group does it belong to?",["Nematodes","Flagellates","Amoebae","Apicomplexa","Ciliates"],2,63,[63],null,"Intro to Microbiology"],["A segmented worm lacks a digestive tract and absorbs nutrients through its tegument. Which group fits?",["Ciliates","Trematodes","Cestodes","Amoebae","Nematodes"],2,65,[65],null,"Intro to Microbiology"],["A leaf-shaped worm has a blind gut and requires a snail intermediate host. Which group fits?",["Flagellates","Apicomplexa","Trematodes","Cestodes","Nematodes"],2,66,[66],null,"Intro to Microbiology"],["An unsegmented cylindrical worm has a molted cuticle, separate sexes, and a complete digestive tract. Which group fits?",["Amoebae","Cestodes","Ciliates","Trematodes","Nematodes"],4,67,[67],null,"Intro to Microbiology"]]},"Innate Response":{"Slides-First":[["Which term means the body's resistance to disease-causing microbes and harmful foreign substances?",["Immunity","Phagocytosis","Diapedesis","Antigen presentation","Immune response"],0,6,[6],null,"Intro to Immunology"],["Which term describes the integrated defensive actions initiated by exposure to a foreign substance?",["Opsonization","Immunity","Tolerance","Hematopoiesis","Immune response"],4,6,[6],null,"Intro to Immunology"],["When does the slide place the adaptive immune response phase?",["96 or more hours","Before immediate defense","Within the first hour only","Within minutes only","Only after resolution"],0,7,[7],null,"Intro to Immunology"],["What does innate immunity primarily recognize?",["Only previously encountered antigens","A unique antigen through somatically recombined receptors","Conserved pathogen patterns through PRRs","Only antibody-coated cells","Only self-MHC complexes"],2,8,[8],null,"Intro to Immunology"],["Which description best fits innate immunity?",["Delayed, exclusively antibody-based defense","Defense confined to the thymus","Defense requiring prior sensitization","Rapid, nonspecific defense","Defense confined to memory B cells"],3,10,[10],null,"Intro to Immunology"],["Which skin property is listed as an entry barrier?",["Absence of normal flora","Alkaline secretions","Non-shedding keratin","Low pH","High moisture alone"],3,11,[11],null,"Intro to Immunology"],["How do defensins primarily kill bacteria?",["Create MHC complexes","Digest host chromosomes","Disrupt lipid membranes","Change antibody isotype","Activate TCR recombination"],2,12,[12],null,"Intro to Immunology"],["Which circulating WBC range is given on the slide?",["40–70 million/µL","4–6 million/µL","2–8 million/µL","4.5–10 thousand/µL","1–6 million/µL"],3,13,[13],null,"Intro to Immunology"],["Macrophages differentiate from which circulating cells?",["B cells","NK cells","Basophils","Monocytes","Eosinophils"],3,14,[14],null,"Intro to Immunology"],["Which resident cell is associated with the liver?",["Microglia","Kupffer cell","Alveolar macrophage","Langerhans cell","Osteoclast"],1,15,[15],null,"Intro to Immunology"],["Which listed cell carries out bone resorption and remodeling?",["Osteoclast","Langerhans cell","Kupffer cell","Splenic macrophage","Microglia"],0,15,[15],null,"Intro to Immunology"],["Which cells are specialized APCs that link innate and adaptive immunity?",["Plasma cells","Dendritic cells","Basophils","Red blood cells","Eosinophils"],1,17,[17],null,"Intro to Immunology"],["Which cells constitute approximately 40–70% of circulating leukocytes?",["Dendritic cells","Eosinophils","Basophils","Monocytes","Neutrophils"],4,19,[19],null,"Intro to Immunology"],["What feature helps neutrophils move through tight spaces?",["Membrane-bound BCR","Antibody secretion","Multilobed nucleus","Long lifespan of decades","Lack of granules"],2,19,[19],null,"Intro to Immunology"],["What is NETosis?",["Complement pore assembly","Antibody isotype switching","Lymphocyte negative selection","MHC-peptide display","Release of extracellular DNA and granule webs"],4,20,[20],null,"Intro to Immunology"],["Which granulocyte releases major basic protein to help combat helminths?",["Basophil","Neutrophil","Monocyte","Dendritic cell","Eosinophil"],4,21,[21],null,"Intro to Immunology"],["What distinguishes NK-cell killing from T-cell killing on the slide?",["Antibodies are always required","NK cells mature into plasma cells","No antigen presentation or prior sensitization is required","Only extracellular bacteria are targeted","NK cells require MHC II recognition"],2,22,[22],null,"Intro to Immunology"],["Which pairing matches adaptive lymphocytes and their roles?",["B cells: thymic maturation; T cells: plasma-cell formation","CD4 cells: erythrocyte production; CD8 cells: histamine release","CD4 helper cells: coordination; CD8 cytotoxic cells: killing","CD4 cells: antibody secretion; CD8 cells: bone resorption","CD8 cells: antibody secretion; B cells: NETosis"],2,23,[23],null,"Intro to Immunology"],["Where do B cells develop?",["Thymus","Bone marrow","Alveoli","Skin","Liver sinusoids only"],1,23,[23],null,"Intro to Immunology"],["What is a soluble factor in immune defense?",["A nuclear chromosome","A membrane-bound organelle","A tissue-resident leukocyte","An intact lymph node","A secreted molecule mediating communication or effector functions"],4,24,[24],null,"Intro to Immunology"],["Where are most serum complement proteins produced?",["Thymus","Bone cortex","Lymph-node paracortex","Liver","Skin surface"],3,26,[26],null,"Intro to Immunology"],["Which complement pathway is antibody-mediated?",["Classical","Alternative","Cytotoxic granule","Death receptor","Lectin"],0,27,[27],null,"Intro to Immunology"],["Which complement component tags microbes for phagocytosis?",["C3a","C3b","C9 alone","C6 alone","C5a"],1,28,[28],null,"Intro to Immunology"],["Which cytokine class recruits leukocytes?",["Immunoglobulins","Interferons","Defensins","Chemokines","Complement proteins"],3,29,[29],null,"Intro to Immunology"],["Which cytokine class is associated with antiviral activity?",["Lectins","Lysozymes","Chemokines","Interferons","Antibodies"],3,29,[29],null,"Intro to Immunology"],["Which cytokine promotes T-cell proliferation and survival?",["IL-1","IL-6","IL-2","IL-10","TNF-α"],2,30,[30],null,"Intro to Immunology"],["Which cytokine inhibits macrophage and dendritic-cell activation and cytokine production?",["IL-10","IL-6","IL-1","TNF-α","IL-12"],0,30,[30],null,"Intro to Immunology"],["Which factors shape immune activation according to the slide?",["Pathogen and manner of exposure","Only the number of erythrocytes","Only antibody half-life","Only the person's blood group","Only thymus size"],0,33,[33],null,"Intro to Immunology"],["Which is a damage-associated molecular pattern listed?",["Bacterial flagellin","Fungal zymosan","ATP released from damaged host cells","Gram-negative LPS","Viral dsRNA"],2,34,[34],null,"Intro to Immunology"],["Which receptor is described in dendritic-cell endosomes recognizing unmethylated CpG DNA motifs?",["TLR9","TLR1","TLR2","TLR4","TLR5"],0,35,[35],null,"Intro to Immunology"],["What is diapedesis?",["Pathogens entering a phagosome","T cells multiplying after activation","Formation of a complement pore","Immune cells squeezing between endothelial cells","Antibodies binding toxin"],3,37,[37],null,"Intro to Immunology"],["What chiefly produces inflammatory swelling on the slide?",["Antibody gene recombination","Loss of all cytokines","Reduced blood flow","Increased permeability and fluid leakage","Reduced tissue fluid"],3,39,[39],null,"Intro to Immunology"],["Which set contains endogenous pyrogens listed?",["B7, CD28, CD40","IgG, IgA, IgM","IL-1, TNF-α, IL-6","C3b, C6, C9","LPS, bacterial toxins, flagellin"],2,40,[40],null,"Intro to Immunology"],["Fusion of a phagosome and lysosome creates what structure?",["Immunological synapse","Membrane attack complex","Endosome receptor","Phagolysosome","Germinal center"],3,41,[41],null,"Intro to Immunology"],["Which granule protein makes pores in the target membrane?",["Perforin","FasL","Granzyme","IL-2","MHC I"],0,43,[43],null,"Intro to Immunology"],["How does FasL contribute to NK-cell cytotoxicity?",["Binds target-cell Fas to trigger apoptosis","Binds IL-2R to drive proliferation","Builds a bacterial wall","Acts as a complement opsonin","Changes antibody Fc class"],0,43,[43],null,"Intro to Immunology"],["Which set lists professional APCs?",["Platelets, T cells, neutrophils","Dendritic cells, macrophages, B cells","Eosinophils, basophils, red blood cells","NK cells, red blood cells, plasma cells","Neutrophils, red blood cells, basophils"],1,44,[44],null,"Intro to Immunology"],["What is displayed on an APC surface for T-cell recognition?",["Unprocessed chromosome alone","MHC–peptide complex","Antibody Fc alone","Histamine granule","Complement MAC alone"],1,44,[44],null,"Intro to Immunology"],["Which pairing is correct for MHC II?",["APCs; intracellular antigens; CD8 T cells","Red blood cells; viral genomes; NK cells","APCs; extracellular antigens; CD4 T cells","All nucleated cells; intracellular antigens; CD8 T cells","All cells; antibodies; plasma cells"],2,45,[45],null,"Intro to Immunology"]],"Slides-Second":[["A response uses receptors generated by somatic recombination and establishes memory. Which system best fits?",["Innate complement alone","Innate physical barriers","Urinary flow","Adaptive immunity","Skin shedding"],3,8,[8],null,"Intro to Immunology"],["Mucus traps a pathogen and cilia help clear it. Which defense category is demonstrated?",["Cytotoxic granule release","Negative selection","Antibody class switching","Clonal expansion","Physiologic entry barriers"],4,11,[11],null,"Intro to Immunology"],["An antimicrobial secretion targets peptidoglycan in bacterial walls. Which agent is responsible?",["IgE","IL-2","Lysozyme","Perforin","Defensin"],2,12,[12],null,"Intro to Immunology"],["A tissue cell engulfs debris, presents antigen, secretes cytokines, and supports wound repair. Which cell best fits?",["Cytotoxic T cell","Red blood cell","Plasma cell","Macrophage","Basophil"],3,14,[14],null,"Intro to Immunology"],["A tissue-resident immune cell performs surveillance and synaptic pruning in the CNS. Which cell is described?",["Kupffer cell","Osteoclast","Peritoneal macrophage","Alveolar macrophage","Microglia"],4,15,[15],null,"Intro to Immunology"],["After detecting a pathogen at a barrier, an APC migrates to a lymph node and influences T-cell differentiation. Which cell best fits?",["Eosinophil","Dendritic cell","Basophil","Neutrophil","Red blood cell"],1,17,[17],null,"Intro to Immunology"],["Microbial signals trigger dendritic-cell maturation. Which change follows?",["Differentiation into a plasma cell","Loss of antigen-presentation function","Reduced new uptake and migration to lymph nodes","Conversion into a neutrophil","Increased new uptake without migration"],2,18,[18],null,"Intro to Immunology"],["Pus accumulates during acute inflammation. Which cells contribute heavily as they die?",["Memory B cells","Red blood cells","Plasma cells","Regulatory T cells","Neutrophils"],4,20,[20],null,"Intro to Immunology"],["A circulating granulocyte contains histamine and heparin and participates in allergic inflammation. Which cell fits?",["NK cell","Eosinophil","B cell","Basophil","Monocyte"],3,21,[21],null,"Intro to Immunology"],["A target cell retains normal MHC I expression. Which NK-cell signal does this support?",["B-cell class switching","Complement lectin activation","Unopposed activating signaling","TCR recombination","Inhibitory signaling"],4,22,[22],null,"Intro to Immunology"],["Why are complement proteins secreted in an inactive form?",["To ensure they act only in the thymus","To eliminate the need for receptors","To prevent unregulated activation","To prevent all microbial recognition","To stop antibody production"],2,26,[26],null,"Intro to Immunology"],["Mannose-binding lectin binds microbial carbohydrates. Which complement pathway is activated?",["Lectin","TCR co-stimulation","Classical","Alternative","Fas signaling"],0,27,[27],null,"Intro to Immunology"],["A complement response forms a pore that lyses a target cell. Which components form this complex?",["C3b and IgE only","IL-1 and TNF-α","B7 and CD28","C3a and C5a only","C5b and C6–C9"],4,28,[28],null,"Intro to Immunology"],["High levels of a cytokine linked to fever, vascular permeability, and maintained macrophage activation contribute to septic shock. Which cytokine is described?",["IL-12","IL-10","IL-2","IFN-β","TNF-α"],4,30,[30],null,"Intro to Immunology"],["An APC displays processed antigen to T cells after an innate encounter. Which outcome does this promote?",["Elimination of antigen specificity","Initiation of the adaptive response","Cessation of all inflammation","Immediate antibody class loss","Formation of red blood cells"],1,32,[32],null,"Intro to Immunology"],["A receptor recognizes a conserved structure on many pathogens that is absent from host cells. Which category is being recognized?",["Antibody Fc","DAMP","Self-MHC","PAMP","Memory-cell BCR"],3,34,[34],null,"Intro to Immunology"],["Recognition of microbial material by TLRs produces which listed outcome?",["Suppression of every immune cell","Antibody heavy-chain deletion only","Destruction of all self-MHC","Loss of innate recognition","Cytokine expression and immune-cell activation"],4,35,[35],null,"Intro to Immunology"],["Immune cells move toward an inflamed site along a chemokine gradient. Which process directs their movement?",["Isotype switching","Chemotaxis","Anergy","Agglutination","Negative selection"],1,37,[37],null,"Intro to Immunology"],["A site of inflammation becomes red because local vessels dilate. Which named sign is this?",["Rubor","Functio laesa","Tumor","Calor","Dolor"],0,39,[39],null,"Intro to Immunology"],["Fever helps inhibit microbial growth but also carries which listed cost?",["Failure of every APC","Loss of all innate barriers","Permanent loss of memory cells","Conversion of all B cells to T cells","Increased metabolic demand"],4,40,[40],null,"Intro to Immunology"],["After engulfment, a phagocyte pumps H+ into the lumen and releases ROS. What is the purpose within the described process?",["Generate memory T cells directly","Increase blood pressure","Promote destruction of the ingested target","Create antibody specificity","Activate BCR gene recombination"],2,41,[41],null,"Intro to Immunology"],["A virus-infected cell reduces MHC I expression. Why can this favor NK-cell killing?",["It prevents granule exocytosis","It removes an inhibitory signal","It increases TCR specificity","It blocks Fas signaling","It produces B7 co-stimulation"],1,43,[43],null,"Intro to Immunology"],["A nucleated cell displays an intracellular viral peptide on MHC I. Which lymphocyte recognizes it?",["Eosinophil","CD4 helper T cell","Plasma cell","Basophil","CD8 cytotoxic T cell"],4,45,[45],null,"Intro to Immunology"]]},"Adaptive Response":{"Slides-First":[["Which feature defines adaptive immunity on the slide?",["Immediate recognition of conserved PAMPs","Complement activation by microbial surfaces","Antigen-specific, memory-based defense","Direct killing without prior sensitization","Constitutive defense by epithelial barriers"],2,48,[48],null,"Intro to Immunology"],["Which organ provides T-cell maturation and education?",["MALT","Lymph node cortex","Thymus","Liver","Spleen"],2,50,[50],null,"Intro to Immunology"],["Which secondary lymphoid organ filters blood and responds to blood-borne pathogens?",["Bone marrow","GALT alone","Lymph node","Thymus","Spleen"],4,51,[51],null,"Intro to Immunology"],["Which lymph-node region contains B-cell follicles?",["Medulla","High endothelial venule","Cortex","Efferent lymphatic","Paracortex"],2,52,[52],null,"Intro to Immunology"],["Which lymph-node region is the T-cell zone?",["Cortex","Paracortex","Afferent lymphatic","Efferent lymphatic","Medulla"],1,52,[52],null,"Intro to Immunology"],["What is oral tolerance in the GALT–MLN system?",["Universal antibody activation by food","Elimination of every gut organism","Failure to recognize all pathogens","Tolerance of harmless dietary antigens and commensal microbes","Complete absence of gut lymphocytes"],3,53,[53],null,"Intro to Immunology"],["Which cells in Peyer's patches transport antigen for sampling?",["Red blood cells","M cells","NK cells","Plasma cells","Basophils"],1,54,[54],null,"Intro to Immunology"],["When are antigen-specific TCRs and BCRs developed?",["Only during secondary exposure","Only after first infection","After antibody secretion begins","Only after vaccination","Before antigen encounter"],4,56,[56],null,"Intro to Immunology"],["Antigen encounter triggers clonal expansion into which populations?",["Effector and memory cells","Only neutrophils","Red blood cells and platelets","Only dendritic cells","Only macrophages"],0,57,[57],null,"Intro to Immunology"],["What are clusters of differentiation (CDs)?",["Cell-surface proteins used for identity and function","Complement pores","Microbial chromosomes","Lymph-node compartments","Antibody-secreting organelles"],0,58,[58],null,"Intro to Immunology"],["Which marker is associated with mature T cells and TCR signal transduction?",["CD3","CD40","B7","MHC II","CD19"],0,59,[59],null,"Intro to Immunology"],["Which marker is associated with mature B cells?",["CD3","CD28","CD4","CD8","CD19"],4,59,[59],null,"Intro to Immunology"],["What is a B-cell receptor?",["Membrane-bound antibody","Toll-like receptor only","Nuclear transcription product only","Secreted complement protein","Death ligand"],0,60,[60],null,"Intro to Immunology"],["Which thymic process eliminates strongly self-reactive T cells?",["Opsonization","Positive selection","Negative selection","Affinity maturation","Class switching"],2,63,[63],null,"Intro to Immunology"],["Where are naïve T cells activated?",["Secondary lymphoid organs","Only bone marrow","Only skin keratin","Only liver cells","Only thymic cortex"],0,64,[64],null,"Intro to Immunology"],["Which adhesion pair stabilizes T-cell–APC contact?",["CD28 and MHC I","TCR and Fc","CD4 and CD40","LFA-1 and ICAM-1","IL-2 and B7"],3,65,[65],null,"Intro to Immunology"],["What provides signal 1 in T-cell activation?",["IL-2 binding its receptor","CTLA-4 binding B7","TCR binding to the MHC–peptide complex","LFA-1 adhesion alone","CD28 binding B7"],2,66,[66],null,"Intro to Immunology"],["Which interaction supplies a co-stimulatory signal to T cells?",["CD28 on T cell binding B7 on APC","TCR binding only free antibody","CD8 binding Fc","IL-2 binding CD40","LFA-1 binding IgE"],0,67,[67],null,"Intro to Immunology"],["Which cytokine from an APC enhances IL-2 receptor expression?",["IL-6","IL-10","IL-1","IFN-α","TNF-α"],2,68,[68],null,"Intro to Immunology"],["Which molecule competes with CD28 for B7 and inhibits T-cell activation?",["IL-2R","LFA-1","TCR","CD40L","CTLA-4"],4,69,[69],null,"Intro to Immunology"],["Which helper subset supports macrophage activation against intracellular pathogens?",["CD8 cytotoxic cell","Treg","Th1","Th2","Th17"],2,70,[70],null,"Intro to Immunology"],["Which helper subset is associated with neutrophil recruitment against extracellular bacteria and fungi?",["Memory B cell","Th17","Th1","Treg","Th2"],1,70,[70],null,"Intro to Immunology"],["What is the most critical factor determining CD4 subset differentiation during activation?",["Red blood cell count","Number of host chromosomes","Cytokine environment","Antibody half-life alone","Bacterial shape alone"],2,72,[72],null,"Intro to Immunology"],["After a BCR binds antigen, what happens to the antigen–BCR complex?",["Immediately expelled unchanged","Transferred to a red blood cell","Converted to MHC I","Internalized by receptor-mediated endocytosis","Broken into complement proteins"],3,75,[75],null,"Intro to Immunology"],["A B cell presents processed peptides to CD4 T cells using which molecule?",["Perforin","C3b","IgE Fc only","MHC I","MHC II"],4,76,[76],null,"Intro to Immunology"],["What is the result of affinity maturation?",["Lower antibody binding strength","Loss of antigen recognition","Higher-affinity antibodies","Only a change in complement concentration","Conversion of B cells into NK cells"],2,77,[77],null,"Intro to Immunology"],["Which B-cell derivative is a short-lived antibody-secreting factory?",["Treg","Memory B cell","Naïve T cell","Plasma cell","Dendritic cell"],3,78,[78],null,"Intro to Immunology"],["What is the basic antibody-chain structure?",["One heavy chain and three light chains","Four identical heavy chains","Two identical heavy chains and two identical light chains","One heavy chain only","Two light chains only"],2,80,[80],null,"Intro to Immunology"],["Which antibody region contains the antigen-binding sites?",["Fab","Complement C3b","Heavy-chain constant stem only","Fc receptor","Fc"],0,80,[80],null,"Intro to Immunology"],["What do antibody isotypes represent?",["Different T-cell adhesion molecules","Distinct antibody classes with different structures and functions","Identical clones with no functional differences","Only changes in antigen size","Different microbial domains"],1,81,[81],null,"Intro to Immunology"],["Which antibody is a pentamer and the first class produced in the primary response?",["IgA","IgG","IgM","IgE","IgD"],2,82,[82],null,"Intro to Immunology"],["Which antibody class is associated with mucosal secretions and neutralization?",["IgG","IgE","IgM","IgA","IgD"],3,82,[82],null,"Intro to Immunology"],["Which antibody region changes during isotype switching?",["Bound antigen","Fab antigen-binding specificity","Epitope","Fc","TCR"],3,84,[84],null,"Intro to Immunology"],["Which IgG subclass is linked to responses to polysaccharide antigens and weak complement activation?",["IgG2","IgA1","IgG4","IgG3","IgG1"],0,85,[85],null,"Intro to Immunology"],["Which IgG subclass has no complement activation and a regulatory role?",["IgG4","IgG3","IgM","IgG2","IgG1"],0,85,[85],null,"Intro to Immunology"],["What is an epitope?",["The specific structure on an antigen bound by antibody or TCR","Any cytokine receptor","The whole antibody Fc region","The complete lymphocyte","A complement pore"],0,86,[86],null,"Intro to Immunology"],["Which substances have the highest immunogenicity in the ranking given?",["Nucleic acids","Carbohydrates","Lipids and nucleic acids equally","Proteins","Lipids"],3,86,[86],null,"Intro to Immunology"],["What distinguishes a monoclonal antibody preparation?",["Only IgM antibodies from all clones","Natural serum mixture from many B cells","A mixture recognizing every possible antigen","Identical antibodies from a single clone","Antibodies with no shared specificity"],3,87,[87],null,"Intro to Immunology"],["What is antibody affinity?",["Number of antibody classes","Number of memory cells","Strength of one antibody–epitope interaction","Rate of complement production","Overall strength of multivalent binding"],2,88,[88],null,"Intro to Immunology"],["Which process groups pathogens together to aid clearance?",["Agglutination","Diapedesis","Positive selection","Anergy","Affinity maturation"],0,89,[89],null,"Intro to Immunology"],["Which antibody classes can initiate the described classical complement-mediated lysis?",["IgE alone","IgA or IgE","IgD or IgE","IgA or IgD","IgM or IgG"],4,91,[91],null,"Intro to Immunology"],["Which cells are the primary effectors in the ADCC mechanism shown?",["NK cells","Red blood cells","Plasma cells","Tregs","Naïve B cells"],0,92,[92],null,"Intro to Immunology"],["Which antibody class predominates in the primary response?",["IgM","IgG","IgA","IgD","IgE"],0,94,[94],null,"Intro to Immunology"],["What lag phase is stated for the primary response?",["24–72 months","20–30 minutes","1–2 minutes","5–10 days","Several decades"],3,94,[94],null,"Intro to Immunology"],["Upon antigen re-exposure, memory B cells can rapidly differentiate into which cells?",["Plasma cells","Basophils","NK cells","Thymocytes","Neutrophils"],0,96,[96],null,"Intro to Immunology"],["What lifespan is associated with memory B cells on the slide?",["20–30 minutes","Years to decades","Only one day","About 10 hours","Only the eclipse period"],1,96,[96],null,"Intro to Immunology"]],"Slides-Second":[["Re-exposure produces a faster, stronger, more specific response than the first encounter. Which response is occurring?",["Primary adaptive response","Secondary adaptive response","Negative selection","Skin barrier response","Immediate innate response only"],1,48,[48],null,"Intro to Immunology"],["A developing T cell can recognize self-MHC. Which thymic process assesses this capacity?",["Clonal deletion for strong autoreactivity","Negative selection","Affinity maturation","Class switching","Positive selection"],4,50,[50],null,"Intro to Immunology"],["An antigen traveling in lymph is trapped at a site of lymphocyte–antigen interaction. Which organ is described?",["Lymph node","Thymus","Liver","Bone marrow","Spleen"],0,51,[51],null,"Intro to Immunology"],["A lymphocyte enters a node directly from blood through a specialized vessel. Which structure allows this?",["Afferent lymphatic","Reticular fiber alone","B-cell follicle","High endothelial venule","Efferent lymphatic"],3,52,[52],null,"Intro to Immunology"],["Specialized DCs and regulatory T cells suppress unnecessary gut inflammation. Which balance does this support?",["Only thymic selection","Only generalized immune suppression","Only complement activation","Protective immunity with tolerance","Only antibody-mediated lysis"],3,53,[53],null,"Intro to Immunology"],["DCs and lymphocytes migrate from GALT to mesenteric lymph nodes. Which activity occurs there?",["Bacterial binary fission","T-cell thymic education","T-cell activation and B-cell differentiation","Neutrophil NETosis exclusively","Erythrocyte enucleation"],2,54,[54],null,"Intro to Immunology"],["A diverse receptor repertoire exists before pathogen exposure. Which process accounts for it?",["Random gene recombination and selection","Antibody agglutination","Antigen-driven creation of every receptor","Complement pore formation","Transfer of bacterial receptors"],0,56,[56],null,"Intro to Immunology"],["A response remains faster upon re-exposure years later. Which lymphocyte feature supports this?",["Lack of clonal expansion","Longevity of memory populations","Short-lived granulocytes alone","Absence of antigen specificity","No self-tolerance"],1,57,[57],null,"Intro to Immunology"],["A helper T cell provides co-stimulation to a B cell through CD40L. Which B-cell molecule binds it?",["CD8","LFA-1","CD3","CD28","CD40"],4,59,[59],null,"Intro to Immunology"],["Failure to eliminate T cells with strong self-antigen reactivity would undermine which stated purpose of thymic education?",["Recognition of every bacterium by TLRs","Antibody Fc binding","Prevention of autoimmunity","Complement production in liver","Neutrophil granule formation"],2,63,[63],null,"Intro to Immunology"],["A T cell has recognized antigen and received co-stimulation. Which cytokine drives its clonal expansion?",["IL-10","IL-6","IL-1 alone","IL-2","TNF-α"],3,64,[64],null,"Intro to Immunology"],["A TCR binds a peptide–MHC complex. Which molecules serve as co-receptors to stabilize this interaction?",["C3a or C5a","CD19 or CD20","IL-1 or IL-2","CD4 or CD8","IgM or IgG"],3,66,[66],null,"Intro to Immunology"],["After antigen recognition and co-stimulation, released cytokines influence T-cell fate. Which numbered activation signal is this?",["Positive selection","Signal 1","Negative selection","Signal 2","Signal 3"],4,68,[68],null,"Intro to Immunology"],["A T cell recognizes antigen without adequate co-stimulation and becomes unresponsive. What is this state?",["Opsonization","Clonal expansion","Affinity maturation","Anergy","Degranulation"],3,69,[69],null,"Intro to Immunology"],["A response requires eosinophil activation and IgE production against parasites. Which helper subset is best matched?",["Th2","Treg","Th1","CD8 cytotoxic cell","Th17"],0,70,[70],null,"Intro to Immunology"],["A naïve B cell begins activation after specific antigen binding. Where does this normally occur on the slide?",["Only liver","Secondary lymphoid organs","Only blood vessel lumen","Only bone cortex","Only thymus"],1,75,[75],null,"Intro to Immunology"],["B-cell CD40 engages CD40L on a helper T cell. What does this interaction provide?",["T-cell negative selection","Direct bacterial lysis","NK inhibitory signaling","Complement alternative-pathway initiation","Co-stimulation for B-cell activation"],4,76,[76],null,"Intro to Immunology"],["Following T-cell help, a B cell undergoes class switching, proliferation, and affinity maturation. Where does the slide place these changes?",["Liver sinusoid","Thymic medulla","Germinal center","Alveolus","Bone surface"],2,77,[77],null,"Intro to Immunology"],["A differentiated B cell is long-lived and has high affinity for antigen. Which population is described?",["Short-lived plasma cell","Immature DC","Memory B cell","Basophil","Neutrophil"],2,78,[78],null,"Intro to Immunology"],["B cells receive insufficient T-cell help. Which outcome is expected from the slide?",["Enhanced switching without cytokines","Immediate mature T-cell formation","Increased BCR diversity from antigen creation","Impaired isotype switching and affinity maturation","Unrestricted high-affinity memory production"],3,79,[79],null,"Intro to Immunology"],["An antibody's effector functions, class, and half-life are determined by which region?",["Bound epitope","Fc","Fab hypervariable tips only","TCR","B7"],1,80,[80],null,"Intro to Immunology"],["An antibody is abundant in serum, crosses the placenta, and supports opsonization. Which class fits?",["IgD","IgG","IgE","IgA","IgM"],1,82,[82],null,"Intro to Immunology"],["A B cell changes antibody class while maintaining the same antigen specificity. Which property changes?",["Fab specificity","Recognized epitope identity","Effector function","TCR specificity","The antigen's molecular structure"],2,84,[84],null,"Intro to Immunology"],["An IgA subclass predominates at mucosal sites and has a short protease-resistant hinge. Which subclass fits?",["IgA1","IgG1","IgG3","IgA2","IgG2"],3,85,[85],null,"Intro to Immunology"],["Serum contains antibodies from multiple B-cell clones with different epitope recognition and binding strengths. Which term fits?",["Polyclonal","Innate-only","Monoclonal","Anergic","Non-immunogenic"],0,87,[87],null,"Intro to Immunology"],["Overall binding strength changes because both individual binding strength and number of binding sites contribute. Which property is described?",["Avidity","Isotype alone","Tolerance","Half-life alone","Affinity alone"],0,88,[88],null,"Intro to Immunology"],["Antibodies physically block a pathogen from binding a host receptor. Which function is demonstrated?",["ADCC","Isotype switching","Neutralization","Opsonization","Classical complement lysis"],2,89,[89],null,"Intro to Immunology"],["IgG coats a pathogen and improves its recognition and uptake by phagocytes. Which mechanism is operating?",["Neutralization alone","Class switching","T-cell anergy","Negative selection","Opsonization"],4,90,[90],null,"Intro to Immunology"],["A MAC pore forms on a target. What directly causes swelling and lysis in the described sequence?",["Influx of water and ions","TCR recombination","Formation of a B-cell follicle","B7 co-stimulation","Loss of antigen specificity"],0,91,[91],null,"Intro to Immunology"],["An NK-cell Fc receptor binds antibody coating a target, triggering perforin and granzyme release. Which mechanism is this?",["ADCC","Agglutination","ADCP","Complement-dependent cytotoxicity","Neutralization"],0,92,[92],null,"Intro to Immunology"],["A previously encountered antigen produces a response with higher-affinity antibodies and a lower memory-cell activation threshold. Which response is described?",["Primary response","Negative selection","Innate pattern recognition only","Physical barrier defense","Secondary response"],4,95,[95],null,"Intro to Immunology"]]},"Vaccines":{"Slides-First":[["Which term refers to successful immunity rather than simply administration of a vaccine?",["Immunization","Passive transfer","Vaccination","Antigen presentation","Inoculation alone"],0,97,[97],null,"Intro to Immunology"],["How is immunity from vaccination classified?",["Artificial passive","Congenital tolerance","Natural passive","Artificial active","Natural active"],3,98,[98],null,"Intro to Immunology"],["Which community benefit results from reduced pathogen spread after vaccination?",["Individual antibody class switching only","Anergy","Herd immunity","Passive antibody transfer","Thymic selection"],2,99,[99],null,"Intro to Immunology"],["Which disease is given as an example of global eradication through vaccination?",["Hepatitis B","Smallpox","Polio","Influenza","COVID-19"],1,99,[99],null,"Intro to Immunology"],["Which vaccine type uses weakened live organisms?",["mRNA","Inactivated","Subunit","Live-attenuated","Toxoid"],3,100,[100],null,"Intro to Immunology"],["Which group of examples belongs to live-attenuated vaccines?",["Hepatitis B and HPV","MMR, chickenpox, yellow fever","Pfizer and Moderna COVID-19","Tetanus and diphtheria","IPV and hepatitis A"],1,100,[100],null,"Intro to Immunology"],["Which vaccine type uses killed organisms?",["Subunit","Viral vector","Toxoid","Live-attenuated","Inactivated"],4,101,[101],null,"Intro to Immunology"],["Which vaccine type uses specific pathogen components?",["Subunit","Inactivated whole organism","Live-attenuated","Toxoid only","Viral vector"],0,102,[102],null,"Intro to Immunology"],["Which vaccine type uses inactivated bacterial toxins?",["Subunit viral protein","Toxoid","Live-attenuated","Viral vector","mRNA"],1,103,[103],null,"Intro to Immunology"],["What do mRNA vaccines instruct host cells to make on the slide?",["A whole bacterial chromosome","Preformed antibodies","Inactivated bacterial toxin","A live bacterial capsule","Viral protein"],4,104,[104],null,"Intro to Immunology"],["What delivers a pathogen gene in a viral-vector vaccine?",["A preformed antibody","A naked polysaccharide alone","A harmless virus","A bacterial endospore","An inactivated bacterial toxin"],2,105,[105],null,"Intro to Immunology"]],"Slides-Second":[["Maternal antibodies pass to a fetus through the placenta. Which category of immunity is this?",["Artificial active","Natural passive","Natural active","Cell-mediated active vaccination","Artificial passive"],1,97,[97],null,"Intro to Immunology"],["An infection stimulates the person's own immune response. Which category applies?",["Natural active","Artificial active","Artificial passive","Natural passive","Antibody injection"],0,97,[97],null,"Intro to Immunology"],["Preformed immunoglobulins are injected for immediate, temporary protection. Which category applies?",["Artificial active","Primary thymic education","Artificial passive","Natural active","Natural passive"],2,98,[98],null,"Intro to Immunology"],["A vaccine provides strong, long-lasting immunity but carries a risk of mild disease and is not for immunocompromised patients on the slide. Which type is described?",["Live-attenuated","mRNA","Inactivated","Toxoid","Subunit"],0,100,[100],null,"Intro to Immunology"],["A vaccine is described as safer and stable, usable in immunocompromised people, but weaker and often requiring boosters. Which type fits?",["mRNA","Toxoid alone","Viral vector","Inactivated","Live-attenuated"],3,101,[101],null,"Intro to Immunology"],["A component-based vaccine may need an adjuvant to enhance its response. Which listed example belongs to this group?",["MMR","Yellow fever","Hepatitis B","IPV","Tetanus"],2,102,[102],null,"Intro to Immunology"],["A vaccine prevents toxin-mediated disease but does not prevent infection itself. Which type is described?",["Viral vector","mRNA","Live-attenuated","Toxoid","Inactivated whole organism"],3,103,[103],null,"Intro to Immunology"],["Rapid development and a potent response are paired with an ultra-cold storage requirement in the deck. Which vaccine type is being described?",["Toxoid","Inactivated","Live-attenuated","Subunit","mRNA"],4,104,[104],null,"Intro to Immunology"],["Pre-existing immunity to a delivery vehicle may reduce a vaccine's effectiveness. Which vaccine type has this listed limitation?",["mRNA","Toxoid","Inactivated","Subunit","Viral vector"],4,105,[105],null,"Intro to Immunology"]]},"Immune System Disorders":{"Slides-First":[["Which immune-disorder category is characterized by underactivity?",["Hypersensitivity","Cytokine storm","Autoimmunity","Immunodeficiency","Superantigen activation"],3,107,[107],null,"Intro to Immunology"],["Which category represents immune misdirection toward self?",["Autoimmunity","Immunodeficiency","Passive immunity","Hypersensitivity only","Normal memory"],0,107,[107],null,"Intro to Immunology"],["Where do superantigens bind in the mechanism described?",["Only the normal peptide-binding groove","CD8 and MHC I only","BCR and an erythrocyte","Antibody Fc and complement C3b","MHC II and TCR outside the antigen-binding groove"],4,108,[108],null,"Intro to Immunology"],["What sustains the cytokine-storm cascade described?",["Loss of all macrophages","Cytokines stimulating further cytokine production","Only decreased complement synthesis","Complete cessation of T-cell signaling","Only antibody neutralization"],1,109,[109],null,"Intro to Immunology"],["Up to what proportion of T cells can superantigens activate on the slide?",["0.001%","0.01%","0.0001%","100%","20%"],4,109,[109],null,"Intro to Immunology"],["Which is a listed long-term consequence of cytokine storms?",["Universal lifelong sterilizing immunity","T-cell exhaustion and immunosuppression","Guaranteed resistance to secondary infection","Permanent enhancement of all T cells","Loss of all microbial exposure"],1,110,[110],null,"Intro to Immunology"],["What is molecular mimicry?",["Self-antigens disappear during inflammation","Microbial antigens resemble self-antigens, enabling cross-reactivity","Antibodies are transferred passively","All microbial antigens become harmless","T cells fail to recognize any MHC"],1,111,[111],null,"Intro to Immunology"],["Which infection is linked to Guillain–Barré syndrome on the slide?",["Salmonella","Shigella","Chlamydia","Campylobacter jejuni","Streptococcus pyogenes"],3,112,[112],null,"Intro to Immunology"],["Which condition is linked to Streptococcus and kidney antigens?",["Reactive arthritis","Hyper-IgM syndrome","DiGeorge syndrome","Post-infectious glomerulonephritis","Guillain–Barré syndrome"],3,112,[112],null,"Intro to Immunology"],["Which condition lacks functional T and B cells?",["DiGeorge syndrome alone","Reactive arthritis","SCID","IgE-mediated allergy","Hyper-IgM syndrome alone"],2,113,[113],null,"Intro to Immunology"],["Which hypersensitivity type involves antibody-mediated cell destruction and complement activation?",["Type III","Type IV","T-cell anergy","Type I","Type II"],4,114,[114],null,"Intro to Immunology"],["What does induration in a tuberculin skin test indicate on the slide?",["Immediate IgE degranulation","Preformed maternal antibodies","Absence of immune memory","Memory T cells from previous exposure","A primary B-cell class-switch defect"],3,115,[115],null,"Intro to Immunology"]],"Slides-Second":[["A bacterial toxin causes atypical T-cell activation without normal antigen processing. Which category best fits?",["Defensin","Neutralizing antibody","Lysozyme","Superantigen","Opsonin"],3,108,[108],null,"Intro to Immunology"],["Systemic inflammation progresses to hypotension, endothelial dysfunction, and multiorgan failure after massive immune activation. Which process fits?",["Cytokine storm","Physiologic class switching","Oral tolerance","Normal negative selection","Passive antibody transfer"],0,110,[110],null,"Intro to Immunology"],["Inflammation releases self-antigens and activates previously anergic self-reactive lymphocytes. Which mechanism is described?",["Bystander activation","Molecular mimicry alone","Positive selection alone","Classical complement regulation","Passive immunity"],0,111,[111],null,"Intro to Immunology"],["An infection is followed by an immune response involving heart-valve tissue mimicry. Which pairing matches the slide?",["Shigella; glomerulonephritis","Salmonella; rheumatic fever","Streptococcus pyogenes; rheumatic fever","Campylobacter jejuni; reactive arthritis","Chlamydia; Guillain–Barré syndrome"],2,112,[112],null,"Intro to Immunology"],["Thymic hypoplasia produces a T-cell deficiency. Which primary immunodeficiency is listed?",["Secondary deficiency from malnutrition","DiGeorge syndrome","HIV/AIDS","Hyper-IgM syndrome","SCID"],1,113,[113],null,"Intro to Immunology"],["Defective class switching produces high IgM and low IgG/IgA. Which syndrome fits?",["HIV/AIDS","SCID","Cytokine storm","Hyper-IgM syndrome","DiGeorge syndrome"],3,113,[113],null,"Intro to Immunology"],["An immediate reaction involves IgE, mast-cell degranulation, and histamine. Which type is it?",["Type II","Type I","Type IV","Normal oral tolerance","Type III"],1,114,[114],null,"Intro to Immunology"],["Antigen–antibody complexes deposit in tissue and cause inflammation. Which hypersensitivity type fits?",["Type IV","Primary immunodeficiency","Type III","Type I","Type II"],2,114,[114],null,"Intro to Immunology"],["Contact dermatitis develops 24–72 hours after exposure, with Th1 cytokines and macrophage activation. Which mechanism explains it?",["Natural passive immunity","Type III immune-complex deposition","Type IV T-cell-mediated hypersensitivity","Type I IgE-mediated hypersensitivity","Type II antibody-mediated cytotoxicity"],2,115,[115],null,"Intro to Immunology"]]},"Exam pictures":{"Images-First":[["Which label belongs in the orange box?",["Plasma membrane","Cell membrane (site of cellular respiration)","Peptidoglycan","Pili","Prokaryote"],4,17,[17],"micro17-prok-0","Intro to Microbiology",null,null,"Exam pictures|Images-First|0"],["Which label belongs in the orange box?",["Ribosomes","Cell membrane (site of cellular respiration)","Flagellum","Prokaryote","Cell wall"],4,17,[17],"micro17-prok-1","Intro to Microbiology",null,null,"Exam pictures|Images-First|1"],["Which label belongs in the orange box?",["Nucleoid","Peptidoglycan","Ribosomes","Pili","Flagellum"],1,17,[17],"micro17-prok-2","Intro to Microbiology",null,null,"Exam pictures|Images-First|2"],["Which label belongs in the orange box?",["Prokaryote","Single, supercoiled circular chromosome","Peptidoglycan","Cytoplasm","Plasma membrane"],1,17,[17],"micro17-prok-3","Intro to Microbiology",null,null,"Exam pictures|Images-First|3"],["Which label belongs in the orange box?",["Cell wall","Pili","Flagellum","Capsule","Plasma membrane"],2,17,[17],"micro17-prok-4","Intro to Microbiology",null,null,"Exam pictures|Images-First|4"],["Which label belongs in the orange box?",["Cytoplasm rich in 70S ribosomes","Nucleoid","Plasmid","Peptidoglycan","Single, supercoiled circular chromosome"],0,17,[17],"micro17-prok-5","Intro to Microbiology",null,null,"Exam pictures|Images-First|5"],["Which label belongs in the orange box?",["Prokaryote","Plasmid","Capsule","Cell wall","Nucleoid"],1,17,[17],"micro17-prok-6","Intro to Microbiology",null,null,"Exam pictures|Images-First|6"],["Which label belongs in the orange box?",["Nucleoid","Pili","Cell membrane (site of cellular respiration)","Plasma membrane","Flagellum"],2,17,[17],"micro17-prok-7","Intro to Microbiology",null,null,"Exam pictures|Images-First|7"],["Which label belongs in the orange box?",["Flagellum","Plasma membrane","80S ribosomes","Eukaryote","Cytoplasm"],3,17,[17],"micro17-euk-0","Intro to Microbiology",null,null,"Exam pictures|Images-First|8"],["Which label belongs in the orange box?",["Flagellum","Cell wall","Plasmid","Mitochondrion (site of cellular respiration)","Nucleoid"],3,17,[17],"micro17-euk-1","Intro to Microbiology",null,null,"Exam pictures|Images-First|9"],["Which label belongs in the orange box?",["Cytoplasm","Lysosome","Smooth endoplasmic reticulum","Golgi apparatus","Cell membrane"],4,17,[17],"micro17-euk-2","Intro to Microbiology",null,null,"Exam pictures|Images-First|10"],["Which label belongs in the orange box?",["Cytoplasm","Plasmid","Smooth endoplasmic reticulum","Lysosome","Ribosomes"],3,17,[17],"micro17-euk-3","Intro to Microbiology",null,null,"Exam pictures|Images-First|11"],["Which label belongs in the orange box?",["Nuclear membrane","Nucleoid","Plasmid","Nucleus","Ribosomes"],3,17,[17],"micro17-euk-4","Intro to Microbiology",null,null,"Exam pictures|Images-First|12"],["Which label belongs in the orange box?",["Nuclear membrane","Cytoplasm","Eukaryote","Nucleus","Pili"],0,17,[17],"micro17-euk-5","Intro to Microbiology",null,null,"Exam pictures|Images-First|13"],["Which label belongs in the orange box?",["Cell membrane","Rough endoplasmic reticulum (ribosomes)","Lysosome","Nuclear membrane","Cytoplasm"],4,17,[17],"micro17-euk-6","Intro to Microbiology",null,null,"Exam pictures|Images-First|14"],["Which label belongs in the orange box?",["Pili","Nucleoid","Flagellum","Cell wall","Smooth endoplasmic reticulum"],4,17,[17],"micro17-euk-7","Intro to Microbiology",null,null,"Exam pictures|Images-First|15"],["Which label belongs in the orange box?",["Plasma membrane","Rough endoplasmic reticulum (ribosomes)","Nuclear membrane","Golgi apparatus","Nucleus"],1,17,[17],"micro17-euk-8","Intro to Microbiology",null,null,"Exam pictures|Images-First|16"],["Which label belongs in the orange box?",["Eukaryote","Cell wall","Capsule","Ribosomes","80S ribosomes"],4,17,[17],"micro17-euk-9","Intro to Microbiology",null,null,"Exam pictures|Images-First|17"],["Which label belongs in the orange box?",["80S ribosomes","Smooth endoplasmic reticulum","Cell wall","Golgi apparatus","Plasma membrane"],3,17,[17],"micro17-euk-10","Intro to Microbiology",null,null,"Exam pictures|Images-First|18"],["Which label belongs in the orange box?",["Cytoplasm","Cell wall","Flagella","Capsule","Flagellum"],0,23,[23],"micro23-0","Intro to Microbiology",null,null,"Exam pictures|Images-First|19"],["Which label belongs in the orange box?",["Nucleoid","Plasma membrane","Flagellum","Cell wall","Cytoplasmic membrane"],0,23,[23],"micro23-1","Intro to Microbiology",null,null,"Exam pictures|Images-First|20"],["Which label belongs in the orange box?",["Capsule","Cytoplasm","Plasma membrane","Flagellum","Pili"],0,23,[23],"micro23-2","Intro to Microbiology",null,null,"Exam pictures|Images-First|21"],["Which label belongs in the orange box?",["Nucleoid","Cytoplasm","Flagella","Cytoplasmic membrane","Cell wall"],4,23,[23],"micro23-3","Intro to Microbiology",null,null,"Exam pictures|Images-First|22"],["Which label belongs in the orange box?",["Cytoplasm","Plasma membrane","Cytoplasmic membrane","Flagella","Plasmid"],2,23,[23],"micro23-4","Intro to Microbiology",null,null,"Exam pictures|Images-First|23"],["Which label belongs in the orange box?",["Cytoplasmic membrane","Cell wall","Ribosomes","Pili","Plasma membrane"],2,23,[23],"micro23-5","Intro to Microbiology",null,null,"Exam pictures|Images-First|24"],["Which label belongs in the orange box?",["Flagellum","Nucleoid","Flagella","Pili","Capsule"],3,23,[23],"micro23-6","Intro to Microbiology",null,null,"Exam pictures|Images-First|25"],["Which label belongs in the orange box?",["Plasma membrane","Cytoplasmic membrane","Plasmid","Flagella","Cytoplasm"],3,23,[23],"micro23-7","Intro to Microbiology",null,null,"Exam pictures|Images-First|26"],["Which label belongs in the orange box?",["Flagellum","Pili","Capsule","Cell wall","Wall teichoic acid"],4,28,[28],"micro28-top-0","Intro to Microbiology",null,null,"Exam pictures|Images-First|27"],["Which label belongs in the orange box?",["Lipoteichoic acid","Wall teichoic acid","Cytoplasm","Pili","Plasma membrane"],0,28,[28],"micro28-top-1","Intro to Microbiology",null,null,"Exam pictures|Images-First|28"],["Which label belongs in the orange box?",["Cell wall","Flagellum","Lipoteichoic acid","Plasma membrane","Peptidoglycan"],4,28,[28],"micro28-top-2","Intro to Microbiology",null,null,"Exam pictures|Images-First|29"],["Which label belongs in the orange box?",["Cell wall","Lipoteichoic acid","Wall teichoic acid","Peptidoglycan","Pili"],0,28,[28],"micro28-top-3","Intro to Microbiology",null,null,"Exam pictures|Images-First|30"],["Which label belongs in the orange box?",["Lipoteichoic acid","Cytoplasm","Plasma membrane","Capsule","Flagellum"],2,28,[28],"micro28-top-4","Intro to Microbiology",null,null,"Exam pictures|Images-First|31"],["Which label belongs in the orange box?",["Plasmid","Cytoplasm","Protein","Ribosomes","Pili"],2,28,[28],"micro28-top-5","Intro to Microbiology",null,null,"Exam pictures|Images-First|32"],["Which label belongs in the orange box?",["Cytoplasm","Nucleoid","Cytoplasm containing many ribosomes","S-layer","Pili"],1,38,[38],"micro38-0","Intro to Microbiology",null,null,"Exam pictures|Images-First|37"],["Which label belongs in the orange box?",["S-layer","Plasma membrane","Capsule","Cytoplasm containing many ribosomes","Pili"],3,38,[38],"micro38-1","Intro to Microbiology",null,null,"Exam pictures|Images-First|38"],["Which label belongs in the orange box?",["Inclusion bodies","Nucleoid","Flagellum","Cytoplasm","Plasmid"],0,38,[38],"micro38-2","Intro to Microbiology",null,null,"Exam pictures|Images-First|39"],["Which label belongs in the orange box?",["Ribosomes","Sex pili","Flagellum","Cytoplasm","Pili"],1,38,[38],"micro38-3","Intro to Microbiology",null,null,"Exam pictures|Images-First|40"],["Which label belongs in the orange box?",["Fimbriae","Nucleoid","Sex pili","Plasmid","Flagellum"],0,38,[38],"micro38-4","Intro to Microbiology",null,null,"Exam pictures|Images-First|41"],["Which label belongs in the orange box?",["Plasmid","Cell wall","Capsule","Fimbriae","Flagellum"],2,38,[38],"micro38-5","Intro to Microbiology",null,null,"Exam pictures|Images-First|42"],["Which label belongs in the orange box?",["Pili","Inclusion bodies","Plasma membrane","Cell wall","Cytoplasm containing many ribosomes"],3,38,[38],"micro38-6","Intro to Microbiology",null,null,"Exam pictures|Images-First|43"],["Which label belongs in the orange box?",["Inclusion bodies","Plasmid","Plasma membrane","Capsule","Fimbriae"],2,38,[38],"micro38-7","Intro to Microbiology",null,null,"Exam pictures|Images-First|44"],["Which label belongs in the orange box?",["Plasma membrane","Flagellum","S-layer","Cytoplasm containing many ribosomes","Inclusion bodies"],2,38,[38],"micro38-8","Intro to Microbiology",null,null,"Exam pictures|Images-First|45"],["Which label belongs in the orange box?",["Capsule","Plasmid","Sex pili","Flagellum","Plasma membrane"],3,38,[38],"micro38-9","Intro to Microbiology",null,null,"Exam pictures|Images-First|46"],["Which label belongs in the orange box?",["Cell wall","Mold spore","Cytoplasm","Plasma membrane","Vegetative hyphae"],1,49,[49],"micro49-0","Intro to Microbiology",null,null,"Exam pictures|Images-First|47"],["Which label belongs in the orange box?",["Reproductive hyphae","Capsule","Ribosomes","Flagellum","Plasmid"],0,49,[49],"micro49-1","Intro to Microbiology",null,null,"Exam pictures|Images-First|48"],["Which label belongs in the orange box?",["Ribosomes","Plasmid","Mold spore","Vegetative hyphae","Plasma membrane"],3,49,[49],"micro49-2","Intro to Microbiology",null,null,"Exam pictures|Images-First|49"],["Which label belongs in the orange box?",["Capsule","Plasma membrane","Eclipse phase","Cytoplasm","Maturation and release phase"],2,56,[56],"micro56-0","Intro to Microbiology",null,null,"Exam pictures|Images-First|50"],["Which label belongs in the orange box?",["Decay of viral progeny","Pili","Maturation and release phase","Plasmid","Eclipse phase"],0,56,[56],"micro56-1","Intro to Microbiology",null,null,"Exam pictures|Images-First|51"],["Which label belongs in the orange box?",["Maturation and release phase","Plasma membrane","Eclipse phase","Capsule","Ribosomes"],0,56,[56],"micro56-2","Intro to Microbiology",null,null,"Exam pictures|Images-First|52"],["Which label belongs in the orange box?",["Proglottids","Pili","Flagellum","Ribosomes","Plasmid"],0,65,[65],"micro65-0","Intro to Microbiology",null,null,"Exam pictures|Images-First|53"],["Which label belongs in the orange box?",["Capsule","Scolex","Strobila","Rostellum","Hooks in two whorls"],1,65,[65],"micro65-1","Intro to Microbiology",null,null,"Exam pictures|Images-First|54"],["Which label belongs in the orange box?",["Scolex","Plasmid","Rostellum","Suckers","Capsule"],2,65,[65],"micro65-2","Intro to Microbiology",null,null,"Exam pictures|Images-First|55"],["Which label belongs in the orange box?",["Cytoplasm","Hooks in two whorls","Suckers","Proglottids","Neck"],4,65,[65],"micro65-3","Intro to Microbiology",null,null,"Exam pictures|Images-First|56"],["Which label belongs in the orange box?",["Pili","Neck","Cell wall","Hooks in two whorls","Proglottids"],3,65,[65],"micro65-4","Intro to Microbiology",null,null,"Exam pictures|Images-First|57"],["Which label belongs in the orange box?",["Cytoplasm","Suckers","Cell wall","Flagellum","Pili"],1,65,[65],"micro65-5","Intro to Microbiology",null,null,"Exam pictures|Images-First|58"],["Which label belongs in the orange box?",["Strobila","Capsule","Cytoplasm","Region of proliferation","Cell wall"],3,65,[65],"micro65-6","Intro to Microbiology",null,null,"Exam pictures|Images-First|59"],["Which label belongs in the orange box?",["Proglottids","Cytoplasm","Strobila","Capsule","Plasmid"],2,65,[65],"micro65-7","Intro to Microbiology",null,null,"Exam pictures|Images-First|60"],["Which label belongs in the orange box?",["Antigen-specific activation","IgE","CD28","CD25","APC"],4,68,[68],"immune68-0","Intro to Immunology",null,null,"Exam pictures|Images-First|61"],["Which label belongs in the orange box?",["IL-1R","IgG","ICAM-1/3","IgD","LFA-1"],2,68,[68],"immune68-1","Intro to Immunology",null,null,"Exam pictures|Images-First|62"],["Which label belongs in the orange box?",["LFA-1","APC","IgA","IgG","CD58"],4,68,[68],"immune68-2","Intro to Immunology",null,null,"Exam pictures|Images-First|63"],["Which label belongs in the orange box?",["Cytokine signals","Adhesion","MHC I/II","IL-2","IgE"],2,68,[68],"immune68-3","Intro to Immunology",null,null,"Exam pictures|Images-First|64"],["Which label belongs in the orange box?",["MHC I/II","LFA-1","APC","IL-2","B7"],4,68,[68],"immune68-4","Intro to Immunology",null,null,"Exam pictures|Images-First|65"],["Which label belongs in the orange box?",["MHC I/II","IgD","LFA-1","IgM","IL-1"],2,68,[68],"immune68-5","Intro to Immunology",null,null,"Exam pictures|Images-First|66"],["Which label belongs in the orange box?",["IgM","CD2","CD28","Cytokine signals","T cell"],1,68,[68],"immune68-6","Intro to Immunology",null,null,"Exam pictures|Images-First|67"],["Which label belongs in the orange box?",["Co-stimulation","T cell","CD25","CD8/4","APC"],3,68,[68],"immune68-7","Intro to Immunology",null,null,"Exam pictures|Images-First|68"],["Which label belongs in the orange box?",["Adhesion","CD28","IgG","CD2","IL-2"],1,68,[68],"immune68-8","Intro to Immunology",null,null,"Exam pictures|Images-First|69"],["Which label belongs in the orange box?",["B7","IL-1","APC","Fc region","IgG"],1,68,[68],"immune68-9","Intro to Immunology",null,null,"Exam pictures|Images-First|70"],["Which label belongs in the orange box?",["IgG","CD28","IL-1R","MHC I/II","IL-2"],4,68,[68],"immune68-10","Intro to Immunology",null,null,"Exam pictures|Images-First|71"],["Which label belongs in the orange box?",["IL-1","Co-stimulation","CD25","IL-2","CD2"],2,68,[68],"immune68-11","Intro to Immunology",null,null,"Exam pictures|Images-First|72"],["Which label belongs in the orange box?",["CD25","IL-1R","Adhesion","Fab region","CD28"],1,68,[68],"immune68-12","Intro to Immunology",null,null,"Exam pictures|Images-First|73"],["Which label belongs in the orange box?",["Fab region","B7","T cell","MHC I/II","Adhesion"],2,68,[68],"immune68-13","Intro to Immunology",null,null,"Exam pictures|Images-First|74"],["Which label belongs in the orange box?",["APC","IL-1","CD25","Adhesion","T cell"],3,68,[68],"immune68-14","Intro to Immunology",null,null,"Exam pictures|Images-First|75"],["Which label belongs in the orange box?",["T cell","Antigen-specific activation","IL-1R","CD25","LFA-1"],1,68,[68],"immune68-15","Intro to Immunology",null,null,"Exam pictures|Images-First|76"],["Which label belongs in the orange box?",["Co-stimulation","IgG","IgE","APC","ICAM-1/3"],0,68,[68],"immune68-16","Intro to Immunology",null,null,"Exam pictures|Images-First|77"],["Which label belongs in the orange box?",["MHC I/II","IL-1R","CD2","ICAM-1/3","Cytokine signals"],4,68,[68],"immune68-17","Intro to Immunology",null,null,"Exam pictures|Images-First|78"],["Which label belongs in the orange box?",["Variable region","Constant region","Light chain","Fc region","IgE"],0,80,[80],"immune80-schematic-0","Intro to Immunology",null,null,"Exam pictures|Images-First|87"],["Which label belongs in the orange box?",["IgG","Antigen-binding site","Heavy chain","Light chain","Disulfide bridge"],2,80,[80],"immune80-schematic-1","Intro to Immunology",null,null,"Exam pictures|Images-First|88"],["Which label belongs in the orange box?",["Fab region","Constant region","Heavy chain","Light chain","Fc region"],3,80,[80],"immune80-schematic-2","Intro to Immunology",null,null,"Exam pictures|Images-First|89"],["Which label belongs in the orange box?",["Fab","IgD","Variable region","Fc region","Antigen-binding site"],4,80,[80],"immune80-schematic-3","Intro to Immunology",null,null,"Exam pictures|Images-First|90"],["Which label belongs in the orange box?",["IgG","IgD","B7","Constant region","IL-2"],3,80,[80],"immune80-schematic-4","Intro to Immunology",null,null,"Exam pictures|Images-First|91"],["Which label belongs in the orange box?",["Fc","Constant region","Disulfide bridge","Fab region","Variable region"],2,80,[80],"immune80-schematic-5","Intro to Immunology",null,null,"Exam pictures|Images-First|92"],["Which label belongs in the orange box?",["IgA","Heavy chain","Fab","Disulfide bridge","IgD"],2,80,[80],"immune80-schematic-6","Intro to Immunology",null,null,"Exam pictures|Images-First|93"],["Which label belongs in the orange box?",["IgE","Fc","Antigen-binding site","Constant region","Fc region"],1,80,[80],"immune80-schematic-7","Intro to Immunology",null,null,"Exam pictures|Images-First|94"],["Which label belongs in the orange box?",["IgG","CD28","IgA","Fab region","B7"],0,81,[81],"immune81-0","Intro to Immunology",null,null,"Exam pictures|Images-First|95"],["Which label belongs in the orange box?",["Fab region","CD28","IgD","IgM","IgA"],2,81,[81],"immune81-1","Intro to Immunology",null,null,"Exam pictures|Images-First|96"],["Which label belongs in the orange box?",["Fab region","CD28","IgG","IgD","IgE"],4,81,[81],"immune81-2","Intro to Immunology",null,null,"Exam pictures|Images-First|97"],["Which label belongs in the orange box?",["IL-2","IgM","B7","Fab region","IgA"],1,81,[81],"immune81-3","Intro to Immunology",null,null,"Exam pictures|Images-First|98"],["Which label belongs in the orange box?",["IgD","IgM","IgG","Fc region","IgA"],4,81,[81],"immune81-4","Intro to Immunology",null,null,"Exam pictures|Images-First|99"],["Which vaccine type is hidden in the picture header?",["Toxoid vaccine","Live-attenuated vaccine","Subunit vaccine","mRNA vaccine","Inactivated vaccine"],1,100,[100],"vaccine100-0","Intro to Immunology",null,null,"Exam pictures|Images-First|100"],["Which vaccine type is hidden in the picture header?",["Inactivated vaccine","Toxoid vaccine","mRNA vaccine","Subunit vaccine","Live-attenuated vaccine"],0,101,[101],"vaccine101-0","Intro to Immunology",null,null,"Exam pictures|Images-First|101"],["Which vaccine type is hidden in the picture header?",["Toxoid vaccine","Inactivated vaccine","Subunit vaccine","Live-attenuated vaccine","mRNA vaccine"],2,102,[102],"vaccine102-0","Intro to Immunology",null,null,"Exam pictures|Images-First|102"],["Which vaccine type is hidden in the picture header?",["Subunit vaccine","Toxoid vaccine","Live-attenuated vaccine","mRNA vaccine","Inactivated vaccine"],1,103,[103],"vaccine103-0","Intro to Immunology",null,null,"Exam pictures|Images-First|103"],["Which vaccine type is hidden in the picture header?",["Live-attenuated vaccine","Inactivated vaccine","mRNA vaccine","Toxoid vaccine","Subunit vaccine"],2,104,[104],"vaccine104-0","Intro to Immunology",null,null,"Exam pictures|Images-First|104"]]},"Block Review Slides":{"Slides-First":[["Which structural form is assigned to IgM in the isotype slide?",["IgG-type monomer","IgD-type monomer","Dimer","Pentamer","IgE-type monomer"],3,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":82}]}],["Which complement-related property is characteristic of IgM?",["Complement inhibition by changing Fab specificity","Weak complement activation associated with IgG2","Strong complement activation","No complement activation, with a regulatory role","Complement activation restricted to mucosal IgA"],2,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":82}]}],["Which antibody class is produced first and predominates in the primary response?",["IgD","IgG","IgE","IgA","IgM"],4,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":82},{"deck":"Intro to Immunology","number":94}]}],["After IgM or IgG triggers complement-dependent cytotoxicity, what forms on the target membrane?",["Immunological synapse between T cell and APC","MHC–peptide complex","Toll-like receptor complex","B-cell receptor complex","Membrane attack complex"],4,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":91}]}],["How does the secondary response compare with the primary response?",["A first encounter dominated by naïve lymphocytes","Same speed but lower magnitude and affinity","Faster, stronger, and more specific upon re-exposure","A short-lived response with lower-affinity antibodies","Slower, weaker, and less specific upon re-exposure"],2,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":48},{"deck":"Intro to Immunology","number":95}]}],["What prior encounters can establish the immunological memory described?",["Only passive transfer of preformed antibodies","Pathogens or vaccines","Only erythrocyte exposure to complement","Only nonreactive physical barriers","Only maternal antibody transfer"],1,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":95}]}],["How does the activation threshold of memory cells support the secondary response?",["It is replaced by a requirement for thymic education","It depends on loss of antigen specificity","It is higher","It is lower","It is identical to that of all naïve cells"],3,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":95}]}],["What does the secondary response produce in greater amounts?",["Only circulating red blood cells","Only keratinized skin cells","Only naïve lymphocytes","Only inactive complement from the liver","Antibodies and effector T cells"],4,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":95}]}],["When are the memory B cells described generated?",["During the primary response","Only during a cytokine storm","Only after a third exposure","Only after passive antibody injection","Only after disappearance of all plasma cells"],0,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":96}]}],["Which lifespan is stated for memory B cells?",["1–20 hours","Years to decades","Only the first 5–10 days","Approximately 10 hours","20–30 minutes"],1,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":96}]}],["Which surface feature is characteristic of memory B cells?",["No antigen-specific receptors","Only MHC I with no BCR","A bacterial capsule","High-affinity surface antibodies","Only inhibitory NK receptors"],3,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":96}]}],["How does memory B-cell output improve antibody quality and quantity?",["Unchanged affinity with reduced output","Lower affinity with the same production rate","Loss of specificity with decreased output","Higher affinity and increased rate or amount of production","Higher affinity but no antibody secretion"],3,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":96}]}],["Which antibody class is associated with memory and the secondary response on the isotype slide?",["IgM","IgD","IgA","IgG","IgE"],3,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":82}]}],["What primarily activates the alternative complement pathway?",["FasL binding Fas","Antibody-mediated recognition","Mannose-binding lectin binding carbohydrates","Microbial surfaces directly","CD28 binding B7"],3,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":27}]}],["Which activation mechanism belongs to the lectin pathway rather than the alternative pathway?",["Perforin forms a target-cell pore","Antibody mediates complement activation","TCR binds a peptide–MHC complex","Mannose-binding lectin binds microbial carbohydrates","Microbial surfaces directly activate complement"],3,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":27}]}],["Which complement pathway provides the antibody-mediated link to adaptive immunity?",["Alternative","Lectin","Phagolysosomal killing","Direct NK cytotoxicity","Classical"],4,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":27}]}],["The complement system is described as a cascade of approximately how many serum proteins?",["Exactly 5","Fewer than 10","Only 3","More than 30","Exactly 12"],3,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":26}]}],["Which organ produces most serum complement proteins?",["Spleen","Bone marrow","Lymph node","Liver","Thymus"],3,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":26}]}],["Which set can also produce complement locally in tissues?",["Only osteoclasts and red blood cells","Erythrocytes, plasma cells, and thymocytes","Only memory B cells and CD8 cells","Only eosinophils and basophils","Macrophages, epithelial cells, and fibroblasts"],4,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":26}]}],["Which complement component tags microbes for phagocytosis?",["C9","C5a","C3a","C6","C3b"],4,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":28}]}],["Which complement components recruit and activate immune cells during inflammation?",["C3b and C6 alone","C8 and C9 alone","C3a and C5a","C6 and C7 alone","C5b and C9 alone"],2,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":28}]}],["Which group forms the membrane attack complex described?",["C5a and C3b only","C5b and C6–C9","IgE and IgD","C3b and C3a only","C3a and C5a"],1,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":28}]}],["Which risks increase with complement deficiencies according to the slide?",["Only thymic enlargement","Infections and autoimmune diseases","Only reduced skin shedding","Only allergic reactions","Only excess antibody affinity"],1,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":28}]}],["Which cell is emphasized for anti-parasitic immunity against helminths?",["Eosinophil","NK cell","Neutrophil","Basophil","Dendritic cell"],0,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Immunology","number":21}]}],["Which eosinophil granule component is toxic to parasites?",["Heparin","Major basic protein","Granzyme","Histamine","Perforin"],1,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Immunology","number":21}]}],["Where do eosinophils mature?",["Spleen","Skin","Thymus","Lymph-node paracortex","Bone marrow"],4,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Immunology","number":21}]}],["What proportion of leukocytes is assigned to eosinophils?",["1–6%","2–8%","Less than 1%","Approximately 30%","40–70%"],0,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Immunology","number":21}]}],["What appearance is associated with eosin staining of eosinophils?",["Bright pink or red","An unstained cell lacking granules","Gram-negative pink staining only","Dark purple or blue","Bluish-purple Gram staining"],0,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Immunology","number":21}]}],["Which antibody class is associated with parasites and mast-cell activation?",["IgM","IgD","IgG","IgA","IgE"],4,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Immunology","number":82}]}],["Which set contains the three major helminth groups named in the Intro to Microbiology deck?",["Bacteria, Archaea, and viruses","Yeasts, molds, and dimorphic fungi","Prions, viruses, and protozoa","Amoebae, flagellates, and ciliates","Cestodes, trematodes, and nematodes"],4,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Microbiology","number":64}]}],["What is targeted in an autoimmune response?",["Only dietary antigens without self-reactivity","Only foreign antigens","Self-antigens","Only antibody Fc regions on microbes","Only pathogen-associated molecular patterns"],2,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":111}]}],["Which description distinguishes autoimmunity from the other disorder categories?",["Passive immunity from antibody transfer","Immune underactivity","Misdirection of the immune response","Hypersensitivity overactivity alone","Normal resolution and memory"],2,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":107}]}],["Failure of which mechanisms can produce autoimmunity?",["Only antigen entry through skin","Only complement production in the liver","Only mucus secretion","Central and/or peripheral tolerance","Only antibody transfer across the placenta"],3,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":111}]}],["Which combination is listed among causes of autoimmunity?",["Only low oxygen and high carbon dioxide","Genetic predisposition, immune dysregulation, and environmental triggers","Only passive antibody transfer and vaccination","Only normal elimination of self-reactive cells","Only normal antibody class switching"],1,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":111}]}],["Which failed regulatory mechanisms are associated with loss of tolerance on the slide?",["Only opsonization and agglutination","Only chemotaxis and diapedesis","Only mucus trapping and ciliary clearance","Tregs, anergy, and deletion or apoptosis","Only antibody Fc binding"],3,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":111}]}],["Which set of infections is associated with reactive arthritis?",["HIV alone","Campylobacter jejuni alone","Influenza and SARS-CoV-2","Chlamydia, Shigella, and Salmonella","Streptococcus pyogenes alone"],3,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":112}]}],["Which tissue is associated with the mimicry underlying reactive arthritis on the slide?",["Thymic tissue","Joint tissue","Heart-valve tissue","Kidney antigens","Peripheral nerve tissue"],1,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":112}]}],["Which condition is linked to Streptococcus and kidney antigens?",["Rheumatic fever","Guillain–Barré syndrome","Reactive arthritis","Post-infectious glomerulonephritis","DiGeorge syndrome"],3,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":112}]}],["Which infection-triggered autoimmune condition is listed at 40–50 cases per 100,000?",["All four have this listed frequency","Post-infectious glomerulonephritis","Reactive arthritis","Guillain–Barré syndrome","Rheumatic fever"],2,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":112}]}],["Which condition is listed at 10–15 cases per 100,000 and is more common in children?",["Reactive arthritis","All four have this listed frequency","Guillain–Barré syndrome","Rheumatic fever","Post-infectious glomerulonephritis"],4,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":112}]}],["Which condition is listed at 1–2 cases per 100,000?",["Guillain–Barré syndrome","All four have this listed frequency","Reactive arthritis","Rheumatic fever","Post-infectious glomerulonephritis"],0,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":112}]}],["Which condition is listed at fewer than 1 case per 100,000 and is uncommon in developed countries?",["Reactive arthritis","Post-infectious glomerulonephritis","Guillain–Barré syndrome","Rheumatic fever","All four have this listed frequency"],3,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":112}]}],["Which antibody region is bound by complement in the complement-dependent cytotoxicity sequence described?",["MHC II","Fab antigen-binding tip","BCR coreceptor CD19","Fc region","TCR"],3,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":91}]}],["Complement is described as important to which immune systems?",["Cell-mediated immunity only, excluding humoral immunity","Innate immunity only","Adaptive immunity only","Both innate and adaptive immunity","Only physical epithelial barriers"],3,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":26},{"deck":"Intro to Immunology","number":27}]}]],"Slides-Second":[["An antibody is pentameric and strongly activates complement early in a primary response. Which class best fits?",["IgD","IgE","IgA","IgG","IgM"],4,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":82}]}],["IgM binds antigen on a target cell and initiates antibody-mediated complement activation. Which pathway is involved?",["Perforin–granzyme signaling","Lectin","Alternative","Classical","Fas death-receptor signaling"],3,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":91}]}],["A pore forms after IgM-mediated complement activation. What causes the target cell to swell and lyse?",["Exocytosis of perforin from the target","Influx of water and ions","Loss of antibody affinity","Release of histamine by the target","Removal of the antibody's Fab region"],1,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":91}]}],["Which comparison correctly distinguishes IgM from IgG on the isotype slide?",["IgM is the most abundant serum antibody; IgG is the first antibody made","IgM mediates mast-cell activation; IgG is a surface BCR only","IgM crosses the placenta; IgG is the primary mucosal antibody","IgM is a mucosal dimer; IgG is a pentamer","IgM is first in the primary response; IgG is associated with the secondary response"],4,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":82}]}],["Antibodies produced after re-exposure bind antigen more strongly. Which process explains the increased affinity?",["Alternative complement activation","NETosis","Affinity maturation","Diapedesis","Negative selection"],2,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":95}]}],["A memory B cell rapidly recognizes antigen on re-exposure. Into what can it differentiate to increase antibody output?",["Cytotoxic T cell","Plasma cell","Dendritic cell","Neutrophil","NK cell"],1,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":96}]}],["Which finding favors a primary response rather than a secondary response?",["More antibodies and effector T cells","A lower activation threshold in memory cells","Higher-affinity antibodies after maturation","A 5–10-day lag with primarily IgM and lower-affinity antibodies","A faster and stronger response to re-exposure"],3,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":94},{"deck":"Intro to Immunology","number":95}]}],["Which pairing correctly contrasts the lymphocyte populations in the two responses?",["Primary: regulatory T cells only; re-exposure: basophils","Primary: plasma cells only; re-exposure: erythrocytes","Primary: naïve lymphocytes; re-exposure: rapidly activated memory cells","Primary: only memory cells; re-exposure: only naïve cells","Primary: NK cells only; re-exposure: no lymphocytes"],2,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":94},{"deck":"Intro to Immunology","number":96}]}],["Complement is activated directly at a microbial surface rather than through antibody or mannose-binding lectin. Which pathway fits?",["ADCC","Alternative","Classical","T-cell co-stimulation","Lectin"],1,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":27}]}],["Why are complement proteins secreted in inactive form?",["To restrict them to adaptive immunity","To stop all local tissue production","To prevent microbial-surface activation","To require IgE before every activation","To prevent unregulated activation"],4,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":26}]}],["Why must complement activation be tightly regulated?",["To prevent all phagocytosis","To prevent recognition of any microbial surface","To eliminate all inflammatory recruitment","To prevent host tissue damage","To stop antibody production permanently"],3,48,[48],null,"Micro Exam 1 Review Fall 2026",{"slide":48,"topic":"Alternative complement pathway","sources":[{"deck":"Intro to Immunology","number":28}]}],["A helper T-cell subset promotes eosinophil activation and IgE production against parasites. Which subset is involved?",["Th17","Th2","CD8 cytotoxic T cell","Treg","Th1"],1,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Immunology","number":70}]}],["Which combination correctly connects the anti-parasitic response across the slides?",["Th2 activation, eosinophils, and IgE","Th17 activation, basophils, and IgM","Treg activation, neutrophils, and IgA","CD8 activation, plasma cells, and IgD","Th1 activation, eosinophils, and IgD"],0,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Immunology","number":21},{"deck":"Intro to Immunology","number":70},{"deck":"Intro to Immunology","number":82}]}],["A granulocyte contains histamine and heparin and participates in allergic inflammation. Which cell contrasts with the eosinophil described?",["Plasma cell","Neutrophil","Basophil","Monocyte","NK cell"],2,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Immunology","number":21}]}],["The organism is a helminth, a multicellular invertebrate parasite. Which immune cell is specifically associated with defense against this group?",["Neutrophil","Basophil","Dendritic cell","Eosinophil","NK cell"],3,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Microbiology","number":64},{"deck":"Intro to Immunology","number":21}]}],["Which organism category most directly matches the helminth-focused eosinophil role in the Immunology deck?",["A budding yeast","An acellular virus","A multicellular parasitic roundworm","A bacterial coccus","A unicellular ciliate"],2,49,[49],null,"Micro Exam 1 Review Fall 2026",{"slide":49,"topic":"Parasitic response","sources":[{"deck":"Intro to Microbiology","number":63},{"deck":"Intro to Microbiology","number":64},{"deck":"Intro to Immunology","number":21}]}],["A microbial antigen resembles a self-antigen, causing a response against both pathogen and host. Which mechanism fits?",["Bystander activation","Opsonization","Antibody neutralization","Molecular mimicry","Passive immunity"],3,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":111}]}],["Inflammation releases self-antigens and activates previously anergic self-reactive lymphocytes. Which mechanism fits?",["Bystander activation","Passive immunity","Molecular mimicry","Positive selection alone","Classical complement activation alone"],0,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":111}]}],["A post-infectious autoimmune condition involves peripheral nerve mimicry after Campylobacter jejuni infection. Which condition fits?",["Rheumatic fever","Guillain–Barré syndrome","Hyper-IgM syndrome","Post-infectious glomerulonephritis","Reactive arthritis"],1,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":112}]}],["An immune response following Streptococcus pyogenes infection involves heart-valve tissue mimicry. Which condition fits?",["Post-infectious glomerulonephritis","Reactive arthritis","Guillain–Barré syndrome","Rheumatic fever","SCID"],3,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":112}]}],["Failure of a helper T-cell subset's suppressive function can undermine tolerance. Which subset normally helps prevent autoimmunity?",["Th17","Th1","Th2","CD8 cytotoxic T cell","Treg"],4,50,[50],null,"Micro Exam 1 Review Fall 2026",{"slide":50,"topic":"Autoimmune responses","sources":[{"deck":"Intro to Immunology","number":70},{"deck":"Intro to Immunology","number":111}]}],["High IgM with low IgG and IgA is linked to which B-cell defect on the immune-deficiency slide?",["CD4 depletion from HIV","Defective class switching","Loss of functional T and B cells together","Failure of thymic development","Failure of neutrophil degranulation"],1,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":113}]}],["A B cell fails to switch from IgM to other classes. What normally changes during successful isotype switching?",["Fab specificity, while Fc remains the same","Both Fc and the recognized antigen necessarily change","The antigen's epitope, while antibody structure stays the same","Only antibody quantity, without a change in class","Fc and effector function, while antigen specificity remains the same"],4,46,[46],null,"Micro Exam 1 Review Fall 2026",{"slide":46,"topic":"IgM","sources":[{"deck":"Intro to Immunology","number":84},{"deck":"Intro to Immunology","number":113}]}],["Which contrast correctly describes the duration of primary response and immune memory?",["Primary response is short-lived; memory cells can persist for years or decades","Memory cells persist only during the initial 5–10-day lag","The secondary response cannot provide long-term protection","Primary response is lifelong; memory cells last about 10 hours","Both responses depend only on short-lived naïve lymphocytes"],0,47,[47],null,"Micro Exam 1 Review Fall 2026",{"slide":47,"topic":"Secondary immune response","sources":[{"deck":"Intro to Immunology","number":94},{"deck":"Intro to Immunology","number":95},{"deck":"Intro to Immunology","number":96}]}]]}};
+const QUESTION_IMAGES = {};
+const MASTER_NAME = "Intro to Immunology";
+const MASTER_SLIDE_COUNT = 116;
+const MASTER_MAP={};
+
+const MASTER_STREAK = 3;
+const STORAGE_KEY = "ipapMicroImmunology20260925v1";
+const PROGRAM_NAME = "IPAP Base Adaptive Program";
+const BANK_ID = "ipap-micro-immunology-2026-09-25-v1";
+const SLIDE_OFFSET = {};
+const REVIEW_TOPICS = {};
+const SOURCE_SLIDE_TITLES = {"Into to Microbiology":{"1":"Introduction to Microbiology","3":"Microbiology Syllabus","4":"Course Details","5":"Class and Exam Preparation","6":"Basic Characteristics of Microorganisms (Section Break)","7":"Basic Characteristics of Microorganisms","8":"Terminal Learning ObjectivesMicrobiology for Physician Assistants","9":"Enabling Learning Objectives","10":"Enabling Learning Objectives (Continued 1)","11":"Microbial World","12":"Human-Microbe Interface","13":"Taxonomy","14":"Taxonomy (Continued 1)","15":"Taxonomy (Continued 2)","16":"Classification of Medically Important Bacteria","17":"Eukaryotes vs. Prokaryotes","18":"Prokaryotic Characteristics","19":"Prokaryotic Replication","20":"Prokaryotic Morphology","21":"Prokaryotic Morphology (Continued 1)","22":"Prokaryotic Morphology (Continued 2)","23":"Prokaryotic Structure","24":"Composition","25":"Bacterial chromosomes are large, single, circular pieces of DNA maintained in nucleoid region","26":"Interior: Cytoplasmic Membrane","27":"Exterior: Cell Wall Composition","28":"Exterior: Cell Wall Composition (Continued 1)","29":"Exterior: Cell Wall Composition (Continued 2)","30":"Exterior: Cell Wall Composition (Continued 3)","31":"Exterior: Capsule","32":"External: Fimbriae and Pili ","33":"External: Fimbriae and Pili (Continued 1)","34":"Exterior: Flagella","35":"Endospores","36":"Endospores (Continued 1)","37":"Endospores (Continued 2)","38":"Endospores (Continued 3)","39":"Laboratory Cultivation and Identification","40":"Essential for diagnosing & treating infectious diseases ","41":"Growth in liquid (broth) or solid (agar plates) media","42":"Atmospheric requirements","43":"Divisions / # of cells","44":"Most pathogenic bacteria are extracellular","45":"Characteristics of Atypical Bacteria","46":"General Characteristics of Fungi","47":"Characteristics of Fungi","48":"Yeast Characteristics","49":"Mold Characteristics","50":"General Characteristics of Viruses","51":"Viral Characteristics","52":"Typical size range","53":"Virus Structure","54":"Major Steps in Viral Replication","55":"Viral Replication Steps","56":"Virus Replication Cycle ","57":"Viral Infections","58":"Prions","59":"Prions (Continued 1)","60":"Prions (Continued 2)","61":"Prionopathies","62":"Parasites","63":"Characteristics of Protozoa","64":"Characteristics of Helminths","65":"Characteristics of Cestodes","66":"Characteristics of Trematodes","67":"Characteristics of Nematodes","68":"Questions?"},"Innate Response":{"1":"U.S. Army ","2":"Terminal Learning Objective","3":"Enabling Learning Objectives","4":"ELOs (continued)","5":"Outline","6":"Immunology Terms","7":"Coordination of Immune Response","8":"Innate and Adaptive Immunity","9":"Innate Response","10":"Innate Immunity","11":"Barriers","12":"Barriers (Continued 1)","13":"Cellular Components of Immune System","14":"Macrophages","15":"Macrophages (Continued 1)","16":"Macrophages (Continued 2)","17":"Dendritic Cells","18":"Dendritic Cells (Continued 1)","19":"Neutrophils","20":"Neutrophils (Continued 1)","21":"Other GranulocytesEosinophils and Basophils","22":"Natural Killer (NK) Cells(Innate Lymphocytes)","23":"T/B cells(Adaptive Lymphocytes)","24":"Soluble Factors","25":"Soluble Factors (Continued 1)","26":"Complement System","27":"Complement System (Continued 1)","28":"Complement System (Continued 2)","29":"Cytokines","30":"Cytokines (Continued 1)","31":"Cytokines (Continued 2)","32":"Processes/Functions of Innate Immunity","33":"Immune Activation","34":"Immune Activation (Continued 1)","35":"Immune Activation (Continued 2)","36":"Immune Activation (Continued 3)","37":"Recruitment of Immune Cells","38":"Inflammatory Response","39":"Inflammatory Response (Continued 1)","40":"Inflammatory Response (Continued 2)","41":"Phagocytosis","42":"Multifunctionality of Macrophages","43":"Natural Killer (NK) Cell Cytotoxicity","44":"Antigen Presentation","45":"Antigen Presentation (Continued 1)"},"Adaptive Response":{"46":"Adaptive Response","47":"Adaptive Immunity","48":"Adaptive Immunity (Continued 1)","49":"Adaptive Immunity (Continued 2)","50":"Organs of the Immune System","51":"Organs of the Immune System (Continued 1)","52":"Lymph Node Architecture","53":"GALT and Mesenteric Lymph Nodes","54":"GALT and Mesenteric Lymph Nodes (Continued 1)","55":"Characteristics of Lymphocytes (Section Divider)","56":"Characteristics of Lymphocytes","57":"Characteristics of Lymphocytes (Continued 1)","58":"Lymphocyte Surface Markers","59":"Lymphocyte Surface Markers (Continued 1)","60":"Lymphocyte Surface Markers (Continued 2)","61":"Characteristics of Lymphocytes (Continued 2)","62":"Cell-mediated Immunity: T Cell Responses","63":"Cell-Mediated Immunity","64":"Cell-Mediated Immunity (Continued 1)","65":"T Cell Activation","66":"T Cell Activation (Continued 1)","67":"T Cell Activation (Continued 2)","68":"T Cell Activation (Continued 3)","69":"T Cell Activation (Continued 4)","70":"T Cell Subsets","71":"Cytokines (Continued 3)","72":"CD4 T Cell Subsets","73":"Humoral Immunity: B Cell Responses (Section Divider)","74":"Humoral Immunity: B Cell Responses","75":"B Cell Activation","76":"B Cell Activation (Continued 1)","77":"B Cell Activation (Continued 2)","78":"B Cell Activation (Continued 3)","79":"B Cell Activation (Continued 4)","80":"Antibody Structure","81":"Antibody Isotypes","82":"Antibody Isotypes (Continued 1)","83":"Antibody Isotypes (Continued 2)","84":"Isotype Switching (Class Switching)","85":"Important Antibody Subclasses","86":"Antigen Recognition","87":"Antibodies: monoclonal vs. polyclonal","88":"Ab binding strength","89":"Antibody Effector Functions","90":"Antibody Effector Functions (Continued 1)","91":"Antibody Effector Functions (Continued 2)","92":"Antibody Effector Functions (Continued 3)","93":"Immunological Memory and Vaccination","94":"Immunological Memory","95":"Immunological Memory (Continued 1)","96":"Immunological Memory (Continued 2)"},"Vaccines":{"97":"Vaccination","98":"Vaccination (Continued 1)","99":"Vaccination (Continued 2)","100":"Vaccine Types","101":"Vaccine Types (Continued 1)","102":"Vaccine Types (Continued 2)","103":"Vaccine Types (Continued 3)","104":"Vaccine Types (Continued 4)","105":"Vaccine Types (Continued 5)","106":"Immune System Disorders (Section Divider)"},"Immune System Disorders":{"107":"Immune System Disorders","108":"Superantigens/Cytokine Storms","109":"Superantigens/Cytokine Storms (Continued 1)","110":"Cytokine Storms","111":"Autoimmunity","112":"Autoimmunity (Continued 1)","113":"Immunodeficiency","114":"Hypersensitivity Reactions","115":"Hypersensitivity","116":"Questions?"}};
+const BANK_BUILD = {"status":"Slide-only bank with instructor review and outlined picture answers","counts":{"Into to Microbiology":81,"Innate Response":62,"Adaptive Response":77,"Vaccines":20,"Immune System Disorders":21,"Exam pictures":93,"Block Review Slides":68},"total":422};
+const $ = id => document.getElementById(id);
+
+let active=[], index=0, correct=0, answered=0, missedThisQuiz=[], locked=false, lastSettings=null;
+let savedSession=null, quizInProgress=false, lastSavedAt=null;
+let progress = {};
+let coverage = {};
+let questionEdits = {};
+let customQuestions = [];
+let storageAvailable = true;
+
+function stableId(day,key,idx){ return `${day}|${key}|${idx}`; }
+function slideNumber(day,pdfPage){ return Number(pdfPage); }
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function shuffle(a){
+  a=[...a];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function defaultStat(){ return {attempts:0,correct:0,wrong:0,streak:0,everWrong:false,inBank:false,mastered:false,manualRemoved:false,excluded:false,lastResult:null}; }
+function statFor(id){ if(!progress[id]) progress[id]=defaultStat(); return progress[id]; }
+
+function captureSession(){
+  if(!quizInProgress || !active.length) return null;
+  return {
+    active,
+    index,
+    correct,
+    answered,
+    missedIds: missedThisQuiz.map(q=>q.id),
+    locked,
+    lastSettings
+  };
+}
+
+function makeProgressPayload(includeExportTime=false){
+  const payload={
+    version:6,
+    customQuestions,
+    questionEdits,
+    settings:Object.fromEntries(["day","order","source","mode","size"].map(id=>[id,$(id).value])),
+    program:PROGRAM_NAME,
+    bankId:BANK_ID,
+    questionCount:ALL ? ALL.length : null,
+    lastSavedAt:lastSavedAt || new Date().toISOString(),
+    progress,
+    coverage,
+    session:quizInProgress ? captureSession() : savedSession
+  };
+  if(includeExportTime) payload.exportedAt=new Date().toISOString();
+  return payload;
+}
+
+// Retired Day 1–4 IDs are removed from older backups without affecting Exam 1 history.
+function removeRetiredQuestions(data){
+  if(!data || typeof data!=="object" || Array.isArray(data))return data;
+  data=JSON.parse(JSON.stringify(data));
+  const retired=id=>["Exam pictures|Images-First|33", "Exam pictures|Images-First|34", "Exam pictures|Images-First|35", "Exam pictures|Images-First|36", "Exam pictures|Images-First|79", "Exam pictures|Images-First|80", "Exam pictures|Images-First|81", "Exam pictures|Images-First|82", "Exam pictures|Images-First|83", "Exam pictures|Images-First|84", "Exam pictures|Images-First|85", "Exam pictures|Images-First|86"].includes(id)||/^Day [1-4]\|Q[1-4]-/.test(id);
+  const clean=obj=>{if(obj && typeof obj==="object")for(const id of Object.keys(obj))if(retired(id))delete obj[id];};
+  if(data.progress || data.questions){clean(data.progress);clean(data.questions);}else clean(data);
+  clean(data.questionEdits);
+  if(data.coverage)for(const [key,c] of Object.entries(data.coverage)){
+    if(c)clean(c.seen);
+  }
+  // Do not offer an unfinished quiz that still contains retired questions.
+  if(data.session && Array.isArray(data.session.active) && data.session.active.some(q=>q && retired(q.id)))data.session=null;
+  if(data.settings){
+    if(["Q2","Q3","Q4"].includes(data.settings.source))data.settings.source="Random";
+  }
+  return data;
+}
+
+function loadProgress(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw)return;
+    const data=validateIncomingPayload(JSON.parse(raw));
+    customQuestions=data.customQuestions;questionEdits=data.questionEdits;rebuildQuestions();
+    progress=data.progress;coverage=data.coverage;savedSession=data.session;
+    lastSavedAt=data.exportedAt||null;applySettings(data.settings);
+  }catch(e){storageAvailable=false;}
+}
+
+function saveProgress(){
+  if(!storageAvailable) return;
+  try{
+    lastSavedAt=new Date().toISOString();
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(makeProgressPayload(false)));
+    updateStorageStatus();
+  }catch(e){
+    storageAvailable=false;
+    updateStorageStatus();
+  }
+}
+
+function formatSavedTime(iso){
+  if(!iso) return "not yet";
+  try{ return new Date(iso).toLocaleString(); }
+  catch(e){ return iso; }
+}
+
+function updateStorageStatus(){
+  $("storageStatus").textContent = (storageAvailable ? "Auto-save is on for this browser. " : "Auto-save is unavailable in this browser. ") + "Before switching chats or devices, choose Save Progress and keep the downloaded JSON file. Open this program in the new chat, then choose Load Progress and select that file. Your history, custom questions, question edits, settings, and unfinished quiz are included.";
+}
+
+function showResumeSessionPanel(){
+  const panel=$("resumeSessionPanel");
+  if(!panel) return;
+  panel.classList.toggle("hide", !savedSession);
+}
+
+function restoreSavedSession(){
+  if(!savedSession || !Array.isArray(savedSession.active) || !savedSession.active.length){
+    alert("No saved in-progress quiz is available.");
+    return;
+  }
+  active=savedSession.active;
+  index=Math.max(0,Math.min(Number(savedSession.index)||0,active.length-1));
+  correct=Number(savedSession.correct)||0;
+  answered=Number(savedSession.answered)||0;
+  locked=!!savedSession.locked;
+  lastSettings=savedSession.lastSettings || null;
+  const missedIds=new Set(savedSession.missedIds || []);
+  missedThisQuiz=active.filter(q=>missedIds.has(q.id));
+  quizInProgress=true;
+  savedSession=null;
+
+  $("setup").classList.add("hide");
+  $("results").classList.add("hide");
+  $("quiz").classList.remove("hide");
+  render();
+  saveProgress();
+}
+
+async function discardSavedSession(){
+  if(!savedSession) return;
+  if(!await askConfirmation("Discard the saved in-progress quiz? Your lifetime progress, Incorrect Bank, mastery, coverage, and removed questions will remain.")) return;
+  savedSession=null;
+  quizInProgress=false;
+  active=[];
+  saveProgress();
+  showResumeSessionPanel();
+}
+
+function migrateAssessmentAnswers(parsed){
+  if(!parsed || typeof parsed!=='object')return parsed;
+  const data=JSON.parse(JSON.stringify(parsed));
+  const fixes=allQuestionObjects().filter(q=>q.day==='Exam 2 Self-Assessment'&&[6,35].includes(q.page));
+  let changed=false;
+  for(const q of fixes){
+    const old=q.page===6?1:2;
+    const edit=data.questionEdits?.[q.id];
+    if(edit && edit.a===old && JSON.stringify(edit.o)===JSON.stringify(q.o))edit.a=q.a;
+    for(const item of data.session?.active||[]){
+      if(item.id!==q.id || JSON.stringify(item.o)!==JSON.stringify(q.o))continue;
+      const answer=item.choices.findIndex(c=>c.txt===q.o[q.a]);
+      if(answer<0)continue;
+      if(item.a!==q.a || item.answer!==answer){
+        item.a=q.a;item.answer=answer;
+        item.choices.forEach((c,i)=>{c.correct=i===answer;});
+        if(item.answered)item.wasCorrect=item.selected===answer;
+        changed=true;
+      }
+    }
+  }
+  if(changed){
+    const session=data.session;
+    session.correct=session.active.filter(q=>q.answered&&q.wasCorrect).length;
+    session.answered=session.active.filter(q=>q.answered).length;
+    session.missedIds=session.active.filter(q=>q.answered&&!q.wasCorrect).map(q=>q.id);
+  }
+  return data;
+}
+
+function validateIncomingPayload(parsed){
+  parsed=removeRetiredQuestions(parsed);
+  if(!parsed || typeof parsed!=="object") throw new Error("Invalid progress data.");
+  if(parsed.bankId && parsed.bankId!==BANK_ID){
+    throw new Error("This progress file belongs to a different question bank.");
+  }
+  const incomingCustom=validateCustomQuestions(parsed.customQuestions||[]);
+  const availableQuestions=[...allQuestionObjects(),...incomingCustom];
+  const incoming=parsed.progress || parsed.questions || parsed;
+  if(!incoming || typeof incoming!=="object") throw new Error("Invalid progress data.");
+  if(Array.isArray(incoming) || Object.entries(incoming).some(([id,s])=>!availableQuestions.some(q=>q.id===id) || !s || typeof s!=="object" || ["attempts","correct","wrong"].some(k=>s[k]!==undefined && (!Number.isFinite(s[k]) || s[k]<0)))) throw new Error("Invalid progress data.");
+  if(!parsed.progress && !parsed.questions && !Object.keys(incoming).length) throw new Error("This file does not contain study progress.");
+  if(parsed.session && (!Array.isArray(parsed.session.active) || parsed.session.active.some(q=>!q || !availableQuestions.some(x=>x.id===q.id) || !Array.isArray(q.choices) || !q.choices.length))) throw new Error("Invalid saved quiz.");
+  return {
+    customQuestions:incomingCustom,
+    questionEdits:validateEdits(parsed.questionEdits || {},availableQuestions),
+    settings:parsed.settings,
+    progress:incoming,
+    coverage:(parsed.coverage && typeof parsed.coverage==="object") ? parsed.coverage : {},
+    session:(parsed.session && typeof parsed.session==="object") ? parsed.session : null,
+    exportedAt:parsed.exportedAt || parsed.lastSavedAt || null
+  };
+}
+
+async function applyImportedPayload(parsed,sourceLabel="transfer"){
+  const data=validateIncomingPayload(parsed);
+  const when=data.exportedAt ? `\nSaved: ${formatSavedTime(data.exportedAt)}` : "";
+  if(!await askConfirmation(`Load this ${sourceLabel} and replace current progress, custom questions, and question edits?${when}`)) return false;
+
+  customQuestions=data.customQuestions; questionEdits=data.questionEdits; rebuildQuestions(); applySettings(data.settings);
+  $("quiz").classList.add("hide"); $("results").classList.add("hide"); $("setup").classList.remove("hide");
+  progress=data.progress;
+  coverage=data.coverage;
+  savedSession=data.session;
+  quizInProgress=false;
+  active=[];
+  index=0; correct=0; answered=0; missedThisQuiz=[]; locked=false; lastSettings=null;
+
+  saveProgress();
+  updateLifetimeUI();
+  updateCoverageStatus();
+  showResumeSessionPanel();
+  return true;
+}
+
+function allQuestionObjects(){
+  const out=[];
+  for(const [day,sets] of Object.entries(BANK)){
+    for(const [key,qs] of Object.entries(sets)){
+      const [quiz,order]=key.split("-");
+      qs.forEach((row,idx)=>{
+        out.push({id:row[9]||stableId(day,key,idx),day,quiz,order,q:row[0],o:row[1],a:row[2],imageKey:row[5]||null,sourceDeck:row[6]||day,review:row[7]||null,page:Number(row[3]),slides:row[4]||[Number(row[3])]});
+      });
+    }
+  }
+  return out;
+}
+const ALL = allQuestionObjects();
+
+function bankQuestions(filterDay="All",filterOrder="Mixed",filterSource="Random"){
+  return ALL.filter(q=>{
+    const s=statFor(q.id);
+    return !s.excluded && s.inBank &&
+      (filterDay==="All" || q.day===filterDay) &&
+      (filterOrder==="Mixed" || q.order===filterOrder) &&
+      (filterSource==="Random" || q.quiz===filterSource);
+  });
+}
+function flattenPool(day,order,source){
+  return ALL.filter(q=>{
+    const s=statFor(q.id);
+    return !s.excluded &&
+      (day==="All" || q.day===day) &&
+      (order==="Mixed" || q.order===order) &&
+      (source==="Random" || q.quiz===source);
+  });
+}
+
+function coverageKey(settings){
+  return `${settings.day}|${settings.order}|${settings.source}`;
+}
+function coverageState(settings){
+  const key=coverageKey(settings);
+  if(!coverage[key]) coverage[key]={cycle:1,seen:{}};
+  if(!coverage[key].seen || typeof coverage[key].seen!=="object") coverage[key].seen={};
+  if(!coverage[key].cycle) coverage[key].cycle=1;
+  return coverage[key];
+}
+function normalizeCoverage(settings,base,allowReset=true){
+  const c=coverageState(settings);
+  const eligible=new Set(base.map(q=>q.id));
+  for(const id of Object.keys(c.seen)){
+    if(!eligible.has(id)) delete c.seen[id];
+  }
+  if(allowReset && base.length && base.every(q=>c.seen[q.id])){
+    c.cycle++;
+    c.seen={};
+    saveProgress();
+  }
+  return c;
+}
+function markCoverageSeen(item){
+  if(!lastSettings) return;
+  const base=flattenPool(lastSettings.day,lastSettings.order,lastSettings.source);
+  if(!base.some(q=>q.id===item.id)) return;
+  const c=normalizeCoverage(lastSettings,base,false);
+  c.seen[item.id]=true;
+  saveProgress();
+  updateCoverageStatus();
+}
+function updateCoverageStatus(){
+  if(!$("coverageStatus")) return;
+  const settings={
+    day:$("day").value,
+    order:$("order").value,
+    source:$("source").value
+  };
+  const base=flattenPool(settings.day,settings.order,settings.source);
+  const c=normalizeCoverage(settings,base,false);
+  const seen=base.filter(q=>c.seen[q.id]).length;
+  $("coverageStatus").textContent =
+    `Coverage cycle ${c.cycle}: ${seen} of ${base.length} unique questions have been shown. ` +
+    `Correct non-bank questions stay out of rotation until this reaches ${base.length} of ${base.length}.`;
+}
+
+function weightedSampleWithoutReplacement(items,count,weightFn){
+  const remaining=[...items], picked=[];
+  while(picked.length<count && remaining.length){
+    const weights=remaining.map(x=>Math.max(0.01,Number(weightFn(x))||0.01));
+    const total=weights.reduce((a,b)=>a+b,0);
+    let r=Math.random()*total, idx=0;
+    for(;idx<weights.length;idx++){ r-=weights[idx]; if(r<=0) break; }
+    if(idx>=remaining.length) idx=remaining.length-1;
+    picked.push(remaining.splice(idx,1)[0]);
+  }
+  return picked;
+}
+
+function adaptiveWeight(q){
+  const s=statFor(q.id);
+  if(s.inBank){
+    if(s.streak===0) return 10;
+    if(s.streak===1) return 7;
+    return 4;
+  }
+  if(s.attempts===0) return 2.2;
+  if(s.mastered) return 0.8;
+  return 1.2;
+}
+
+function buildQuiz(settings){
+  const base=flattenPool(settings.day,settings.order,settings.source);
+  const c=normalizeCoverage(settings,base,true);
+  const unseen=base.filter(q=>!c.seen[q.id]);
+
+  if(settings.mode==="Incorrect"){
+    const b=bankQuestions(settings.day,settings.order,settings.source);
+    return shuffle(b).slice(0,Math.min(settings.size,b.length));
+  }
+
+  if(settings.mode==="Unseen"){
+    // Literal current-cycle view: do not auto-reset the cycle here.
+    // Only questions not yet shown in the current coverage cycle are eligible.
+    const current=normalizeCoverage(settings,base,false);
+    const notAsked=base.filter(q=>!current.seen[q.id]);
+    return shuffle(notAsked).slice(0,Math.min(settings.size,notAsked.length));
+  }
+
+  if(settings.mode==="Random"){
+    // Coverage-first randomization: exhaust unseen questions before recycling clean-correct ones.
+    const first=shuffle(unseen).slice(0,Math.min(settings.size,unseen.length));
+    if(first.length>=settings.size) return first;
+    const firstIds=new Set(first.map(q=>q.id));
+    const remainder=shuffle(base.filter(q=>!firstIds.has(q.id))).slice(0,settings.size-first.length);
+    return [...first,...remainder];
+  }
+
+  // Adaptive:
+  // Active Incorrect Bank questions are the deliberate exception to the no-recycle rule.
+  // They can repeat before full coverage so the learner can build a 3-correct streak.
+  const b=bankQuestions(settings.day,settings.order,settings.source);
+  const desiredBank=Math.min(b.length,Math.ceil(settings.size*0.55));
+  const bankPick=weightedSampleWithoutReplacement(b,desiredBank,q=>{
+    const s=statFor(q.id);
+    return s.streak===0 ? 10 : s.streak===1 ? 7 : 4;
+  });
+
+  const pickedIds=new Set(bankPick.map(q=>q.id));
+  const remainingSlots=settings.size-bankPick.length;
+
+  // For every non-bank slot, use unseen questions first.
+  const unseenNonPicked=unseen.filter(q=>!pickedIds.has(q.id));
+  const coveragePick=shuffle(unseenNonPicked).slice(0,Math.min(remainingSlots,unseenNonPicked.length));
+  coveragePick.forEach(q=>pickedIds.add(q.id));
+
+  const stillNeeded=remainingSlots-coveragePick.length;
+  let fill=[];
+  if(stillNeeded>0){
+    const restPool=base.filter(q=>!pickedIds.has(q.id));
+    fill=weightedSampleWithoutReplacement(restPool,stillNeeded,adaptiveWeight);
+  }
+
+  return shuffle([...bankPick,...coveragePick,...fill]);
+}
+
+function prepareQuestion(raw){
+  const pairs=raw.o.map((txt,i)=>({txt,correct:i===raw.a}));
+  const mixed=raw.day==='Exam 2 Self-Assessment'?pairs:shuffle(pairs);
+  return {
+    ...raw,
+    choices:mixed,
+    answer:mixed.findIndex(x=>x.correct),
+    answered:false,
+    selected:null,
+    wasCorrect:null
+  };
+}
+
+function sourceLabel(q){
+  const original=ALL.find(x=>x.id===q.id)||q;
+  if(original.review)return `Micro Exam 1 Review Fall 2026 · slide ${original.review.slide} · Answers: ${original.review.sources.map(r=>`${r.deck}${r.deck==='Intro to Immunology'?' master deck':''} slide ${r.number}`).join('; ')}`;
+  const refs=sourceSlidesFor(original);
+  const deck=original.sourceDeck||(original.day==='Into to Microbiology'?'Intro to Microbiology':'Intro to Immunology');
+  return refs.length?`${deck}${deck==='Intro to Immunology'?' master deck':''} · slide${refs.length===1?'':'s'} ${refs.map(r=>r.number).join(', ')}`:`${original.day} · custom question`;
+}
+
+function topicForQuestion(q){
+  if(q.review)return {start:q.review.slide,end:q.review.slide,name:`${q.review.topic} · Answers: ${q.review.sources.map(r=>r.deck+' slide '+r.number).join('; ')}`};
+  const slide=sourceSlidesFor(q)[0]?.number||0;
+  return {start:slide,end:slide,name:q.day==='Exam pictures'?`${q.sourceDeck} · picture labels`:(SOURCE_SLIDE_TITLES[q.day]||{})[slide]||'Review your custom question'};
+}
+
+function recommendationData(){
+  const groups=new Map();
+  for(const q of ALL){
+    const s=statFor(q.id);
+    if(s.excluded || !s.inBank || ($("day").value!=="All" && q.day!==$("day").value)) continue;
+    const topic=topicForQuestion(q);
+    const key=`${q.day}|${topic.start}|${topic.end}|${topic.name}`;
+    if(!groups.has(key)){
+      groups.set(key,{
+        day:q.day,deck:q.sourceDeck,start:topic.start,end:topic.end,name:topic.name,
+        questions:0,wrong:0,streakSum:0,zeroStreak:0,ids:[]
+      });
+    }
+    const g=groups.get(key);
+    g.questions++;
+    g.wrong += s.wrong || 0;
+    g.streakSum += s.streak || 0;
+    if((s.streak||0)===0) g.zeroStreak++;
+    g.ids.push(q.id);
+  }
+  return [...groups.values()].sort((a,b)=>{
+    const scoreA=(a.questions*4)+(a.zeroStreak*2)+a.wrong-(a.streakSum*0.5);
+    const scoreB=(b.questions*4)+(b.zeroStreak*2)+b.wrong-(b.streakSum*0.5);
+    return scoreB-scoreA || b.questions-a.questions;
+  });
+}
+
+function renderReviewRecommendations(){
+  const holder=$("reviewRecommendations");
+  if(!holder) return;
+  const recs=recommendationData();
+  if(!recs.length){
+    holder.innerHTML='<p style="margin:10px 0 0"><strong>No targeted review areas right now.</strong> Your Incorrect Bank is empty.</p>';
+    return;
+  }
+
+  const top=recs.slice(0,6);
+  holder.innerHTML=top.map((g,idx)=>{
+    const avg=(g.streakSum/g.questions).toFixed(1);
+    const unit=g.day==='Exam 2 Pictures'?'page':'slide';
+    const range=g.start===0?"your custom question":(g.start===g.end ? `${unit} ${g.start}` : `${unit}s ${g.start}–${g.end}`);
+    let priority="Review";
+    if(idx===0 || g.questions>=4 || g.zeroStreak>=3) priority="Highest priority";
+    else if(idx<=2 || g.questions>=2) priority="Priority";
+    return `<article class="bank-item">
+      <strong>${idx+1}. ${escapeHtml(g.day)} — ${escapeHtml(g.name)}</strong><br>
+      <span class="pill">${priority}</span>
+      <span class="pill">${range}</span>
+      <span class="pill">${g.questions} active bank question${g.questions===1?"":"s"}</span>
+      <br><span class="small">Recommendation: go back through ${range}. Your current bank has ${g.questions} question${g.questions===1?"":"s"} tied to this area; ${g.zeroStreak} currently have a 0/${MASTER_STREAK} mastery streak.</span>
+    </article>`;
+  }).join("");
+}
+
+function updateLifetimeUI(){
+  const day=$("day").value;
+  $("statsScope").textContent=`Historical statistics — ${day === "All" ? "All sections" : day}`;
+  const vals=ALL.filter(q=>day==="All" || q.day===day).map(q=>statFor(q.id));
+  const bank=vals.filter(s=>s.inBank).length;
+  const mastered=vals.filter(s=>s.mastered).length;
+  const attempts=vals.reduce((n,s)=>n+(s.attempts||0),0);
+  const corr=vals.reduce((n,s)=>n+(s.correct||0),0);
+  $("bankCount").textContent=bank;
+  $("masteredCount").textContent=mastered;
+  $("attemptCount").textContent=attempts;
+  $("accuracy").textContent=attempts ? Math.round(corr/attempts*100)+"%" : "—";
+  renderBankList();
+  renderRemovedList();
+  renderReviewRecommendations();
+}
+
+function renderBankList(){
+  const rows=ALL.filter(q=>statFor(q.id).inBank && !statFor(q.id).excluded)
+    .sort((a,b)=>statFor(a.id).streak-statFor(b.id).streak || b.day.localeCompare(a.day));
+  const holder=$("bankList");
+  if(!rows.length){
+    holder.innerHTML="<p>Your Incorrect Bank is empty. Missed questions will appear here automatically.</p>";
+    return;
+  }
+  holder.innerHTML=rows.slice(0,100).map(q=>{
+    const s=statFor(q.id), slide=slideNumber(q.day,q.page);
+    const answer=escapeHtml(q.o[q.a]);
+    return `<div class="bank-item">
+      <button type="button" class="secondary bank-question-toggle" data-toggle-answer="${escapeHtml(q.id)}" style="width:100%;text-align:left;margin:0;padding:0;border:none;background:transparent;color:inherit;min-height:0">
+        <strong>${escapeHtml(q.q)}</strong>
+      </button>
+      <div class="small" style="margin-top:4px">Click the question to show/hide the answer.</div>
+      <div id="bank-answer-${escapeHtml(q.id)}" class="hide" style="margin-top:8px;padding:10px;border:1px solid var(--border);border-radius:8px">
+        <strong>Answer:</strong> ${answer}<br>
+        <span class="small">Source: ${escapeHtml(sourceLabel(q))}</span>${sourceButton(q)}
+      </div>
+      <div style="margin-top:7px">
+        <span class="pill">${q.day}</span><span class="pill">${q.order} order</span>
+        <span class="pill">Slide ${slide}</span><span class="pill">Correct streak ${s.streak}/${MASTER_STREAK}</span>
+      </div>
+      <button type="button" class="bank-remove" data-remove-bank="${escapeHtml(q.id)}">Remove from Incorrect Bank</button>
+      <div class="small" style="margin-top:5px">If you miss this question again later, it will automatically return to the Incorrect Bank.</div>
+    </div>`;
+  }).join("") + (rows.length>100 ? `<p>Showing 100 of ${rows.length} bank questions.</p>` : "");
+}
+
+function renderRemovedList(){
+  const rows=ALL.filter(q=>statFor(q.id).excluded);
+  const holder=$("removedList");
+  if(!holder) return;
+  if(!rows.length){
+    holder.innerHTML="<p>No questions have been removed from the test bank.</p>";
+    return;
+  }
+  holder.innerHTML=rows.map(q=>{
+    const slide=slideNumber(q.day,q.page);
+    return `<div class="bank-item">
+      <strong>${escapeHtml(q.q)}</strong><br>
+      <span class="pill">${q.day}</span>
+      <span class="pill">${q.order} order</span>
+      <span class="pill">Slide ${slide}</span><br>
+      <button type="button" class="secondary bank-remove" data-restore-question="${escapeHtml(q.id)}" style="color:var(--text);border-color:var(--border)">Restore to Test Bank</button>
+    </div>`;
+  }).join("");
+}
+
+
+function startQuiz(custom=null, forcedMode=null){
+  let settings;
+  if(custom){
+    settings=lastSettings || {day:"All",order:"Mixed",source:"Random",size:custom.length,mode:"Adaptive"};
+  }else{
+    settings={
+      day:$("day").value,
+      order:$("order").value,
+      source:$("source").value,
+      size:Number($("size").value),
+      mode:forcedMode || $("mode").value
+    };
+  }
+  lastSettings=settings;
+
+  let pool=custom || buildQuiz(settings);
+  if(!pool.length){
+    if(settings.mode==="Incorrect"){
+      alert("Your Incorrect Bank is empty for those filters.");
+    }else if(settings.mode==="Unseen"){
+      alert("There are no unasked questions left in the current coverage cycle for those filters.");
+    }else{
+      alert("That combination has no questions.");
+    }
+    return;
+  }
+  active=pool.map(prepareQuestion);
+  index=0; correct=0; answered=0; missedThisQuiz=[]; locked=false;
+  quizInProgress=true;
+  savedSession=null;
+  $("setup").classList.add("hide"); $("results").classList.add("hide"); $("quiz").classList.remove("hide");
+  render();
+  saveProgress();
+}
+
+function render(){
+  const item=active[index];
+  if(!item){ finish(); return; }
+
+  markCoverageSeen(item);
+  locked=item.answered;
+
+  $("counter").textContent=`Question ${index+1} of ${active.length}`;
+  $("scoreline").textContent=`Score: ${correct} / ${answered}`;
+  $("bar").style.width=`${((index+1)/active.length)*100}%`;
+
+  const s=statFor(item.id);
+  const bankText=s.inBank ? ` • Incorrect Bank streak ${s.streak}/${MASTER_STREAK}` : "";
+  const baseForCoverage=lastSettings ? flattenPool(lastSettings.day,lastSettings.order,lastSettings.source) : [];
+  const cForCoverage=lastSettings ? normalizeCoverage(lastSettings,baseForCoverage,false) : {cycle:1,seen:{}};
+  const seenForCoverage=baseForCoverage.filter(q=>cForCoverage.seen[q.id]).length;
+  const coverageText=baseForCoverage.length ? ` • Coverage ${seenForCoverage}/${baseForCoverage.length}` : "";
+  $("meta").textContent=`${item.day} • ${item.order==="Instructor"?"Instructor self-assessment":item.order+" order"} • ${item.quiz}${bankText}${coverageText} • ${sourceLabel(item)}`;
+$("qtext").textContent=item.q;
+  $("questionMedia").innerHTML=questionMedia(item);
+
+  $("prev").disabled=index===0;
+  $("next").textContent=index===active.length-1 ? "Finish quiz" : "Next question";
+  $("next").disabled=!item.answered;
+  $("removeBadQuestion").disabled=false;
+
+  const holder=$("answers");
+  holder.innerHTML="";
+  if(item.o.length===1 && !item.answered){
+    const form=document.createElement("form");
+    const label=document.createElement("label");label.textContent="Your answer";
+    const input=document.createElement("input");input.type="text";input.required=true;input.autocomplete="off";label.appendChild(input);
+    const submit=document.createElement("button");submit.type="submit";submit.textContent="Check answer";
+    form.appendChild(label);form.appendChild(submit);holder.appendChild(form);
+    form.onsubmit=e=>{e.preventDefault();if(!input.value.trim())return;item.typedAnswer=input.value.trim();answer(item.typedAnswer.toLowerCase()===item.o[0].trim().toLowerCase()?item.answer:-1,submit);};
+  }else item.choices.forEach((choice,i)=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="answer";
+    b.textContent=`${String.fromCharCode(65+i)}. ${choice.txt}`;
+
+    if(item.answered){
+      b.disabled=true;
+      if(i===item.answer) b.classList.add("correct");
+      if(i===item.selected && !item.wasCorrect) b.classList.add("wrong");
+    }else{
+      b.addEventListener("click",()=>answer(i,b));
+    }
+    holder.appendChild(b);
+  });
+
+  if(item.answered){
+    const correctAnswer=escapeHtml(item.choices[item.answer].txt);
+    const slide=slideNumber(item.day,item.page);
+    let masteryMsg="";
+    const currentStat=statFor(item.id);
+
+    if(currentStat.mastered){
+      masteryMsg=`<div class="mastery done">Mastered: ${MASTER_STREAK}/${MASTER_STREAK} consecutive correct. Removed from Incorrect Bank.</div>`;
+    }else if(currentStat.inBank){
+      masteryMsg=`<div class="mastery need">Incorrect Bank: correct streak ${currentStat.streak}/${MASTER_STREAK}. This question will be prioritized in future adaptive quizzes.</div>`;
+    }
+
+    $("feedback").className=`feedback ${item.wasCorrect ? "good" : "bad"}`;
+    $("feedback").innerHTML=
+      `<strong>${item.wasCorrect ? "Correct." : "Incorrect."}</strong>` +
+      (item.wasCorrect ? "" : `<br>Correct answer: ${correctAnswer}`) +
+      `<br><strong>Source:</strong> ${escapeHtml(sourceLabel(item))}<div class="actions">${sourceButton(item)}</div>` +
+      masteryMsg + instructorNote(item);
+  }else{
+    $("feedback").className="feedback hide";
+    $("feedback").textContent="";
+  }
+}
+
+function answer(choiceIndex,button){
+  const item=active[index];
+  if(item.answered) return;
+
+  locked=true;
+  item.answered=true;
+  $("questionMedia").innerHTML=questionMedia(item);
+  item.selected=choiceIndex;
+  answered++;
+
+  const s=statFor(item.id);
+  const buttons=[...$("answers").querySelectorAll("button")];
+  buttons.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===item.answer) b.classList.add("correct");
+  });
+
+  const ok=choiceIndex===item.answer;
+  item.wasCorrect=ok;
+  s.attempts++;
+
+  if(ok){
+    correct++;
+    s.correct++;
+    s.lastResult="correct";
+    button.classList.add("correct");
+
+    if(s.manualRemoved){
+      s.inBank=false;
+      s.streak=0;
+      s.mastered=false;
+    }else if(s.everWrong && !s.mastered){
+      s.streak++;
+      if(s.streak>=MASTER_STREAK){
+        s.streak=MASTER_STREAK;
+        s.inBank=false;
+        s.mastered=true;
+      }else{
+        s.inBank=true;
+      }
+    }else if(s.mastered){
+      s.streak=MASTER_STREAK;
+    }
+
+    $("feedback").className="feedback good";
+  }else{
+    s.wrong++;
+    s.everWrong=true;
+    s.lastResult="wrong";
+    s.streak=0;
+    s.inBank=true;
+    s.mastered=false;
+    s.manualRemoved=false;
+
+    button.classList.add("wrong");
+    if(!missedThisQuiz.some(q=>q.id===item.id)) missedThisQuiz.push(item);
+    $("feedback").className="feedback bad";
+  }
+
+  saveProgress();
+  updateLifetimeUI();
+
+  const correctAnswer=escapeHtml(item.choices[item.answer].txt);
+  const slide=slideNumber(item.day,item.page);
+  let masteryMsg="";
+  if(s.mastered){
+    masteryMsg=`<div class="mastery done">Mastered: ${MASTER_STREAK}/${MASTER_STREAK} consecutive correct. Removed from Incorrect Bank.</div>`;
+  }else if(s.inBank){
+    masteryMsg=`<div class="mastery need">Incorrect Bank: correct streak ${s.streak}/${MASTER_STREAK}. This question will be prioritized in future adaptive quizzes.</div>`;
+  }
+
+  $("feedback").innerHTML=
+    `<strong>${ok ? "Correct." : "Incorrect."}</strong>` +
+    (ok ? "" : `<br>Correct answer: ${correctAnswer}`) +
+    `<br><strong>Source:</strong> ${escapeHtml(sourceLabel(item))}<div class="actions">${sourceButton(item)}</div>` +
+    masteryMsg + instructorNote(item);
+
+  $("scoreline").textContent=`Score: ${correct} / ${answered}`;
+  $("next").disabled=false;
+  $("questionMedia").innerHTML=questionMedia(item);
+}
+function removeCurrentBadQuestion(){
+  const item=active[index];
+  if(!item) return;
+
+  const wasAnswered=!!item.answered;
+  const wasCorrect=!!item.wasCorrect;
+
+  // If it was already answered, remove its contribution from THIS quiz.
+  if(wasAnswered){
+    answered=Math.max(0,answered-1);
+    if(wasCorrect) correct=Math.max(0,correct-1);
+  }
+
+  // A "bad question" is removed from scoring/history as well as future rotation.
+  // If restored later, it comes back as a clean question.
+  progress[item.id]={
+    ...defaultStat(),
+    excluded:true
+  };
+
+  // Remove it from any current-quiz missed list and from the active quiz.
+  missedThisQuiz=missedThisQuiz.filter(q=>q.id!==item.id);
+  active.splice(index,1);
+
+  // Remove stale coverage entry for this question in the current filtered cycle.
+  // It no longer counts toward the eligible denominator because flattenPool excludes it.
+  if(lastSettings){
+    const key=coverageKey(lastSettings);
+    if(coverage[key] && coverage[key].seen){
+      delete coverage[key].seen[item.id];
+    }
+  }
+
+  saveProgress();
+  updateLifetimeUI();
+  updateCoverageStatus();
+
+  alert(
+    wasAnswered
+      ? "Question removed. Its answer was also removed from this quiz score. You can restore it later under View Removed Questions."
+      : "Question removed before answering. It will not count in this quiz. You can restore it later under View Removed Questions."
+  );
+
+  if(!active.length){
+    finish();
+    return;
+  }
+
+  // Stay at the same numeric position so the next question slides into place.
+  // If the removed item was last, move back to the new last item.
+  if(index>=active.length) index=active.length-1;
+
+  render();
+  saveProgress();
+}
+
+function finish(){
+  quizInProgress=false;
+  savedSession=null;
+  $("quiz").classList.add("hide"); $("results").classList.remove("hide");
+  const pct=active.length ? Math.round((correct/active.length)*100) : 0;
+  $("pct").textContent=pct+"%";
+  $("correctCount").textContent=correct;
+  $("missedCount").textContent=missedThisQuiz.length;
+  $("bankAfter").textContent=Object.values(progress).filter(s=>s.inBank).length;
+  $("retry").disabled=!missedThisQuiz.length;
+
+  const r=$("missedReview"); r.innerHTML="";
+  if(missedThisQuiz.length){
+    const h=document.createElement("h3"); h.textContent="Missed-question review"; r.appendChild(h);
+    missedThisQuiz.forEach((item,i)=>{
+      const a=document.createElement("article");
+      a.innerHTML=`<strong>${i+1}. ${escapeHtml(item.q)}</strong><br>
+        <span class="small">${escapeHtml(sourceLabel(item))}</span><br>
+        Correct: ${escapeHtml(item.choices[item.answer].txt)}<br>${sourceButton(item)}<br>
+        <span class="small">Bank streak: ${statFor(item.id).streak}/${MASTER_STREAK}</span>`;
+      r.appendChild(a);
+    });
+  }
+  saveProgress();
+  showResumeSessionPanel();
+}
+
+function startBank(){
+  const settings={
+    day:$("day").value, order:$("order").value, source:$("source").value,
+    size:Number($("size").value), mode:"Incorrect"
+  };
+  lastSettings=settings;
+  const pool=buildQuiz(settings);
+  if(!pool.length){ alert("Your Incorrect Bank is empty for those filters."); return; }
+  startQuiz(pool);
+}
+
+function progressFile(){
+  const payload=makeProgressPayload(true);
+  return new File(
+    [JSON.stringify(payload,null,2)],
+    "IPAP_Progress_"+new Date().toISOString().replace(/[:.]/g,"-")+".json",
+    {type:"application/json"}
+  );
+}
+
+function exportProgress(){
+  saveProgress();
+  const file=progressFile();
+  const url=URL.createObjectURL(file);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=file.name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  $("backupStatus").textContent="Backup download requested. Keep the JSON file to load your progress in another chat or device.";
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function importProgressFile(file){
+  const reader=new FileReader();
+  reader.onload=async ()=>{
+    try{
+      const parsed=JSON.parse(reader.result);
+      if(await applyImportedPayload(parsed,"progress file")){
+        alert(savedSession
+          ? "Progress imported. Use Resume saved quiz to continue exactly where you left off."
+          : "Progress imported.");
+      }
+    }catch(e){
+      alert(e && e.message ? e.message : "Could not import that progress file.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+$("start").addEventListener("click",()=>startQuiz());
+$("studyBank").addEventListener("click",startBank);
+$("prev").addEventListener("click",()=>{
+  if(index>0){
+    index--;
+    render();
+    saveProgress();
+  }
+});
+$("next").addEventListener("click",()=>{
+  if(!active[index] || !active[index].answered) return;
+  if(index>=active.length-1) finish();
+  else{
+    index++;
+    render();
+    saveProgress();
+  }
+});
+$("removeBadQuestion").addEventListener("click",removeCurrentBadQuestion);
+$("quit").addEventListener("click",finish);
+$("again").addEventListener("click",()=>{ $("mode").value="Adaptive"; startQuiz(); });
+$("retry").addEventListener("click",()=>{ if(missedThisQuiz.length) startQuiz(missedThisQuiz.map(x=>ALL.find(q=>q.id===x.id))); });
+$("resultsBank").addEventListener("click",()=>{ $("results").classList.add("hide"); $("setup").classList.remove("hide"); startBank(); });
+$("home").addEventListener("click",()=>{ $("results").classList.add("hide"); $("setup").classList.remove("hide"); updateLifetimeUI(); });
+
+$("refreshRecommendations").addEventListener("click",renderReviewRecommendations);
+
+$("removedList").addEventListener("click",e=>{
+  const btn=e.target.closest("[data-restore-question]");
+  if(!btn) return;
+  const id=btn.getAttribute("data-restore-question");
+  progress[id]=defaultStat();
+  saveProgress();
+  updateLifetimeUI();
+  updateCoverageStatus();
+});
+
+$("bankList").addEventListener("click",e=>{
+  const toggle=e.target.closest("[data-toggle-answer]");
+  if(toggle){
+    const id=toggle.getAttribute("data-toggle-answer");
+    const panel=document.getElementById(`bank-answer-${id}`);
+    if(panel) panel.classList.toggle("hide");
+    return;
+  }
+
+  const btn=e.target.closest("[data-remove-bank]");
+  if(!btn) return;
+  const id=btn.getAttribute("data-remove-bank");
+  const q=ALL.find(x=>x.id===id);
+  if(!q) return;
+  const s=statFor(id);
+  s.inBank=false;
+  s.streak=0;
+  s.mastered=false;
+  s.manualRemoved=true;
+  saveProgress();
+  updateLifetimeUI();
+});
+
+
+
+$("exportProgress").addEventListener("click",exportProgress);
+
+
+$("resumeSession").addEventListener("click",restoreSavedSession);
+$("discardSession").addEventListener("click",discardSavedSession);
+$("importProgress").addEventListener("change",e=>{ const f=e.target.files && e.target.files[0]; if(f) importProgressFile(f); e.target.value=""; });
+$("resetProgress").addEventListener("click",async ()=>{
+  if(!await askConfirmation("Reset progress for ALL sections? This clears answer history, Incorrect Bank, mastery, removed-question flags, coverage, and the unfinished quiz. Your question edits and custom questions remain. Saved backup files are unchanged.")) return;
+  progress={}; coverage={}; savedSession=null; quizInProgress=false; active=[];
+  index=0; correct=0; answered=0; missedThisQuiz=[]; locked=false; lastSettings=null;
+  $("quiz").classList.add("hide"); $("results").classList.add("hide"); $("setup").classList.remove("hide");
+  saveProgress(); updateLifetimeUI(); updateCoverageStatus(); showResumeSessionPanel(); renderWholeBank();
+  $("backupStatus").textContent="Progress reset for all sections. Question edits and custom questions retained.";
+});
+["day","order","source","mode","size"].forEach(id=>$(id).addEventListener("change",()=>{updateLifetimeUI();updateCoverageStatus();saveProgress();}));
+$("loadButton").onclick=()=>$("importProgress").click();
+$("wholeBank").addEventListener("toggle",()=>{if($("wholeBank").open)renderWholeBank();});
+$("bankSearch").oninput=renderWholeBank;
+$("bankDay").onchange=renderWholeBank;
+$("wholeBankList").onclick=e=>{const b=e.target.closest("[data-edit]");if(b)openEditor(b.dataset.edit);};
+$("editCurrent").onclick=()=>{if(active[index])openEditor(active[index].id);};
+$("cancelEdit").onclick=()=>$("editDialog").close();
+let editingId=null;
+const ORIGINALS=allQuestionObjects();
+function validateEdits(edits,questions=ALL){
+  if(!edits || typeof edits!=="object" || Array.isArray(edits))throw new Error("Invalid question edits.");
+  const clean={};
+  for(const [id,e] of Object.entries(edits)){
+    if(!questions.some(q=>q.id===id) || !e || typeof e.q!=="string" || !e.q.trim() || !Array.isArray(e.o) || e.o.length!==questions.find(q=>q.id===id).o.length || e.o.some(t=>typeof t!=="string" || !t.trim()) || !Number.isInteger(e.a) || e.a<0 || e.a>=e.o.length)throw new Error("Invalid edited question in backup.");
+    clean[id]={q:e.q,o:[...e.o],a:e.a};
+  }
+  return clean;
+}
+function applyEdits(){
+  ALL.forEach((q,i)=>{const e=questionEdits[q.id]||ORIGINALS.find(x=>x.id===q.id)||customQuestions.find(x=>x.id===q.id)||q; q.q=e.q;q.o=[...e.o];q.a=e.a;});
+  if($("wholeBank").open)renderWholeBank();
+}
+function applySettings(settings){
+  if(!settings)return;
+  ["day","order","source","mode","size"].forEach(id=>{if([...$(id).options].some(o=>o.value===settings[id]))$(id).value=settings[id];});
+}
+function askConfirmation(message){
+  return new Promise(resolve=>{
+    const d=$("confirmDialog");$("confirmMessage").textContent=message;
+    const done=value=>{d.close();resolve(value);};
+    $("confirmYes").onclick=()=>done(true);$("confirmNo").onclick=()=>done(false);
+    d.oncancel=e=>{e.preventDefault();done(false);};d.showModal();
+  });
+}
+function originalQuestionMedia(q){
+  const original=ALL.find(x=>x.id===q.id)||q;
+  if(original.imageKey && QUESTION_IMAGES[original.imageKey]){
+    return `<img src="${QUESTION_IMAGES[original.imageKey]}" alt="Slide-derived study image" style="display:block;max-width:100%;max-height:520px;object-fit:contain;margin:12px auto;background:white;border:1px solid var(--border);border-radius:8px">`;
+  }
+  return "";
+}
+function renderWholeBank(){
+  const term=$("bankSearch").value.toLowerCase(),day=$("bankDay").value;
+  const rows=ALL.filter(q=>(day==="All"||q.day===day)&&[q.q,...q.o].join(" ").toLowerCase().includes(term));
+  $("wholeBankCount").textContent=`${rows.length} of ${ALL.length} questions`;
+  $("wholeBankList").innerHTML=rows.map(q=>`<article class="bank-item"><strong>${escapeHtml(q.q)}</strong><p class="small">${q.day} · ${q.quiz} · ${q.order} order · ${escapeHtml(sourceLabel(q))}${questionEdits[q.id]?" · Edited":""}${statFor(q.id).excluded?" · Removed from quizzes":""}</p>${bankQuestionMedia(q)}<ol type="A">${q.o.map((o,i)=>`<li>${escapeHtml(o)}${i===q.a?" <strong>— Correct answer</strong>":""}</li>`).join("")}</ol><button type="button" class="secondary" data-edit="${escapeHtml(q.id)}">Edit question / answers</button> ${sourceButton(q)}</article>`).join("");
+}
+function openEditor(id){
+  const q=ALL.find(q=>q.id===id);if(!q)return;editingId=id;
+  $("editText").value=q.q;$("editCorrect").innerHTML=q.o.map((o,i)=>`<option value="${i}">${q.o.length===1?"Accepted answer":String.fromCharCode(65+i)}</option>`).join("");$("editCorrect").value=q.a;
+  $("editChoices").innerHTML=q.o.map((o,i)=>`<label>Answer ${String.fromCharCode(65+i)}<input id="editOption${i}" required value="${escapeHtml(o)}"></label>`).join("");
+  $("editDialog").showModal();
+}
+$("editForm").onsubmit=e=>{
+  e.preventDefault();
+  const edit={q:$("editText").value.trim(),o:ALL.find(q=>q.id===editingId).o.map((_,i)=>$("editOption"+i).value.trim()),a:Number($("editCorrect").value)};
+  if(!edit.q || edit.o.some(o=>!o)){alert("Fill in the question and all answers.");return;}
+  questionEdits[editingId]=edit;applyEdits();
+  const q=ALL.find(q=>q.id===editingId);
+  active=active.map(item=>item.id===editingId&&!item.answered?prepareQuestion(q):item);
+  if(savedSession) savedSession.active=savedSession.active.map(item=>item.id===editingId&&!item.answered?prepareQuestion(q):item);
+  $("editDialog").close();updateLifetimeUI();
+  if(quizInProgress)render();saveProgress();renderWholeBank();
+};
+
+$("day").addEventListener("change",()=>{ $("source").value="Random";updateCoverageStatus();saveProgress(); });
+function validateCustomQuestions(items){
+  if(!Array.isArray(items))throw new Error('Invalid custom questions.');
+  const ids=new Set();
+  return items.map(item=>{
+    if(!item || typeof item.id!=='string' || !/^custom-[a-zA-Z0-9-]+$/.test(item.id) || ids.has(item.id))throw new Error('Invalid custom question ID.');
+    ids.add(item.id);
+    if(!Object.prototype.hasOwnProperty.call(BANK,item.day) || !['First','Second'].includes(item.order) || typeof item.q!=='string' || !item.q.trim() || !Array.isArray(item.o) || item.o.length!==5 || item.o.some(t=>typeof t!=='string'||!t.trim()) || new Set(item.o.map(t=>t.trim().toLowerCase())).size!==5 || !Number.isInteger(item.a) || item.a<0 || item.a>4)throw new Error('Each custom question needs a section, five distinct choices, and one correct answer.');
+    const refs=item.masterSlides||[];
+    if(!Array.isArray(refs) || refs.length>20 || refs.some(n=>!Number.isInteger(n)||n<1||n>MASTER_SLIDE_COUNT))throw new Error('Invalid master slide number.');
+    return {id:item.id,day:item.day,quiz:'Custom',order:item.order,q:item.q.trim(),o:item.o.map(t=>t.trim()),a:item.a,page:0,slides:[],masterSlides:[...new Set(refs)]};
+  });
+}
+function rebuildQuestions(){
+  ALL.splice(0,ALL.length,...allQuestionObjects(),...customQuestions.map(q=>({...q,o:[...q.o],masterSlides:[...q.masterSlides]})));
+  applyEdits();
+}
+function sourceSlidesFor(question){
+  const q=ALL.find(x=>x.id===question.id)||question;
+  const deck=q.sourceDeck||q.day;
+  if(q.quiz==='Custom')return (q.masterSlides||[]).map(n=>({number:n,deck}));
+  return (q.slides||[q.page]).map(n=>({number:n,deck}));
+}
+function sourceButton(q){ return ''; }
+$('addOwnQuestion').onclick=()=>{
+  $('customQuestionForm').reset();
+  $('customSection').innerHTML=Object.keys(BANK).map(day=>`<option>${escapeHtml(day)}</option>`).join('');
+  if(Object.prototype.hasOwnProperty.call(BANK,$('day').value))$('customSection').value=$('day').value;
+  $('customError').textContent='';$('customQuestionDialog').showModal();
+};
+$('cancelCustomQuestion').onclick=()=>$('customQuestionDialog').close();
+$('customQuestionForm').onsubmit=e=>{
+  e.preventDefault();
+  try{
+    const text=$('customSlideNumbers').value.trim();
+    if(text && !/^\d+(?:\s*,\s*\d+)*$/.test(text))throw new Error('Enter slide numbers separated by commas, for example 12, 13.');
+    const item={id:'custom-'+(globalThis.crypto?.randomUUID?globalThis.crypto.randomUUID():Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)),day:$('customSection').value,order:$('customOrder').value,q:$('customQuestionText').value,o:[0,1,2,3,4].map(i=>$('customAnswer'+i).value),a:Number($('customCorrect').value),masterSlides:text?text.split(',').map(n=>Number(n.trim())):[]};
+    const validated=validateCustomQuestions([...customQuestions,item]);
+    customQuestions=validated;rebuildQuestions();saveProgress();updateLifetimeUI();updateCoverageStatus();renderWholeBank();
+    $('customQuestionDialog').close();
+    $('backupStatus').textContent='Question added. Use Save Progress to include it in your backup.';
+  }catch(error){$('customError').textContent=error.message;}
+};
+
+const MASTER_SLIDES = {};
+const MASTER_FIGURES = {};
+const EXAM_PICTURES = {"micro17-prok":"images/study-01.webp","micro17-euk":"images/study-02.webp","micro23":"images/study-03.webp","micro28-top":"images/study-04.webp","micro38":"images/study-05.webp","micro49":"images/study-06.webp","micro56":"images/study-07.webp","micro65":"images/study-08.webp","immune68":"images/study-09.webp","immune80-schematic":"images/study-10.webp","immune81":"images/study-11.webp","vaccine100":"images/study-12.webp","vaccine101":"images/study-13.webp","vaccine102":"images/study-14.webp","vaccine103":"images/study-15.webp","vaccine104":"images/study-16.webp"};
+const PICTURE_LAYOUTS = {"micro17-prok":{"width":436,"height":237,"labels":[{"label":"Prokaryote","boxes":[[8,5,78,16]],"highlightBoxes":[[94,46,293,129]]},{"label":"Cell wall","boxes":[[126,12,54,15]],"highlightBoxes":[[99,49,285,122]]},{"label":"Peptidoglycan","boxes":[[180,24,92,15]],"highlightBoxes":[[118,46,145,17]]},{"label":"Single, supercoiled circular chromosome","boxes":[[291,15,137,34]],"highlightBoxes":[[143,99,139,25]]},{"label":"Flagellum","boxes":[[7,146,66,17]],"highlightBoxes":[[7,98,105,48]]},{"label":"Cytoplasm rich in 70S ribosomes","boxes":[[63,179,72,47]],"highlightBoxes":[[119,117,29,38]]},{"label":"Plasmid","boxes":[[170,178,55,17]],"highlightBoxes":[[184,132,29,20]]},{"label":"Cell membrane (site of cellular respiration)","boxes":[[245,177,104,49]],"highlightBoxes":[[109,61,263,100]]}],"covers":[]},"micro17-euk":{"width":394,"height":328,"labels":[{"label":"Eukaryote","boxes":[[2,2,66,16]],"highlightBoxes":[[87,72,229,212]]},{"label":"Mitochondrion (site of cellular respiration)","boxes":[[90,5,153,31]],"highlightBoxes":[[152,81,29,43]]},{"label":"Cell membrane","boxes":[[269,39,90,16]],"highlightBoxes":[[88,73,227,211]]},{"label":"Lysosome","boxes":[[8,137,64,17]],"highlightBoxes":[[138,144,27,29]]},{"label":"Nucleus","boxes":[[183,132,49,16]],"highlightBoxes":[[168,105,85,80]]},{"label":"Nuclear membrane","boxes":[[314,106,66,32]],"highlightBoxes":[[165,103,90,86]]},{"label":"Cytoplasm","boxes":[[319,156,65,16]],"highlightBoxes":[[177,220,18,22]]},{"label":"Smooth endoplasmic reticulum","boxes":[[309,216,78,44]],"highlightBoxes":[[263,191,35,39]]},{"label":"Rough endoplasmic reticulum (ribosomes)","boxes":[[8,265,127,31]],"highlightBoxes":[[108,185,45,46]]},{"label":"80S ribosomes","boxes":[[243,281,91,18]],"highlightBoxes":[[244,239,14,16]]},{"label":"Golgi apparatus","boxes":[[160,307,99,17]],"highlightBoxes":[[180,182,70,45]]}],"covers":[]},"micro23":{"width":375,"height":430,"labels":[{"label":"Cytoplasm","boxes":[[210,41,66,15]],"highlightBoxes":[[95,61,82,54]]},{"label":"Nucleoid","boxes":[[249,119,55,15]],"highlightBoxes":[[78,85,127,234]]},{"label":"Capsule","boxes":[[0,170,50,13]],"highlightBoxes":[[65,165,26,28]]},{"label":"Cell wall","boxes":[[0,192,52,14]],"highlightBoxes":[[62,191,28,15]]},{"label":"Cytoplasmic membrane","boxes":[[2,221,76,27]],"highlightBoxes":[[76,201,22,28]]},{"label":"Ribosomes","boxes":[[14,264,67,16]],"highlightBoxes":[[119,265,24,23]]},{"label":"Pili","boxes":[[31,330,23,15]],"highlightBoxes":[[54,316,54,62]]},{"label":"Flagella","boxes":[[289,362,50,16]],"highlightBoxes":[[231,86,141,331]]}],"covers":[]},"micro28-top":{"width":510,"height":488,"labels":[{"label":"Wall teichoic acid","boxes":[[14,65,110,53]],"highlightBoxes":[[140,173,62,145]]},{"label":"Lipoteichoic acid","boxes":[[271,26,152,29]],"highlightBoxes":[[270,139,71,181]]},{"label":"Peptidoglycan","boxes":[[367,58,130,28]],"highlightBoxes":[[142,100,317,213]]},{"label":"Cell wall","boxes":[[15,201,88,25]],"highlightBoxes":[[136,99,324,222]]},{"label":"Plasma membrane","boxes":[[0,307,91,58]],"highlightBoxes":[[121,305,337,139]]},{"label":"Protein","boxes":[[149,442,63,27]],"highlightBoxes":[[310,343,26,67]]}],"covers":[]},"micro38":{"width":1613,"height":876,"labels":[{"label":"Nucleoid","boxes":[[548,135,111,32]],"highlightBoxes":[[435,352,272,170]]},{"label":"Cytoplasm containing many ribosomes","boxes":[[658,53,207,111]],"highlightBoxes":[[824,378,296,52]]},{"label":"Inclusion bodies","boxes":[[989,91,115,75]],"highlightBoxes":[[884,430,234,124]]},{"label":"Sex pili","boxes":[[1427,161,96,34]],"highlightBoxes":[[680,0,355,84]]},{"label":"Fimbriae","boxes":[[1506,458,107,34]],"highlightBoxes":[[1238,200,149,407]]},{"label":"Capsule","boxes":[[1325,686,108,37]],"highlightBoxes":[[784,570,273,49]]},{"label":"Cell wall","boxes":[[936,799,110,39]],"highlightBoxes":[[782,561,260,29]]},{"label":"Plasma membrane","boxes":[[757,800,139,73]],"highlightBoxes":[[772,552,253,22]]},{"label":"S-layer","boxes":[[569,799,98,41]],"highlightBoxes":[[443,580,211,28]]},{"label":"Flagellum","boxes":[[0,527,123,38]],"highlightBoxes":[[239,592,347,237]]}],"covers":[]},"micro49":{"width":599,"height":176,"labels":[{"label":"Mold spore","boxes":[[198,65,64,27]],"highlightBoxes":[[20,24,104,99]]},{"label":"Reproductive hyphae","boxes":[[194,94,151,21]],"highlightBoxes":[[66,55,71,101],[408,10,182,152]]},{"label":"Vegetative hyphae","boxes":[[195,117,132,19]],"highlightBoxes":[[16,147,136,23],[311,153,156,20]]}],"covers":[]},"micro56":{"width":461,"height":357,"labels":[{"label":"Eclipse phase","boxes":[[122,31,57,39]],"highlightBoxes":[[86,16,113,292]]},{"label":"Decay of viral progeny","boxes":[[272,122,95,37]],"highlightBoxes":[[284,17,78,54]]},{"label":"Maturation and release phase","boxes":[[227,240,104,39]],"highlightBoxes":[[176,71,163,215]]}],"covers":[]},"micro65":{"width":299,"height":235,"labels":[{"label":"Proglottids","boxes":[[4,5,57,11]],"highlightBoxes":[[17,28,35,49]]},{"label":"Scolex","boxes":[[112,0,33,11]],"highlightBoxes":[[108,13,27,31],[208,24,89,94]]},{"label":"Rostellum","boxes":[[219,0,48,11]],"highlightBoxes":[[237,22,32,18]]},{"label":"Neck","boxes":[[165,18,23,10],[215,160,24,10]],"highlightBoxes":[[126,24,29,27],[249,171,17,32]]},{"label":"Hooks in two whorls","boxes":[[153,44,60,20]],"highlightBoxes":[[235,32,33,17]]},{"label":"Suckers","boxes":[[179,88,41,12]],"highlightBoxes":[[214,50,20,30],[251,50,25,32]]},{"label":"Region of proliferation","boxes":[[175,117,63,20]],"highlightBoxes":[[245,130,25,36]]},{"label":"Strobila","boxes":[[149,139,40,11]],"highlightBoxes":[[1,32,163,180]]}],"covers":[]},"immune68":{"width":1618,"height":1246,"labels":[{"label":"APC","boxes":[[65,19,106,51],[511,19,105,51],[956,18,108,52],[1327,18,106,53]],"highlightBoxes":[[2,2,395,255],[404,2,404,237],[814,2,401,205],[1221,2,394,228]]},{"label":"ICAM-1/3","boxes":[[96,116,221,54]],"highlightBoxes":[[162,192,73,558]]},{"label":"CD58","boxes":[[446,108,126,52]],"highlightBoxes":[[443,172,70,347]]},{"label":"MHC I/II","boxes":[[602,126,190,53]],"highlightBoxes":[[545,175,119,344]]},{"label":"B7","boxes":[[988,127,68,54]],"highlightBoxes":[[990,191,73,332]]},{"label":"LFA-1","boxes":[[133,872,135,51]],"highlightBoxes":[[141,710,116,146]]},{"label":"CD2","boxes":[[414,925,95,52]],"highlightBoxes":[[444,544,70,376]]},{"label":"CD8/4","boxes":[[594,891,147,56]],"highlightBoxes":[[678,345,79,522]]},{"label":"CD28","boxes":[[943,871,133,56]],"highlightBoxes":[[973,509,105,350]]},{"label":"IL-1","boxes":[[1270,442,79,52]],"highlightBoxes":[[1259,184,212,615]]},{"label":"IL-2","boxes":[[1346,578,82,53]],"highlightBoxes":[[1414,531,43,230]]},{"label":"CD25","boxes":[[1345,871,131,55]],"highlightBoxes":[[1408,773,74,89]]},{"label":"IL-1R","boxes":[[1240,932,114,55]],"highlightBoxes":[[1254,776,83,129]]},{"label":"T cell","boxes":[[173,974,39,54],[576,974,39,54],[1440,974,36,54]],"highlightBoxes":[[2,849,398,224],[405,849,405,224],[815,848,401,226],[1221,840,394,234]]},{"label":"Adhesion","boxes":[[97,1135,218,53]],"highlightBoxes":[[135,179,130,684]]},{"label":"Antigen-specific activation","boxes":[[483,1099,266,115]],"highlightBoxes":[[438,173,325,755]]},{"label":"Co-stimulation","boxes":[[858,1135,341,55]],"highlightBoxes":[[969,182,116,684]]},{"label":"Cytokine signals","boxes":[[1331,1098,201,117]],"highlightBoxes":[[1246,182,346,756]]}],"covers":[]},"immune80-schematic":{"width":320,"height":320,"labels":[{"label":"Variable region","boxes":[],"polygons":[[[3,64],[51,22],[60,31],[12,73]]],"highlightBoxes":[[34,49,51,52],[226,46,45,51]]},{"label":"Heavy chain","boxes":[],"polygons":[[[85,48],[136,100],[128,109],[77,56]]],"highlightBoxes":[[64,79,75,228],[149,75,87,232]]},{"label":"Light chain","boxes":[],"polygons":[[[210,148],[249,110],[258,119],[219,157]]],"highlightBoxes":[[29,69,69,71],[190,71,78,72]]},{"label":"Antigen-binding site","boxes":[],"polygons":[[[238,9],[295,57],[281,75],[225,28]]],"highlightBoxes":[[31,40,48,46],[227,40,48,45]]},{"label":"Constant region","boxes":[[0,161,76,16]],"highlightBoxes":[[78,91,177,54],[125,149,38,159]]},{"label":"Disulfide bridge","boxes":[[0,191,77,16]],"highlightBoxes":[[100,119,27,25],[134,174,24,29]]},{"label":"Fab","boxes":[[301,91,19,17]],"highlightBoxes":[[29,42,249,114]]},{"label":"Fc","boxes":[[302,224,18,16]],"highlightBoxes":[[120,157,48,153]]}],"covers":[]},"immune81":{"width":703,"height":630,"labels":[{"label":"IgG","boxes":[[91,0,40,23]],"highlightBoxes":[[0,21,218,233]]},{"label":"IgD","boxes":[[333,0,42,23]],"highlightBoxes":[[240,20,208,234]]},{"label":"IgE","boxes":[[586,0,39,23]],"highlightBoxes":[[482,22,219,273]]},{"label":"IgM","boxes":[[377,290,45,26]],"highlightBoxes":[[336,278,365,350]]},{"label":"IgA","boxes":[[145,359,38,26]],"highlightBoxes":[[0,379,328,195]]}],"covers":[]},"vaccine100":{"width":117,"height":186,"labels":[{"label":"Live-attenuated vaccine","boxes":[[12,3,94,25]],"highlightBoxes":[[1,1,115,184]]}],"covers":[]},"vaccine101":{"width":116,"height":185,"labels":[{"label":"Inactivated vaccine","boxes":[[23,3,77,25]],"highlightBoxes":[[1,1,114,183]]}],"covers":[]},"vaccine102":{"width":117,"height":187,"labels":[{"label":"Subunit vaccine","boxes":[[12,3,100,25]],"highlightBoxes":[[1,1,115,185]]}],"covers":[]},"vaccine103":{"width":501,"height":656,"labels":[{"label":"Toxoid vaccine","boxes":[[18,486,231,35]],"highlightBoxes":[[1,1,499,654]]}],"covers":[]},"vaccine104":{"width":113,"height":184,"labels":[{"label":"mRNA vaccine","boxes":[[27,3,58,25]],"highlightBoxes":[[1,1,111,182]]}],"covers":[]}};
+const PICTURE_QUESTIONS = {"micro17-prok-0":{"figure":"micro17-prok","label":0},"micro17-prok-1":{"figure":"micro17-prok","label":1},"micro17-prok-2":{"figure":"micro17-prok","label":2},"micro17-prok-3":{"figure":"micro17-prok","label":3},"micro17-prok-4":{"figure":"micro17-prok","label":4},"micro17-prok-5":{"figure":"micro17-prok","label":5},"micro17-prok-6":{"figure":"micro17-prok","label":6},"micro17-prok-7":{"figure":"micro17-prok","label":7},"micro17-euk-0":{"figure":"micro17-euk","label":0},"micro17-euk-1":{"figure":"micro17-euk","label":1},"micro17-euk-2":{"figure":"micro17-euk","label":2},"micro17-euk-3":{"figure":"micro17-euk","label":3},"micro17-euk-4":{"figure":"micro17-euk","label":4},"micro17-euk-5":{"figure":"micro17-euk","label":5},"micro17-euk-6":{"figure":"micro17-euk","label":6},"micro17-euk-7":{"figure":"micro17-euk","label":7},"micro17-euk-8":{"figure":"micro17-euk","label":8},"micro17-euk-9":{"figure":"micro17-euk","label":9},"micro17-euk-10":{"figure":"micro17-euk","label":10},"micro23-0":{"figure":"micro23","label":0},"micro23-1":{"figure":"micro23","label":1},"micro23-2":{"figure":"micro23","label":2},"micro23-3":{"figure":"micro23","label":3},"micro23-4":{"figure":"micro23","label":4},"micro23-5":{"figure":"micro23","label":5},"micro23-6":{"figure":"micro23","label":6},"micro23-7":{"figure":"micro23","label":7},"micro28-top-0":{"figure":"micro28-top","label":0},"micro28-top-1":{"figure":"micro28-top","label":1},"micro28-top-2":{"figure":"micro28-top","label":2},"micro28-top-3":{"figure":"micro28-top","label":3},"micro28-top-4":{"figure":"micro28-top","label":4},"micro28-top-5":{"figure":"micro28-top","label":5},"micro38-0":{"figure":"micro38","label":0},"micro38-1":{"figure":"micro38","label":1},"micro38-2":{"figure":"micro38","label":2},"micro38-3":{"figure":"micro38","label":3},"micro38-4":{"figure":"micro38","label":4},"micro38-5":{"figure":"micro38","label":5},"micro38-6":{"figure":"micro38","label":6},"micro38-7":{"figure":"micro38","label":7},"micro38-8":{"figure":"micro38","label":8},"micro38-9":{"figure":"micro38","label":9},"micro49-0":{"figure":"micro49","label":0},"micro49-1":{"figure":"micro49","label":1},"micro49-2":{"figure":"micro49","label":2},"micro56-0":{"figure":"micro56","label":0},"micro56-1":{"figure":"micro56","label":1},"micro56-2":{"figure":"micro56","label":2},"micro65-0":{"figure":"micro65","label":0},"micro65-1":{"figure":"micro65","label":1},"micro65-2":{"figure":"micro65","label":2},"micro65-3":{"figure":"micro65","label":3},"micro65-4":{"figure":"micro65","label":4},"micro65-5":{"figure":"micro65","label":5},"micro65-6":{"figure":"micro65","label":6},"micro65-7":{"figure":"micro65","label":7},"immune68-0":{"figure":"immune68","label":0},"immune68-1":{"figure":"immune68","label":1},"immune68-2":{"figure":"immune68","label":2},"immune68-3":{"figure":"immune68","label":3},"immune68-4":{"figure":"immune68","label":4},"immune68-5":{"figure":"immune68","label":5},"immune68-6":{"figure":"immune68","label":6},"immune68-7":{"figure":"immune68","label":7},"immune68-8":{"figure":"immune68","label":8},"immune68-9":{"figure":"immune68","label":9},"immune68-10":{"figure":"immune68","label":10},"immune68-11":{"figure":"immune68","label":11},"immune68-12":{"figure":"immune68","label":12},"immune68-13":{"figure":"immune68","label":13},"immune68-14":{"figure":"immune68","label":14},"immune68-15":{"figure":"immune68","label":15},"immune68-16":{"figure":"immune68","label":16},"immune68-17":{"figure":"immune68","label":17},"immune80-schematic-0":{"figure":"immune80-schematic","label":0},"immune80-schematic-1":{"figure":"immune80-schematic","label":1},"immune80-schematic-2":{"figure":"immune80-schematic","label":2},"immune80-schematic-3":{"figure":"immune80-schematic","label":3},"immune80-schematic-4":{"figure":"immune80-schematic","label":4},"immune80-schematic-5":{"figure":"immune80-schematic","label":5},"immune80-schematic-6":{"figure":"immune80-schematic","label":6},"immune80-schematic-7":{"figure":"immune80-schematic","label":7},"immune81-0":{"figure":"immune81","label":0},"immune81-1":{"figure":"immune81","label":1},"immune81-2":{"figure":"immune81","label":2},"immune81-3":{"figure":"immune81","label":3},"immune81-4":{"figure":"immune81","label":4},"vaccine100-0":{"figure":"vaccine100","label":0},"vaccine101-0":{"figure":"vaccine101","label":0},"vaccine102-0":{"figure":"vaccine102","label":0},"vaccine103-0":{"figure":"vaccine103","label":0},"vaccine104-0":{"figure":"vaccine104","label":0}};
+const INSTRUCTOR_SOURCE = {};
+function coveredPictureSVG(q,revealed=false){
+  const spec=PICTURE_QUESTIONS[q.imageKey];if(!spec)return '';
+  const layout=PICTURE_LAYOUTS[spec.figure];
+  const masks=revealed?'':layout.labels.map((label,i)=>{
+    const target=i===spec.label,fill=target?'#fbbf24':'#cbd5e1';
+    const boxes=(label.boxes||[]).map(([x,y,w,h])=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}"/>${target?`<text x="${x+w/2}" y="${y+h/2}" dominant-baseline="central" text-anchor="middle" font-family="Arial" font-size="${Math.min(h*.75,40)}" font-weight="bold" fill="#111827">?</text>`:''}`).join('');
+    const polys=(label.polygons||[]).map(points=>{
+      const x=points.reduce((n,p)=>n+p[0],0)/points.length,y=points.reduce((n,p)=>n+p[1],0)/points.length;
+      return `<polygon points="${points.map(p=>p.join(',')).join(' ')}" fill="${fill}"/>${target?`<text x="${x}" y="${y}" dominant-baseline="central" text-anchor="middle" font-family="Arial" font-size="12" fill="#111827">?</text>`:''}`;
+    }).join('');return boxes+polys;
+  }).join('');
+  const target=layout.labels[spec.label];
+  const outline=revealed?(target.boxes||[]).map(([x,y,w,h])=>`<rect class="answer-label-outline" x="${x}" y="${y}" width="${w}" height="${h}" fill="none" stroke="#f97316" stroke-width="3" vector-effect="non-scaling-stroke"/>`).join('')+(target.polygons||[]).map(points=>`<polygon class="answer-label-outline" points="${points.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#f97316" stroke-width="3" vector-effect="non-scaling-stroke"/>`).join(''):'';
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${layout.width} ${layout.height}" role="img" aria-label="${revealed?'Full study picture; orange outline marks the word or phrase asked about':'Study picture, identify the orange question mark'}" style="display:block;width:100%;max-height:650px;height:auto;background:white"><image href="${EXAM_PICTURES[spec.figure]}" width="${layout.width}" height="${layout.height}"/>${masks}${outline}</svg>`;
+}
+function questionMedia(q){
+  if(!PICTURE_QUESTIONS[q.imageKey])return '';
+  return `<div class="covered-picture" data-revealed="${!!q.answered}" style="margin:14px 0">${coveredPictureSVG(q,!!q.answered)}<p class="small">${q.answered?'Full picture revealed. The orange outline marks the word or phrase you were asked to identify.':'Identify the orange ? box. Other diagram labels are covered; vaccine questions cover only the header.'}</p><button type="button" class="secondary" data-enlarge-exam="${escapeHtml(q.id)}">Enlarge picture</button></div>`;
+}
+function bankQuestionMedia(q){
+  return PICTURE_QUESTIONS[q.imageKey]?`<button type="button" class="secondary" data-enlarge-exam="${escapeHtml(q.id)}">Show study picture</button>`:'';
+}
+function instructorNote(q){return '';}
+function openExamImage(title,content){
+  $('examImageTitle').textContent=title;$('examImageContent').innerHTML=content;
+  if(!$('examImageDialog').open)$('examImageDialog').showModal();
+  $('examImageDialog').scrollTop=0;
+}
+document.addEventListener('click',event=>{
+  const zoom=event.target.closest('[data-enlarge-exam]');if(!zoom)return;
+  const id=zoom.dataset.enlargeExam;
+  const current=quizInProgress&&active[index]?.id===id?active[index]:null;
+  const q=current||ALL.find(x=>x.id===id);if(!q)return;
+  openExamImage(sourceLabel(q),coveredPictureSVG(q,current?!!q.answered:true));
+});
+$('examImageClose').onclick=()=>$('examImageDialog').close();
+function syncExamFilters(){
+  const pictures=$('day').value==='Exam pictures';
+  if(pictures)$('order').value='First';
+  $('order').disabled=pictures;
+}
+$('day').addEventListener('change',()=>{
+  $('source').value='Random';
+  if($('day').value!=='Exam pictures')$('order').value='Mixed';
+  syncExamFilters();updateCoverageStatus();saveProgress();
+});
+loadProgress();
+syncExamFilters();
+updateStorageStatus();
+updateLifetimeUI();
+updateCoverageStatus();
+showResumeSessionPanel();
+
+</script>
+</body>
+</html>
