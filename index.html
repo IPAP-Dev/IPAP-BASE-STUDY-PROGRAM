@@ -76,7 +76,7 @@ dialog{border:1px solid var(--border);border-radius:12px;padding:20px} dialog::b
 <section class="panel" id="setup">
   <h1>IPAP Base Adaptive Program</h1>
   <p class="notice" id="answerKeyRevision"><strong>Block 3 — Endocrine</strong> · Slide-only adaptive question bank</p>
-  <p class="small"><strong>441 quiz questions installed.</strong> 338 written questions plus 103 cover/reveal picture questions. Written questions come only from the Day 1–4 lecture files and reference the corresponding master-deck slide number. Master slides 21, 26, 62, and 134 are reserved for the independent interactive Chart Review and are not part of normal quiz coverage.</p>
+  <p class="small"><strong>441 quiz questions installed.</strong> 338 written questions plus 103 cover/reveal picture questions. Written questions come only from the Day 1–4 lecture files and reference the corresponding master-deck slide number. Master slides 21, 26, 62, and 134 are chart reference slides and are not part of normal quiz coverage.</p>
 
   <div class="notice small">
     <strong>Adaptive mastery:</strong> a missed question enters the Incorrect Bank. You can manually remove it at any time, or let it stay there until you answer it correctly
@@ -94,7 +94,7 @@ dialog{border:1px solid var(--border);border-radius:12px;padding:20px} dialog::b
 
   <div class="grid" style="margin-top:16px">
     <label>Section
-      <select id="day"><option value="All">All sections</option><option>Day 1</option><option>Day 2</option><option>Day 3</option><option>Day 4</option><option>Exam pictures</option><option>Chart Review</option></select>
+      <select id="day"><option value="All">All sections</option><option>Day 1</option><option>Day 2</option><option>Day 3</option><option>Day 4</option><option>Exam pictures</option></select>
     </label>
     <label>Question type
       <select id="order"><option value="Mixed">Mixed first + second order</option><option value="First">First order only</option><option value="Second">Second order only</option></select>
@@ -125,13 +125,6 @@ dialog{border:1px solid var(--border);border-radius:12px;padding:20px} dialog::b
     <button id="start">Start quiz</button>
     <button id="studyBank" class="secondary">Study Incorrect Bank</button><button id="addOwnQuestion" type="button" class="secondary">Add Your Own Question</button>
   </div>
-
-
-  <section id="chartReviewPanel" class="panel hide" style="margin-top:16px;padding:14px">
-    <div class="topline"><div><h2 style="margin-bottom:4px">Interactive Chart Review</h2><p class="small" style="margin:0">Master slides 21, 26, 62, and 134 only. Chart Review is independent from All Sections, the Incorrect Bank, and normal adaptive coverage.</p></div><button id="newChartActivity" type="button" style="width:auto;min-width:170px">New chart activity</button></div>
-    <div class="statgrid" style="margin-top:12px"><div class="stat"><b id="chartAttempts">0</b><span class="small">Relationships attempted</span></div><div class="stat"><b id="chartCorrect">0</b><span class="small">Correct</span></div><div class="stat"><b id="chartAccuracy">—</b><span class="small">Accuracy</span></div><div class="stat"><b id="chartMissed">0</b><span class="small">Missed relationships</span></div></div>
-    <div id="chartActivity" style="margin-top:14px"></div>
-  </section>
 
   <section class="panel" style="margin-top:16px; padding:14px">
     <div class="topline">
@@ -258,7 +251,7 @@ const BANK_ID = "ipap-block3-endocrine-2026-09-29-v1";
 const SLIDE_OFFSET = {};
 const REVIEW_TOPICS = {};
 const SOURCE_SLIDE_TITLES = {"Day 1":{"1":"Anatomy and Physiology II","2":"Learning Outcomes","3":"The Endocrine System","4":"HYPOTHALAMUS Inhibiting","5":"Endocrine Pearls of Wisdom","6":"The Endocrine and Nervous Systems","7":"The Endocrine and Nervous Systems","8":"Endocrine vs. Exocrine","9":"Hormone Action","10":"Hormone Receptors","11":"Hormone Receptors","12":"Endocrine Action","13":"Circulating vs. Local Hormones","14":"Study slide","15":"Study slide","16":"Study slide","17":"Types of Hormones Amino Acid vs. Cholesterol (Steroid) Hormones","18":"Types of Hormones","19":"Amino Acid Hormones","20":"Amino Acid Hormones","21":"Amino Acid Hormones","22":"Catecholamines","23":"**Iodothyronines (T3/T4)","24":"Cholesterol (Steroid)","25":"Steroid Hormones","26":"Steroid Hormones Site of Synthesis/Secretion","27":"Hormone Transport","28":"Hormone Transport","29":"Control of Hormone Secretion","30":"Control of Hormone Secretion","31":"Negative & Positive Feedback","32":"Study slide","33":"The Hypothalamus","34":"Study slide","35":"Study slide","36":"The Hypothalamus","37":"Study slide","38":"The Hypothalamus","39":"Endocrine Axes","40":"Hypothalamic Axes","41":"Hypothalamic Hormones","42":"Transport to Anterior Pituitary Gland","43":"Hypophyseal Portal System","44":"Hypothalamic Releasing Hormones","45":"Hypothalamic Inhibiting Hormones","46":"Study slide","47":"Hypothalamic Hormones","48":"Transport to Posterior Pituitary","49":"Other Hypothalamic Hormones","50":"Study slide","51":"Study slide","52":"The Pituitary Gland","53":"The Pituitary Gland","54":"Study slide","55":"Study slide","56":"Anterior Pituitary","57":"The Anterior Pituitary Gland","58":"The Anterior Pituitary Gland","59":"Pars Tuberalis of the","60":"Anterior Pituitary Hormones","61":"Study slide","62":"Anterior Pituitary Hormones"},"Day 2":{"63":"Individual Hormones","64":"Human Growth Hormone (hGH)","65":"Human Growth Hormone (hGH)","66":"hGH Functions","67":"hGH Functions","68":"hGH Functions","69":"hGH Functions","70":"Human Growth Hormone (hGH)","71":"Insulin-Like Growth Factors (IGF)","72":"Control of hGH Secretion","73":"Control of hGH Secretion – Other","74":"GHRH: Growth hormone- releasing","75":"hGH & IGF-1 Interplay (grossly simplified)","76":"Clinical Correlation: hGH","77":"hGH Hypersecretion","78":"Study slide","79":"Giantism (gigantism):","80":"Robert Wadlow’s Growth Chart","81":"Study slide","82":"hGH Hypersecretion","83":"Acromegaly","84":"Acromegaly","85":"Acromegaly","86":"Study slide","87":"hGH Hyposecretion","88":"Study slide","89":"Adrenocorticotropic Hormone","90":"ACTH","91":"Prolactin (PRL)","92":"Prolactin (PRL)","93":"Clinical Correlation: Prolactin","94":"Study slide","95":"Follicle Stimulating Hormone","96":"FSH","97":"Luteinizing Hormone","98":"Luteinizing Hormone","99":"Melanocyte Stimulating","100":"Melanocyte Stimulating Hormones","101":"Thyroid Stimulating Hormone","102":"Thyroid Stimulating Hormone","103":"Study slide","104":"Posterior Pituitary","105":"The Posterior Pituitary Gland","106":"Posterior Pituitary Hormones","107":"Study slide","108":"Study slide","109":"Individual Hormones","110":"Antidiuretic Hormone (ADH/Vasopressin)","111":"Antidiuretic Hormone (ADH)","112":"Antidiuretic Hormone (ADH)","113":"Antidiuretic Hormone:","114":"Antidiuretic Hormone (ADH)","115":"Clinical Correlation: Diabetes","116":"Oxytocin","117":"Oxytocin","118":"Study slide"},"Day 3":{"119":"Thyroid Gland","120":"Thyroid Gland (Macroscopic)","121":"Note extensive blood supply","122":"Study slide","123":"Approximately 50% of thyroid","124":"Thyroid Gland (Microscopic)","125":"Thyroid Gland (Microscopic)","126":"Control of Thyroid Hormone Secretion","127":"Hormones Produced IN the","128":"T4  T3 Conversion","129":"Synthesis of T3 and T4","130":"Synthesis of T3 and T4","131":"Synthesis of T3 and T4","132":"Secretion of T3 and T4","133":"Transport of T3 and T4","134":"*Proteases released by lysosomes","135":"Critical Concept: ***TGB and TBG are two different things***","136":"Actions of Thyroid Hormones (T3/T4)","137":"Actions of Thyroid Hormones T3/T4","138":"Actions of Thyroid Hormones T3/T4","139":"Comparison of Non-Euthyroid States","140":"Clinical Correlation","141":"Myxedema - Hypothyroidism","142":"Myxedema: Pre- and Post-Treatment","143":"Pretibial Myxedema","144":"Hypothyroidism in Childhood","145":"Hashimoto’s Disease -","146":"Clinical Correlation","147":"Hyperthyroidism","148":"Hyperthyroidism: Graves’ Disease","149":"Hyperthyroidism: Graves’ Disease","150":"Graves’ Disease Exophthalmos before and after","151":"Goiter (enlarged thyroid)","152":"Study slide","153":"Parafollicular cells","154":"Hormones Produced IN the","155":"Parafollicular CELLS","156":"Parafollicular Cells","157":"Terminology","158":"Parafollicular Cells","159":"Parathyroid Glands","160":"Anatomy of the Parathyroid Glands","161":"Parathyroid glands","162":"Study slide","163":"Parathyroid Glands","164":"The Adrenal Glands","165":"Study slide","166":"Anatomy of the Adrenal Glands","167":"The Adrenal Cortex","168":"Study slide","169":"Study slide","170":"Adrenal Cortex Hormone","171":"Zones of the Adrenal Cortex","172":"Zona Glomerulosa","173":"Zona Fasciculata","174":"Glucocorticoids (Zona Fasciculata)","175":"Glucocorticoids (Zona Fasciculata)","176":"Glucocorticoids (Zona Fasciculata)","177":"Glucocorticoids (Zona Fasciculata)","178":"Glucocorticoids (Zona Fasciculata)","179":"Study slide","180":"Zona Reticularis","181":"Androgens (Zona reticularis)","182":"Clinical Correlation:","183":"Addison’s Disease","184":"Study slide","185":"Hyperpigmentation in Addison’s Disease","186":"Clinical Correlation:","187":"Cushing’s Disease/Syndrome*","188":"Study slide","189":"Same patient: pre- and post-treatment for","190":"Cushing’s Syndrome","191":"The Adrenal Medulla","192":"Adrenal Medulla","193":"Adrenal Dopamine","194":"Chromaffin Cells","195":"Study slide","196":"Adrenal Medulla","197":"Clinical Correlation:","198":"Pheochromocytoma","199":"Study slide","200":"Study slide"},"Day 4":{"201":"The Pancreas","202":"Anatomy of the Pancreas","203":"Study slide","204":"Anatomy of the Pancreas","205":"Pancreatic Islet Cells","206":"Study slide","207":"Alpha Cells - Glucagon","208":"Alpha Cells - Glucagon","209":"Beta Cells - Insulin","210":"Beta Cells - Insulin","211":"Insulin to Glucagon Ratio","212":"Negative feedback","213":"Functions of Pancreatic Hormones","214":"Functions of Pancreatic Hormones","215":"Clinical Correlation:","216":"Growth","217":"Figure 78-6, Guyton, pg. 967","218":"Diabetes Mellitus","219":"Type 1 Diabetes","220":"Type 1 Diabetes","221":"Type 2 Diabetes","222":"Study slide","223":"Hyperinsulinism","224":"Ovaries and Testes","225":"Gonads - Ovaries","226":"Gonads - Testes","227":"Pineal Gland","228":"Pineal Gland","229":"Pineal Gland","230":"Light Box Therapy","231":"Miscellaneous Hormones","232":"Miscellaneous","233":"Miscellaneous","234":"Miscellaneous","235":"Study slide","236":"Miscellaneous","237":"Study slide","238":"Digestive Tract Hormones","239":"Digestive Tract Hormones","240":"Digestive Tract Hormones","241":"Miscellaneous Hormones","242":"Miscellaneous","243":"Miscellaneous","244":"General Adaptation Syndrome","245":"Stress Response","246":"Stress Response","247":"Stress Response 2. The Resistance Reaction (hours to weeks)","248":"Stress Response 3. The Exhaustion Response","249":"Study slide","250":"Aging and the Endocrine","251":"Aging & Endocrine System","252":"Aging & Endocrine System","253":"Aging & Endocrine System","254":"HYPOTHALAMUS Inhibiting","255":"Questions?"},"Exam pictures":{"37":"Exam picture · master slide 37","59":"Exam picture · master slide 59","107":"Exam picture · master slide 107","161":"Exam picture · master slide 161","168":"Exam picture · master slide 168","203":"Exam picture · master slide 203","206":"Exam picture · master slide 206","228":"Exam picture · master slide 228","249":"Exam picture · master slide 249"}};
-const BANK_BUILD = {"status":"Block 3 Endocrine slide-only bank with independent chart review","counts":{"Day 1":58,"Day 2":63,"Day 3":111,"Day 4":106,"Exam pictures":103},"total":441};
+const BANK_BUILD = {"status":"Block 3 Endocrine slide-only bank","counts":{"Day 1":58,"Day 2":63,"Day 3":111,"Day 4":106,"Exam pictures":103},"total":441};
 const $ = id => document.getElementById(id);
 
 let active=[], index=0, correct=0, answered=0, missedThisQuiz=[], locked=false, lastSettings=null;
@@ -1391,134 +1384,23 @@ document.addEventListener('click',event=>{
   openExamImage(sourceLabel(q),coveredPictureSVG(q,current?!!q.answered:true));
 });
 $('examImageClose').onclick=()=>$('examImageDialog').close();
-const CHART_REVIEW_DATA = {
-  "21": {title:"Amino Acid Hormones", type:"pairs", pairs:[
-    ["GHIH (somatostatin)","Hypothalamus"],["PIH (dopamine)","Hypothalamus"],["PRH","Hypothalamus"],["GHRH","Hypothalamus"],["CRH","Hypothalamus"],["TRH","Hypothalamus"],["GnRH","Hypothalamus"],["Oxytocin","Hypothalamus"],["ADH","Hypothalamus"],
-    ["hGH","Anterior Pituitary"],["TSH","Anterior Pituitary"],["ACTH","Anterior Pituitary"],["FSH","Anterior Pituitary"],["LH","Anterior Pituitary"],["Prolactin","Anterior Pituitary"],["MSH","Anterior Pituitary"],
-    ["Insulin","Pancreas"],["Glucagon","Pancreas"],["GHIH (somatostatin)","Pancreas"],["Pancreatic polypeptide","Pancreas"],["Parathyroid hormone","Parathyroid Glands"],["Calcitonin","Thyroid parafollicular cells"],
-    ["Gastrin","Stomach and small intestine"],["Secretin","Stomach and small intestine"],["Cholecystokinin","Stomach and small intestine"],["GIP","Stomach and small intestine"],["Erythropoietin","Kidneys"],["Leptin","Adipose tissue"],
-    ["Epinephrine","Adrenal Medulla"],["Norepinephrine","Adrenal Medulla"],["Dopamine","Adrenal Medulla"],["Melatonin","Pineal Gland"],["Histamine","Mast cells/platelets"],["Serotonin","Intestines, Brain, CNS"],["T3/T4","Thyroid"]
-  ]},
-  "26": {title:"Steroid Hormones", type:"pairs", pairs:[
-    ["Calcitriol","Kidneys"],["Aldosterone","Adrenal Cortex — zona glomerulosa"],["Cortisol/Corticosterone","Adrenal Cortex — zona fasciculata"],["Adrenal androgens (androstenedione, DHEA, DHEA-Sulfate)","Adrenal Cortex — zona reticularis"],["Estrogen, Progesterone, Testosterone","Ovaries, testes, adipocytes, placenta"]
-  ]},
-  "62": {title:"Anterior Pituitary Hormones", type:"pairs", pairs:[
-    ["hGH (somatotropin)","Somatotrophs"],["TSH (thyrotropin)","Thyrotrophs"],["FSH","Gonadotrophs"],["LH","Gonadotrophs"],["PRL (prolactin)","Lactotrophs"],["ACTH (corticotropin)","Corticotrophs"],["MSH","Corticotrophs"]
-  ]},
-  "134": {title:"Thyroid Hormone Synthesis: Flow Chart", type:"flow", steps:[
-    ["TRH Release","Hypothalamus releases TRH onto Anterior Pituitary","Hypothalamus"],
-    ["TSH Release","Anterior Pituitary releases TSH onto Thyroid Gland","Anterior Pituitary Gland"],
-    ["Thyroglobulin Production","Thyroglobulin production","Thyroid Follicular Cells"],
-    ["Iodide Uptake","Iodide uptake","Sodium/Iodide Symporter"],
-    ["Iodide Oxidation","Iodide oxidation","Thyroid Peroxidase (TPO)"],
-    ["Thyroglobulin Iodination","Thyroglobulin iodination","Thyroid Peroxidase (TPO)"],
-    ["MIT/DIT Coupling","MIT/DIT coupling","Thyroid Peroxidase (TPO)"],
-    ["Thyroglobulin Proteolysis","Thyroglobulin proteolysis","Protease*"],
-    ["Thyroid Hormone Release","Thyroid gland releases TH; TH circulates in blood","Thyroxine-Binding Globulin (TBG)"]
-  ]}
-};
-let chartReviewState={attempts:0,correct:0,missed:{}};
-function loadChartReview(){
-  try{const x=JSON.parse(localStorage.getItem(STORAGE_KEY+"_chartReview")||"null");if(x&&typeof x==='object')chartReviewState={attempts:Number(x.attempts)||0,correct:Number(x.correct)||0,missed:x.missed&&typeof x.missed==='object'?x.missed:{}};}catch(e){}
-  updateChartStats();
-}
-function saveChartReview(){try{localStorage.setItem(STORAGE_KEY+"_chartReview",JSON.stringify(chartReviewState));}catch(e){} updateChartStats();}
-function updateChartStats(){
-  if(!$('chartAttempts'))return;
-  $('chartAttempts').textContent=chartReviewState.attempts||0;$('chartCorrect').textContent=chartReviewState.correct||0;
-  $('chartAccuracy').textContent=chartReviewState.attempts?`${Math.round(100*chartReviewState.correct/chartReviewState.attempts)}%`:'—';
-  $('chartMissed').textContent=Object.values(chartReviewState.missed||{}).filter(v=>v>0).length;
-}
-function chartRecord(key,ok){chartReviewState.attempts++;if(ok)chartReviewState.correct++;else chartReviewState.missed[key]=(chartReviewState.missed[key]||0)+1;saveChartReview();}
-function sample(arr,n){return shuffle([...arr]).slice(0,Math.min(n,arr.length));}
-function renderPairMatching(slide,data){
-  const picked=sample(data.pairs,Math.min(7,data.pairs.length));
-  const left=shuffle(picked.map((p,i)=>({txt:p[0],i}))),right=shuffle(picked.map((p,i)=>({txt:p[1],i})));
-  let chosen=null,matchedLeft=new Set(),matchedRight=new Set();
-  const validSources=item=>data.pairs.filter(p=>p[0]===item).map(p=>p[1]);
-  $('chartActivity').innerHTML=`<h3>Slide ${slide} · ${escapeHtml(data.title)} — Matching</h3><p class="small">Tap a hormone/item, then tap a matching source/cell. Correct pairs lock. If the chart lists an item in more than one valid source, either listed source is accepted.</p><div id="chartFeedback" class="small" aria-live="polite"></div><div class="grid" style="grid-template-columns:1fr 1fr;align-items:start"><div id="chartLeft" class="answers"></div><div id="chartRight" class="answers"></div></div>`;
-  const draw=()=>{
-    $('chartLeft').innerHTML=left.map(x=>`<button type="button" class="answer ${matchedLeft.has(x.i)?'hide':''}" data-chart-left="${x.i}" ${chosen===x.i?'style="border-color:var(--accent);font-weight:700"':''}>${escapeHtml(x.txt)}</button>`).join('');
-    $('chartRight').innerHTML=right.map((x,ri)=>`<button type="button" class="answer ${matchedRight.has(ri)?'hide':''}" data-chart-right="${ri}">${escapeHtml(x.txt)}</button>`).join('');
-  }; draw();
-  $('chartLeft').onclick=e=>{const b=e.target.closest('[data-chart-left]');if(!b)return;chosen=Number(b.dataset.chartLeft);draw();};
-  $('chartRight').onclick=e=>{const b=e.target.closest('[data-chart-right]');if(!b||chosen===null)return;const ri=Number(b.dataset.chartRight),rightItem=right[ri],item=picked[chosen][0],ok=validSources(item).includes(rightItem.txt);chartRecord(`S${slide}|${item}→${rightItem.txt}`,ok);if(ok){matchedLeft.add(chosen);matchedRight.add(ri);$('chartFeedback').textContent='Correct pair.';chosen=null;draw();if(matchedLeft.size===picked.length)$('chartFeedback').textContent='Chart activity complete.';}else{$('chartFeedback').textContent='Not a match. Try again.';}};
-}
-function renderFindError(slide,data){
-  const picked=sample(data.pairs,5);const bad=Math.floor(Math.random()*picked.length);const sources=shuffle([...new Set(data.pairs.map(p=>p[1]))]);const valid=data.pairs.filter(p=>p[0]===picked[bad][0]).map(p=>p[1]);let replacement=sources.find(x=>!valid.includes(x));
-  const shown=picked.map((p,i)=>[p[0],i===bad?replacement:p[1]]);
-  $('chartActivity').innerHTML=`<h3>Slide ${slide} · ${escapeHtml(data.title)} — Find the Error</h3><p class="small">One row is incorrect. Tap the row that needs repair.</p><div id="chartFeedback" class="small" aria-live="polite"></div><div class="answers">${shown.map((p,i)=>`<button type="button" class="answer" data-err-row="${i}"><strong>${escapeHtml(p[0])}</strong> → ${escapeHtml(p[1])}</button>`).join('')}</div>`;
-  $('chartActivity').onclick=e=>{const b=e.target.closest('[data-err-row]');if(!b)return;const i=Number(b.dataset.errRow),ok=i===bad;chartRecord(`S${slide}|find-error|${picked[bad][0]}`,ok);if(ok){$('chartFeedback').innerHTML=`Correct. <strong>${escapeHtml(picked[bad][0])}</strong> should match <strong>${escapeHtml(picked[bad][1])}</strong>.`;[...$('chartActivity').querySelectorAll('[data-err-row]')].forEach(x=>x.disabled=true);}else $('chartFeedback').textContent='That row is valid. Try another row.';};
-}
-function renderBuildChart(slide,data){
-  const picked=sample(data.pairs,Math.min(6,data.pairs.length));const pool=shuffle([...new Set(data.pairs.map(p=>p[1]))]);
-  $('chartActivity').innerHTML=`<h3>Slide ${slide} · ${escapeHtml(data.title)} — Build the Chart</h3><p class="small">Choose the matching source/cell for each item, then submit.</p><form id="chartBuildForm"><div class="answers">${picked.map((p,i)=>`<label class="answer" style="display:block"><strong>${escapeHtml(p[0])}</strong><select data-build="${i}"><option value="">Choose…</option>${pool.map(x=>`<option>${escapeHtml(x)}</option>`).join('')}</select></label>`).join('')}</div><button type="submit">Check chart</button><div id="chartFeedback" class="small" aria-live="polite"></div></form>`;
-  $('chartBuildForm').onsubmit=e=>{e.preventDefault();let c=0;picked.forEach((p,i)=>{const v=$(`chartBuildForm`).querySelector(`[data-build="${i}"]`).value,valid=data.pairs.filter(x=>x[0]===p[0]).map(x=>x[1]),ok=valid.includes(v);chartRecord(`S${slide}|build|${p[0]}→${v||'blank'}`,ok);if(ok)c++;});$('chartFeedback').textContent=`${c} of ${picked.length} relationships correct.`;};
-}
-function renderFlowSequence(slide,data){
-  const items=shuffle(data.steps.map((s,i)=>({i,txt:s[1]})));let selected=[];
-  $('chartActivity').innerHTML=`<h3>Slide ${slide} · ${escapeHtml(data.title)} — Sequence Builder</h3><p class="small">Tap the processes in the order shown on the slide. Use Undo if needed, then submit.</p><div id="flowPool" class="answers"></div><div class="notice small" style="margin:12px 0"><strong>Your sequence:</strong><ol id="flowChosen"></ol></div><div class="actions"><button id="flowUndo" type="button" class="secondary">Undo</button><button id="flowSubmit" type="button">Check sequence</button></div><div id="chartFeedback" class="small" aria-live="polite"></div>`;
-  const draw=()=>{$('flowPool').innerHTML=items.filter(x=>!selected.includes(x.i)).map(x=>`<button type="button" class="answer" data-flow="${x.i}">${escapeHtml(x.txt)}</button>`).join('');$('flowChosen').innerHTML=selected.map(i=>`<li>${escapeHtml(data.steps[i][1])}</li>`).join('');};draw();
-  $('flowPool').onclick=e=>{const b=e.target.closest('[data-flow]');if(!b)return;selected.push(Number(b.dataset.flow));draw();};
-  $('flowUndo').onclick=()=>{selected.pop();draw();};
-  $('flowSubmit').onclick=()=>{if(selected.length!==data.steps.length){$('chartFeedback').textContent='Place every process before submitting.';return;}let c=0;selected.forEach((v,pos)=>{const ok=v===pos;chartRecord(`S134|sequence|${data.steps[pos][0]}`,ok);if(ok)c++;});$('chartFeedback').textContent=`${c} of ${data.steps.length} positions correct.`;};
-}
-function renderSortBuckets(slide,data){
-  const sourceNames=sample([...new Set(data.pairs.map(p=>p[1]))],Math.min(4,new Set(data.pairs.map(p=>p[1])).size));
-  let candidates=[]; sourceNames.forEach(src=>{candidates.push(...sample(data.pairs.filter(p=>p[1]===src),2));});
-  const queue=shuffle(candidates).slice(0,Math.min(8,candidates.length)); let pos=0;
-  $('chartActivity').innerHTML=`<h3>Slide ${slide} · ${escapeHtml(data.title)} — Sorting</h3><p class="small">Sort each hormone/item into its correct source or cell. Tap a destination bucket.</p><div id="sortPrompt" class="notice" style="margin:12px 0"></div><div id="sortBuckets" class="grid"></div><div id="chartFeedback" class="small" aria-live="polite"></div>`;
-  const draw=()=>{
-    if(pos>=queue.length){$('sortPrompt').innerHTML='<strong>Sorting activity complete.</strong>';$('sortBuckets').innerHTML='';return;}
-    $('sortPrompt').innerHTML=`<strong>${escapeHtml(queue[pos][0])}</strong>`;
-    $('sortBuckets').innerHTML=sourceNames.map(src=>`<button type="button" class="answer" data-sort-src="${escapeHtml(src)}">${escapeHtml(src)}</button>`).join('');
-  };
-  $('sortBuckets').onclick=e=>{const b=e.target.closest('[data-sort-src]');if(!b||pos>=queue.length)return;const p=queue[pos],valid=data.pairs.filter(x=>x[0]===p[0]).map(x=>x[1]),ok=valid.includes(b.dataset.sortSrc);chartRecord(`S${slide}|sort|${p[0]}→${b.dataset.sortSrc}`,ok);if(ok){$('chartFeedback').textContent='Correct.';pos++;draw();}else $('chartFeedback').textContent='Not that bucket. Try again.';};
-  draw();
-}
-function renderFlowProcessMatch(slide,data){
-  const pairs=data.steps.slice(2).map(s=>[s[1],s[2]]),picked=sample(pairs,Math.min(6,pairs.length));
-  const pool=shuffle([...new Set(pairs.map(p=>p[1]))]);let pos=0;
-  $('chartActivity').innerHTML=`<h3>Slide ${slide} · ${escapeHtml(data.title)} — Process ↔ Structure/Enzyme</h3><p class="small">For each synthesis process, tap the structure or enzyme listed with it on the chart.</p><div id="flowMatchPrompt" class="notice" style="margin:12px 0"></div><div id="flowMatchChoices" class="answers"></div><div id="chartFeedback" class="small" aria-live="polite"></div>`;
-  const draw=()=>{if(pos>=picked.length){$('flowMatchPrompt').innerHTML='<strong>Process matching complete.</strong>';$('flowMatchChoices').innerHTML='';return;}const p=picked[pos];$('flowMatchPrompt').innerHTML=`<strong>${escapeHtml(p[0])}</strong>`;$('flowMatchChoices').innerHTML=pool.map(x=>`<button type="button" class="answer" data-flow-match="${escapeHtml(x)}">${escapeHtml(x)}</button>`).join('');};
-  $('flowMatchChoices').onclick=e=>{const b=e.target.closest('[data-flow-match]');if(!b||pos>=picked.length)return;const p=picked[pos],ok=b.dataset.flowMatch===p[1];chartRecord(`S${slide}|process|${p[0]}→${p[1]}`,ok);if(ok){$('chartFeedback').textContent='Correct.';pos++;draw();}else $('chartFeedback').textContent='Not the charted match. Try again.';};
-  draw();
-}
-function renderFlowComplete(slide,data){
-  const pairs=data.steps.slice(2).map(s=>[s[1],s[2]]),pool=shuffle([...new Set(pairs.map(p=>p[1]))]);
-  $('chartActivity').innerHTML=`<h3>Slide ${slide} · ${escapeHtml(data.title)} — Complete the Flow</h3><p class="small">Complete the thyroid-synthesis flow chart by filling the structure/enzyme for every synthesis process.</p><form id="flowCompleteForm"><div class="answers">${pairs.map((p,i)=>`<label class="answer" style="display:block"><strong>${escapeHtml(p[0])}</strong><select data-flow-complete="${i}"><option value="">Choose…</option>${pool.map(x=>`<option>${escapeHtml(x)}</option>`).join('')}</select></label>`).join('')}</div><button type="submit">Check flow chart</button><div id="chartFeedback" class="small" aria-live="polite"></div></form>`;
-  $('flowCompleteForm').onsubmit=e=>{e.preventDefault();let c=0;pairs.forEach((p,i)=>{const v=$('flowCompleteForm').querySelector(`[data-flow-complete="${i}"]`).value,ok=v===p[1];chartRecord(`S${slide}|complete-flow|${p[0]}`,ok);if(ok)c++;});$('chartFeedback').textContent=`${c} of ${pairs.length} flow relationships correct.`;};
-}
-function newChartActivity(){
-  const slide=sample(Object.keys(CHART_REVIEW_DATA),1)[0],data=CHART_REVIEW_DATA[slide];
-  if(data.type==='flow'){const r=Math.random();if(r<0.34)renderFlowSequence(slide,data);else if(r<0.67)renderFlowProcessMatch(slide,data);else renderFlowComplete(slide,data);}
-  else{const r=Math.random();if(r<0.27)renderPairMatching(slide,data);else if(r<0.52)renderBuildChart(slide,data);else if(r<0.77)renderSortBuckets(slide,data);else renderFindError(slide,data);}
-}
 function syncExamFilters(){
-  const section=$('day').value,pictures=section==='Exam pictures',charts=section==='Chart Review';
-  $('chartReviewPanel').classList.toggle('hide',!charts);
-  ['order','size','mode','source','start','studyBank','addOwnQuestion'].forEach(id=>$(id).disabled=charts || (id==='order'&&pictures));
+  const section=$('day').value,pictures=section==='Exam pictures';
+  $('order').disabled=pictures;
   if(pictures){$('order').value='First';$('source').value='Images';}
-  else if(!charts && $('source').value==='Images' && section!=='All')$('source').value='Random';
-  if(charts){
-    $('statsScope').textContent='Chart Review — tracked separately from quiz history';
-    $('coverageStatus').textContent='Chart Review is independent from All Sections, the Incorrect Bank, and adaptive coverage.';
-    if(!$('chartActivity').children.length)newChartActivity();
-  }else{
-    updateLifetimeUI();updateCoverageStatus();
-  }
+  else if($('source').value==='Images' && section!=='All')$('source').value='Random';
+  updateLifetimeUI();
+  updateCoverageStatus();
 }
-$('newChartActivity').onclick=newChartActivity;
 $('day').addEventListener('change',()=>{
-  if($('day').value!=='Exam pictures' && $('day').value!=='Chart Review')$('order').value='Mixed';
+  if($('day').value!=='Exam pictures')$('order').value='Mixed';
   if($('day').value!=='Exam pictures')$('source').value='Random';
   syncExamFilters();saveProgress();
 });
 loadProgress();
-loadChartReview();
 syncExamFilters();
 updateStorageStatus();
-if($('day').value!=='Chart Review'){updateLifetimeUI();updateCoverageStatus();}
+updateLifetimeUI();updateCoverageStatus();
 showResumeSessionPanel();
 </script>
 </body>
